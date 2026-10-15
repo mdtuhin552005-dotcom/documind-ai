@@ -74,6 +74,18 @@
     documentSearchInput: document.getElementById("document-search-input"),
     clearSearchBtn: document.getElementById("clear-search-btn"),
 
+    // Landing Header & Mobile Hamburger Navigation
+    landingHamburgerBtn: document.getElementById("landing-hamburger-btn"),
+    landingMobileNav: document.getElementById("landing-mobile-nav"),
+    landingMobileSignin: document.getElementById("landing-mobile-signin"),
+
+    // Mobile Chat Action Bar
+    mobileChatBar: document.getElementById("mobile-chat-bar"),
+    mobileBtnNewChat: document.getElementById("mobile-btn-new-chat"),
+    mobileBtnSummary: document.getElementById("mobile-btn-summary"),
+    mobileBtnExportPdf: document.getElementById("mobile-btn-export-pdf"),
+    mobileBtnExportWord: document.getElementById("mobile-btn-export-word"),
+
     // Wisdom Topbar Ticker Elements
     topbarWisdomTicker: document.getElementById("topbar-wisdom-ticker"),
     topbarWisdomText: document.getElementById("topbar-wisdom-text"),
@@ -719,6 +731,8 @@
     if (elements.btnExportWord) elements.btnExportWord.classList.toggle("is-dimmed", disabled);
     if (elements.barBtnExportPdf) elements.barBtnExportPdf.classList.toggle("is-dimmed", disabled);
     if (elements.barBtnExportWord) elements.barBtnExportWord.classList.toggle("is-dimmed", disabled);
+    if (elements.mobileBtnExportPdf) elements.mobileBtnExportPdf.disabled = disabled;
+    if (elements.mobileBtnExportWord) elements.mobileBtnExportWord.disabled = disabled;
   }
 
   // --- Export Modal Controller ---
@@ -759,6 +773,9 @@
 
     if (elements.btnSmartSummary) {
       elements.btnSmartSummary.disabled = !selected || state.busy;
+    }
+    if (elements.mobileBtnSummary) {
+      elements.mobileBtnSummary.disabled = !selected || state.busy;
     }
     setExportButtonsDisabled(!state.chatId || state.history.length === 0);
 
@@ -1008,7 +1025,7 @@
       }
       state.chatId = conversation.id;
       state.selectedId = conversation.document_id;
-      state.history = conversation.messages.map(({ role, content }) => ({ role, content }));
+      state.history = conversation.messages.map(({ role, content, sources }) => ({ role, content, sources: sources || [] }));
       if (elements.messageList) elements.messageList.replaceChildren();
       if (elements.welcomeState) elements.welcomeState.hidden = conversation.messages.length > 0;
       conversation.messages.forEach((message) => {
@@ -1449,7 +1466,7 @@
           history: state.history.slice(-8),
         }),
       });
-      state.history.push({ role: "user", content: question }, { role: "assistant", content: result.answer });
+      state.history.push({ role: "user", content: question }, { role: "assistant", content: result.answer, sources: result.sources || [] });
       typing?.remove();
       addMessage("assistant", result.answer, result.sources);
       setExportButtonsDisabled(false);
@@ -1859,9 +1876,64 @@
       exportChat("docx");
     });
 
+    // Mobile-Dedicated Chat Action Bar Events
+    elements.mobileBtnNewChat?.addEventListener("click", () => {
+      startNewChat();
+    });
+
+    elements.mobileBtnSummary?.addEventListener("click", () => {
+      triggerSmartSummary();
+    });
+
+    elements.mobileBtnExportPdf?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      exportChat("pdf");
+    });
+
+    elements.mobileBtnExportWord?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      exportChat("docx");
+    });
+
+    // Landing 3-Line Mobile Hamburger Menu Toggle
+    elements.landingHamburgerBtn?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!elements.landingMobileNav) return;
+      const isHidden = elements.landingMobileNav.hidden;
+      elements.landingMobileNav.hidden = !isHidden;
+      elements.landingHamburgerBtn.setAttribute("aria-expanded", String(isHidden));
+    });
+
+    // Landing Mobile Nav Links (Smooth Scroll & Close)
+    elements.landingMobileNav?.querySelectorAll(".landing-mobile-nav-item").forEach((anchor) => {
+      anchor.addEventListener("click", (e) => {
+        const href = anchor.getAttribute("href");
+        if (href && href.startsWith("#")) {
+          e.preventDefault();
+          if (elements.landingMobileNav) elements.landingMobileNav.hidden = true;
+          elements.landingHamburgerBtn?.setAttribute("aria-expanded", "false");
+          const targetEl = document.querySelector(href);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+      });
+    });
+
+    // Landing Mobile Nav Sign In
+    elements.landingMobileSignin?.addEventListener("click", () => {
+      if (elements.landingMobileNav) elements.landingMobileNav.hidden = true;
+      elements.landingHamburgerBtn?.setAttribute("aria-expanded", "false");
+      openAuthModal("signin");
+    });
+
     document.addEventListener("click", (e) => {
       if (elements.exportMenu && !elements.exportDropdownWrap?.contains(e.target)) {
         elements.exportMenu.hidden = true;
+      }
+      if (elements.landingMobileNav && !elements.landingMobileNav.hidden && !elements.landingHamburgerBtn?.contains(e.target) && !elements.landingMobileNav.contains(e.target)) {
+        elements.landingMobileNav.hidden = true;
+        elements.landingHamburgerBtn?.setAttribute("aria-expanded", "false");
       }
     });
 

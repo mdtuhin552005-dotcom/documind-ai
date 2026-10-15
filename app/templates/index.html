@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=44" />
+    <link rel="stylesheet" href="/static/styles.css?v=46" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,7 +42,7 @@
         },
       };
     </script>
-    <script defer src="/static/app.js?v=35"></script>
+    <script defer src="/static/app.js?v=37"></script>
   </head>
   <body>
     <!-- Clean, Static Subtle Ambient Background -->
@@ -87,7 +87,11 @@
           </nav>
 
           <div class="landing-nav-right">
-            <button class="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
+            <!-- Right-side Document AI button -->
+            <button type="button" class="btn-corner-try" id="btn-corner-try" title="Open Document AI Workspace">⚡ Document AI</button>
+
+            <!-- Theme Switcher (Dark / Light) -->
+            <button class="theme-toggle" id="landing-theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
               <svg class="theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="12" cy="12" r="4"></circle>
                 <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
@@ -97,9 +101,56 @@
                 <path d="m17 3 .5 1.5L19 5l-1.5.5L17 7l-.5-1.5L15 5l1.5-.5L17 3Z"></path>
               </svg>
             </button>
+
+            <!-- Sign In (Desktop) -->
             <button type="button" class="auth-button auth-button-signin" id="landing-btn-signin">Sign In</button>
-            <!-- Requested Corner "Try for Free" Button -->
-            <button type="button" class="btn-corner-try" id="btn-corner-try">⚡ Try for Free →</button>
+
+            <!-- 3-Line Hamburger Menu for Phone -->
+            <button type="button" class="landing-hamburger-btn" id="landing-hamburger-btn" aria-label="Toggle navigation menu" aria-expanded="false" title="Menu">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Mobile Dropdown Navigation Menu for 3-Line Hamburger (Preview, Capabilities, FAQ, etc.) -->
+          <div class="landing-mobile-nav" id="landing-mobile-nav" hidden>
+            <div class="landing-mobile-nav-inner">
+              <a href="#simulation" class="landing-mobile-nav-item">
+                <span class="nav-item-icon">🔍</span>
+                <div class="nav-item-text">
+                  <strong>Preview</strong>
+                  <small>Interactive Pipeline Architecture</small>
+                </div>
+              </a>
+              <a href="#features" class="landing-mobile-nav-item">
+                <span class="nav-item-icon">⚡</span>
+                <div class="nav-item-text">
+                  <strong>Capabilities</strong>
+                  <small>Vector Search, Citations, RAG</small>
+                </div>
+              </a>
+              <a href="#workflow" class="landing-mobile-nav-item">
+                <span class="nav-item-icon">⚙️</span>
+                <div class="nav-item-text">
+                  <strong>How It Works</strong>
+                  <small>Step-by-step workflow</small>
+                </div>
+              </a>
+              <a href="#faq" class="landing-mobile-nav-item">
+                <span class="nav-item-icon">❓</span>
+                <div class="nav-item-text">
+                  <strong>FAQ</strong>
+                  <small>Answers &amp; Common Inquiries</small>
+                </div>
+              </a>
+              <div class="landing-mobile-nav-divider"></div>
+              <button type="button" class="landing-mobile-nav-auth" id="landing-mobile-signin">
+                <span>Sign In to Your Account</span>
+              </button>
+            </div>
           </div>
         </header>
 
@@ -775,33 +826,6 @@
                   <span>Smart Summary</span>
                 </button>
 
-                <!-- Export Dropdown Button with PDF and Word options -->
-                <div class="export-dropdown-wrap" id="export-dropdown-wrap">
-                  <button class="header-action-button export-btn" id="btn-export-chat" type="button" title="Export conversation as PDF or Word" aria-haspopup="true" aria-expanded="false">
-                    <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1">
-                      <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
-                      <path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />
-                    </svg>
-                    <span>Export ▾</span>
-                  </button>
-                  <div class="export-menu" id="export-menu" hidden>
-                    <button type="button" class="export-option-item" id="btn-export-pdf">
-                      <span class="export-opt-icon icon-pdf">📄</span>
-                      <div class="export-opt-text">
-                        <strong>Export as PDF (.pdf)</strong>
-                        <small>Instant formatted research document</small>
-                      </div>
-                    </button>
-                    <button type="button" class="export-option-item" id="btn-export-word">
-                      <span class="export-opt-icon icon-word">📝</span>
-                      <div class="export-opt-text">
-                        <strong>Export as Word (.docx)</strong>
-                        <small>Editable Microsoft Word document</small>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
                 <span class="ready-pill" id="ready-pill"><span></span> Ready</span>
 
                 <button class="new-chat-button" id="new-chat-button" type="button" title="Start a fresh conversation">
@@ -809,6 +833,23 @@
                   <span>New chat</span>
                 </button>
               </div>
+            </div>
+
+            <!-- Phone-Dedicated Mobile Chat Action Bar -->
+            <div class="mobile-chat-bar" id="mobile-chat-bar">
+              <button class="mobile-bar-btn mobile-bar-new-chat" id="mobile-btn-new-chat" type="button" title="Start a fresh conversation">
+                <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" /></svg>
+                <span>New Chat</span>
+              </button>
+              <button class="mobile-bar-btn mobile-bar-summary" id="mobile-btn-summary" type="button" title="Generate Smart Executive Summary" disabled>
+                <span>⚡ Summary</span>
+              </button>
+              <button class="mobile-bar-btn mobile-bar-pdf" id="mobile-btn-export-pdf" type="button" title="Download Full Chat as PDF" disabled>
+                <span>📄 Full Chat PDF</span>
+              </button>
+              <button class="mobile-bar-btn mobile-bar-word" id="mobile-btn-export-word" type="button" title="Download Full Chat as Word" disabled>
+                <span>📝 Word</span>
+              </button>
             </div>
 
             <!-- Chat Scroll Body -->

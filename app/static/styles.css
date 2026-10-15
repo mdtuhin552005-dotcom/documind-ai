@@ -204,27 +204,23 @@ html[data-theme="light"] .ambient-four {
   overflow-y: auto;
   position: relative;
   z-index: 5;
-  background-color: #080b12;
+  background-color: #080c15;
   background-image: 
-    radial-gradient(ellipse 90% 50% at 50% -10%, rgba(37, 99, 235, 0.22), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 85% 15%, rgba(6, 182, 212, 0.14), transparent 60%),
-    radial-gradient(ellipse 50% 30% at 15% 45%, rgba(139, 92, 246, 0.12), transparent 50%),
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
-  background-position: top center, top center, top center, 0 0, 0 0;
+    radial-gradient(ellipse 80% 30% at 50% 0%, rgba(37, 99, 235, 0.08), transparent 70%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+  background-position: top center, 0 0, 0 0;
 }
 
 html[data-theme="light"] .landing-page {
-  background-color: #ffffff;
+  background-color: #f8fafc;
   background-image: 
-    radial-gradient(ellipse 90% 50% at 50% -10%, rgba(37, 99, 235, 0.08), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 85% 15%, rgba(6, 182, 212, 0.06), transparent 60%),
-    radial-gradient(ellipse 50% 30% at 15% 45%, rgba(139, 92, 246, 0.05), transparent 50%),
-    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
-  background-position: top center, top center, top center, 0 0, 0 0;
+    radial-gradient(ellipse 80% 30% at 50% 0%, rgba(37, 99, 235, 0.04), transparent 70%),
+    linear-gradient(to right, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+  background-position: top center, 0 0, 0 0;
 }
 
 .landing-header {
@@ -291,23 +287,30 @@ html[data-theme="light"] .landing-page {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 18px;
-  border-radius: 12px;
-  border: none;
-  background: var(--primary-gradient);
-  background-size: 200% 200%;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #2563eb;
   color: #ffffff !important;
-  font-size: 13px;
-  font-weight: 800;
+  font-size: 12.5px;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.45);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  transform-style: preserve-3d;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 .btn-corner-try:hover {
-  background-position: right center;
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 24px rgba(37, 99, 235, 0.65);
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Landing Hamburger & Mobile Navigation (Hidden on Desktop) */
+.landing-hamburger-btn {
+  display: none !important;
+}
+.landing-mobile-nav {
+  display: none !important;
 }
 
 /* Hero Section */
@@ -372,26 +375,21 @@ html[data-theme="light"] .hero-title {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 35%, #93c5fd 70%, #60a5fa 100%);
-  background-size: 260% 260%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  color: #38bdf8 !important;
   font-weight: 800;
-  animation: text-gradient-flow 8s ease infinite;
+  text-shadow: none !important;
+  animation: none !important;
 }
 
 html[data-theme="light"] .gradient-text {
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 35%, #0284c7 70%, #1d4ed8 100%);
-  background-size: 260% 260%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: text-gradient-flow 8s ease infinite;
-}
-
-@keyframes text-gradient-flow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  color: #1d4ed8 !important;
+  font-weight: 800;
+  text-shadow: none !important;
+  animation: none !important;
 }
 
 .hero-subtitle {
@@ -422,42 +420,23 @@ html[data-theme="light"] .hero-subtitle {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 13px 30px;
-  border-radius: 14px;
-  border: none;
-  background: var(--primary-gradient);
+  padding: 13px 28px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #2563eb;
   color: #ffffff !important;
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 22px rgba(37, 99, 235, 0.55), 0 0 35px rgba(59, 130, 246, 0.3);
-  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
   position: relative;
-  overflow: hidden;
-  animation: btn-glow-pulse 3s ease-in-out infinite alternate;
-}
-@keyframes btn-glow-pulse {
-  0% { box-shadow: 0 4px 20px rgba(37, 99, 235, 0.45), 0 0 25px rgba(59, 130, 246, 0.2); }
-  100% { box-shadow: 0 8px 32px rgba(37, 99, 235, 0.75), 0 0 45px rgba(59, 130, 246, 0.45); }
-}
-.btn-hero-primary::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-  transform: rotate(30deg);
-  animation: btn-sweep 4s ease-in-out infinite;
-}
-@keyframes btn-sweep {
-  0% { transform: translateX(-150%) rotate(30deg); }
-  40%, 100% { transform: translateX(150%) rotate(30deg); }
+  text-decoration: none;
 }
 .btn-hero-primary:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 10px 40px rgba(37, 99, 235, 0.85), 0 0 50px rgba(59, 130, 246, 0.55);
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 .btn-hero-secondary {
@@ -3238,6 +3217,11 @@ html[data-theme="light"] .export-opt-text small {
   stroke-width: 1.9;
 }
 
+/* Phone-Dedicated Mobile Chat Bar (Hidden on Desktop) */
+.mobile-chat-bar {
+  display: none !important;
+}
+
 /* Chat Scroll Region */
 .chat-scroll {
   flex: 1;
@@ -4452,6 +4436,134 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
     height: 34px;
   }
 
+  /* Landing Header Mobile Navigation */
+  .landing-header {
+    height: 60px;
+    min-height: 60px;
+    padding: 0 12px;
+    position: relative;
+  }
+  .landing-nav-links {
+    display: none !important;
+  }
+  .landing-nav-right {
+    gap: 6px;
+    align-items: center;
+  }
+  .btn-corner-try {
+    padding: 6px 11px;
+    font-size: 11.5px;
+    border-radius: 8px;
+  }
+  #landing-btn-signin {
+    display: none !important;
+  }
+  .landing-hamburger-btn {
+    display: grid !important;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text-main);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+  .landing-hamburger-btn:active {
+    transform: scale(0.95);
+  }
+  .landing-hamburger-btn svg {
+    width: 19px;
+    height: 19px;
+  }
+  .landing-mobile-nav {
+    display: block !important;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 8px;
+    right: 8px;
+    background: #0d1527;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: 14px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.88), 0 0 20px rgba(37, 99, 235, 0.2);
+    padding: 10px;
+    z-index: 99999;
+    backdrop-filter: blur(24px);
+    animation: fade-up 0.18s ease both;
+  }
+  html[data-theme="light"] .landing-mobile-nav {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+  }
+  .landing-mobile-nav[hidden] {
+    display: none !important;
+  }
+  .landing-mobile-nav-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .landing-mobile-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 11px;
+    border-radius: 9px;
+    text-decoration: none;
+    color: var(--text-main);
+    background: transparent;
+    transition: background 0.18s;
+  }
+  .landing-mobile-nav-item:hover, .landing-mobile-nav-item:active {
+    background: rgba(37, 99, 235, 0.14);
+  }
+  html[data-theme="light"] .landing-mobile-nav-item:hover,
+  html[data-theme="light"] .landing-mobile-nav-item:active {
+    background: #eff6ff;
+  }
+  .nav-item-icon {
+    font-size: 16px;
+    width: 22px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .nav-item-text strong {
+    display: block;
+    font-size: 12.5px;
+    color: var(--heading-color);
+  }
+  .nav-item-text small {
+    display: block;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .landing-mobile-nav-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 5px 0;
+  }
+  .landing-mobile-nav-auth {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--surface-hover);
+    color: var(--text-main);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .landing-mobile-nav-auth:hover {
+    background: #2563eb;
+    color: #fff;
+    border-color: #2563eb;
+  }
+
   /* Landing Hero Optimization */
   .hero-section {
     padding: 24px 14px 16px;
@@ -4504,9 +4616,10 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
     min-height: auto;
     height: auto;
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
     width: 100%;
     min-width: 0;
   }
@@ -4520,21 +4633,68 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
     font-size: 12.5px;
   }
   .chat-header-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-    width: 100%;
-    overflow: visible !important;
+    display: none !important; /* Replaced cleanly by dedicated mobile-chat-bar */
   }
-  .header-action-button,
-  .new-chat-button {
-    flex: 1;
-    justify-content: center;
-    padding: 7px 6px;
-    font-size: 11px;
-    white-space: nowrap;
+
+  /* Dedicated Mobile Action Bar for Phone Users */
+  .mobile-chat-bar {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-shrink: 0;
+    width: 100%;
+  }
+  .mobile-chat-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .mobile-bar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
     border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid var(--line);
+    background: var(--surface-hover);
+    color: var(--text-main);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+  }
+  .mobile-bar-btn:active {
+    transform: scale(0.95);
+  }
+  .mobile-bar-btn:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .mobile-bar-new-chat {
+    background: rgba(37, 99, 235, 0.15);
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.4);
+  }
+  .mobile-bar-summary {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .mobile-bar-pdf {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.35);
+  }
+  .mobile-bar-word {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60a5fa;
+    border-color: rgba(59, 130, 246, 0.35);
   }
   .ready-pill {
     display: none;
