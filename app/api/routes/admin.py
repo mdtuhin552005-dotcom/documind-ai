@@ -10,11 +10,22 @@ from app.core.config import settings
 def get_db_path() -> Path:
     return settings.database_path
 
+import time
+import secrets
+
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
+ACTIVE_ADMIN_SESSIONS: dict[str, float] = {}  # token -> expire_timestamp (5 min TTL)
 
 
 def is_authenticated(request: Request) -> bool:
-    return request.cookies.get("admin_auth") == ADMIN_PASSWORD
+    token = request.cookies.get("admin_token")
+    if not token:
+        return False
+    exp = ACTIVE_ADMIN_SESSIONS.get(token)
+    if not exp or time.time() > exp:
+        ACTIVE_ADMIN_SESSIONS.pop(token, None)
+        return False
+    return True
 
 
 def check_admin(request: Request):
@@ -128,16 +139,23 @@ button:hover{{background:#4338ca}}
 @router.post("/login")
 async def login_submit(password: str = Form(...)):
     if password == ADMIN_PASSWORD:
+        token = secrets.token_urlsafe(32)
+        # Session valid for strictly 5 minutes of inactivity
+        ACTIVE_ADMIN_SESSIONS[token] = time.time() + 300
         resp = RedirectResponse("/admin", status_code=302)
-        # Session cookie (expires when browser is closed, or max 15 minutes)
-        resp.set_cookie("admin_auth", ADMIN_PASSWORD, httponly=True, max_age=900, samesite="lax")
+        resp.set_cookie("admin_token", token, httponly=True, max_age=300, samesite="lax")
+        resp.delete_cookie("admin_auth")
         return resp
     return RedirectResponse("/admin/login?error=1", status_code=302)
 
 
 @router.get("/logout")
-async def logout():
+async def logout(request: Request):
+    token = request.cookies.get("admin_token")
+    if token:
+        ACTIVE_ADMIN_SESSIONS.pop(token, None)
     resp = RedirectResponse("/admin/login", status_code=302)
+    resp.delete_cookie("admin_token")
     resp.delete_cookie("admin_auth")
     return resp
 
