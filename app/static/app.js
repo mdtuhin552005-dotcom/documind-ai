@@ -58,6 +58,10 @@
     docChunkBadge: document.getElementById("doc-chunk-badge"),
     btnSmartSummary: document.getElementById("btn-smart-summary"),
     btnExportChat: document.getElementById("btn-export-chat"),
+    exportDropdownWrap: document.getElementById("export-dropdown-wrap"),
+    exportMenu: document.getElementById("export-menu"),
+    btnExportPdf: document.getElementById("btn-export-pdf"),
+    btnExportWord: document.getElementById("btn-export-word"),
     documentSearchInput: document.getElementById("document-search-input"),
     clearSearchBtn: document.getElementById("clear-search-btn"),
 
@@ -1423,39 +1427,145 @@
     sendQuestion("Please provide a comprehensive executive summary of this document, including its primary objectives, top 5 key takeaways, and actionable conclusions.");
   }
 
-  // --- Export Chat to Markdown ---
-  function exportChatMarkdown() {
+  // --- Export Chat as PDF or Word (.docx / .doc) ---
+  async function exportChat(format) {
     if (!state.history.length) {
       showToast("No conversation to export.", "info");
       return;
     }
     const selectedDoc = state.documents.find((d) => d.id === state.selectedId);
     const docName = selectedDoc ? selectedDoc.filename : "Document";
+    const cleanDocName = docName.replace(/\.pdf$/i, "").replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "_") || "Report";
+    const ts = Date.now();
+
+    if (elements.exportMenu) elements.exportMenu.hidden = true;
+    showToast(`Generating ${format.toUpperCase()} export...`, "info");
+
+    try {
+      const response = await fetch(`/api/chats/export/${format}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          document_name: docName,
+          messages: state.history,
+        }),
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        const ext = format === "pdf" ? "pdf" : "docx";
+        link.download = `DocuMind_Export_${cleanDocName}_${ts}.${ext}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showToast(`Saved as ${ext.toUpperCase()} successfully!`, "success");
+        return;
+      }
+    } catch (err) {
+      console.warn("Backend export failed, using client-side generator:", err);
+    }
+
+    // Client-side fallback
+    if (format === "docx" || format === "word") {
+      exportChatWordFallback(docName, cleanDocName, ts);
+    } else {
+      exportChatPdfFallback(docName);
+    }
+  }
+
+  function exportChatWordFallback(docName, cleanDocName, ts) {
     const dateStr = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+    let html = `<!DOCTYPE html><html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset='utf-8'><title>DocuMind Research Export</title>
+<style>
+  body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.6; color: #1e293b; margin: 40px; }
+  h1 { color: #1d4ed8; font-size: 20pt; border-bottom: 2px solid #2563eb; padding-bottom: 8px; margin-bottom: 12px; }
+  .meta { color: #64748b; font-size: 10pt; margin-bottom: 24px; }
+  .question-box { background: #eff6ff; border-left: 4px solid #2563eb; padding: 12px 16px; margin: 18px 0 10px; border-radius: 4px; }
+  .question-title { color: #1e40af; font-weight: bold; font-size: 12pt; margin-bottom: 4px; }
+  .answer-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px 18px; margin-bottom: 24px; border-radius: 4px; }
+  .answer-title { color: #0f172a; font-weight: bold; font-size: 11.5pt; margin-bottom: 6px; }
+  .citation { display: inline-block; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-size: 9pt; font-weight: bold; margin-top: 8px; }
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 20px 0; }
+</style></head><body>
+<h1>DocuMind AI Research Export</h1>
+<div class="meta">
+  <strong>Document:</strong> ${escapeHtml(docName)}<br/>
+  <strong>Export Date:</strong> ${dateStr}<br/>
+  <strong>Method:</strong> Grounded neural vector search with verified citations
+</div><hr/>`;
 
-    let md = `# DocuMind AI Research Export\n\n`;
-    md += `**Document:** ${docName}\n`;
-    md += `**Export Date:** ${dateStr}\n`;
-    md += `**Principle:** Grounded in document evidence with page citations.\n\n---\n\n`;
-
-    state.history.forEach((turn, idx) => {
+    let qIdx = 1;
+    state.history.forEach((turn) => {
       if (turn.role === "user") {
-        md += `### ❓ Question ${Math.floor(idx / 2) + 1}\n\n${turn.content}\n\n`;
+        html += `<div class="question-box"><div class="question-title">Question ${qIdx}:</div><div>${escapeHtml(turn.content)}</div></div>`;
+        qIdx++;
       } else {
-        md += `### 🤖 DocuMind Answer\n\n${turn.content}\n\n---\n\n`;
+        html += `<div class="answer-box"><div class="answer-title">DocuMind Grounded Answer:</div><div>${escapeHtml(turn.content).replace(/\n/g, '<br/>')}</div>`;
+        if (turn.sources && turn.sources.length) {
+          const srcList = turn.sources.map(s => `Page ${s.page || '?'}`).join(', ');
+          html += `<div class="citation">Sources: ${escapeHtml(srcList)}</div>`;
+        }
+        html += `</div>`;
       }
     });
 
-    const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+    html += `</body></html>`;
+    const blob = new Blob([html], { type: "application/msword;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `DocuMind_Export_${docName.replace(/\.pdf$/i, "")}_${Date.now()}.md`;
+    link.download = `DocuMind_Export_${cleanDocName}_${ts}.doc`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    showToast("Conversation exported as Markdown (.md)!", "success");
+    showToast("Conversation exported as Word document (.doc)!", "success");
+  }
+
+  function exportChatPdfFallback(docName) {
+    const dateStr = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+    const printWin = window.open("", "_blank");
+    if (!printWin) {
+      showToast("Pop-up blocked. Please allow popups to export PDF.", "error");
+      return;
+    }
+    let html = `<!DOCTYPE html><html><head><title>DocuMind_Export_${escapeHtml(docName)}</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11pt; line-height: 1.6; color: #0f172a; margin: 30px; }
+  h1 { color: #1d4ed8; font-size: 18pt; margin-bottom: 6px; }
+  .meta { color: #64748b; font-size: 9.5pt; margin-bottom: 20px; border-bottom: 1px solid #cbd5e1; padding-bottom: 12px; }
+  .q { font-weight: bold; color: #1e40af; margin-top: 16px; margin-bottom: 4px; font-size: 12pt; }
+  .a { background: #f8fafc; border-left: 3px solid #2563eb; padding: 10px 14px; margin-bottom: 18px; border-radius: 4px; }
+  .src { font-size: 9pt; color: #0369a1; font-weight: bold; margin-top: 6px; }
+  @media print { body { margin: 1.5cm; } button { display: none; } }
+</style></head><body>
+<h1>DocuMind AI Research Report</h1>
+<div class="meta">Document: ${escapeHtml(docName)} | Exported: ${dateStr}</div>`;
+
+    let qIdx = 1;
+    state.history.forEach((turn) => {
+      if (turn.role === "user") {
+        html += `<div class="q">Question ${qIdx}: ${escapeHtml(turn.content)}</div>`;
+        qIdx++;
+      } else {
+        html += `<div class="a"><div>${escapeHtml(turn.content).replace(/\n/g, '<br/>')}</div>`;
+        if (turn.sources && turn.sources.length) {
+          const srcList = turn.sources.map(s => `Page ${s.page || '?'}`).join(', ');
+          html += `<div class="src">Verified Sources: ${escapeHtml(srcList)}</div>`;
+        }
+        html += `</div>`;
+      }
+    });
+
+    html += `<script>window.onload = function() { window.print(); };<\/script></body></html>`;
+    printWin.document.write(html);
+    printWin.document.close();
+    showToast("Print-to-PDF ready! Select 'Save as PDF' to save.", "success");
   }
 
   // --- 3D Interactive Simulation Sequence ---
@@ -1645,9 +1755,35 @@
       renderDocuments();
     });
 
-    // Smart Summary and Export Actions
+    // Smart Summary and Export Dropdown Actions
     elements.btnSmartSummary?.addEventListener("click", triggerSmartSummary);
-    elements.btnExportChat?.addEventListener("click", exportChatMarkdown);
+
+    elements.btnExportChat?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!state.history.length) {
+        showToast("No conversation to export.", "info");
+        return;
+      }
+      if (elements.exportMenu) {
+        elements.exportMenu.hidden = !elements.exportMenu.hidden;
+      }
+    });
+
+    elements.btnExportPdf?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      exportChat("pdf");
+    });
+
+    elements.btnExportWord?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      exportChat("docx");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (elements.exportMenu && !elements.exportDropdownWrap?.contains(e.target)) {
+        elements.exportMenu.hidden = true;
+      }
+    });
 
     // Quick Chat Composer PDF Upload Button
     elements.btnComposerUpload?.addEventListener("click", () => {

@@ -3065,6 +3065,109 @@ html[data-theme="light"] .meta-pill {
   transform: translateY(-2px);
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
 }
+
+/* Export Dropdown Menu */
+.export-dropdown-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.export-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 240px;
+  background: #0f1626;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(37, 99, 235, 0.25);
+  padding: 6px;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  backdrop-filter: blur(20px);
+  animation: fade-up 0.16s ease both;
+}
+
+html[data-theme="light"] .export-menu {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(37, 99, 235, 0.15);
+}
+
+.export-menu[hidden] {
+  display: none !important;
+}
+
+.export-option-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.16s ease;
+  width: 100%;
+}
+
+.export-option-item:hover {
+  background: rgba(37, 99, 235, 0.16);
+}
+
+html[data-theme="light"] .export-option-item:hover {
+  background: #eff6ff;
+}
+
+.export-opt-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.icon-pdf {
+  background: rgba(239, 68, 68, 0.16);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.icon-word {
+  background: rgba(37, 99, 235, 0.16);
+  color: #60a5fa;
+  border: 1px solid rgba(37, 99, 235, 0.35);
+}
+
+.export-opt-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.export-opt-text strong {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+html[data-theme="light"] .export-opt-text strong {
+  color: #0f172a;
+}
+
+.export-opt-text small {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+html[data-theme="light"] .export-opt-text small {
+  color: #64748b;
+}
+
 .ready-pill {
   display: inline-flex;
   align-items: center;
@@ -3405,27 +3508,47 @@ html[data-theme="light"] .prompt-card.prompt-pill:hover {
   color: #38bdf8;
 }
 
-/* High-Contrast Dual Theme Message Bubble */
+/* High-Contrast Dual Theme Message Bubble (Distinctly Separated from Background) */
 .message-bubble {
   padding: 14px 18px;
   border-radius: 14px;
-  border: 1px solid var(--line);
-  background: var(--bubble-bg);
-  color: var(--bubble-text);
   font-size: 13.5px;
   line-height: 1.7;
   letter-spacing: 0.1px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
   transform-style: preserve-3d;
 }
+
+.message.assistant .message-bubble {
+  background: #141c2e;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-left: 3.5px solid #3b82f6;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.48), 0 2px 8px rgba(0, 0, 0, 0.3);
+  color: #f8fafc;
+}
+
+html[data-theme="light"] .message.assistant .message-bubble {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-left: 3.5px solid #2563eb;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+}
+
 .message.user .message-bubble {
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%);
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #1d4ed8 100%);
   color: #ffffff !important;
   font-size: 13.5px;
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.32);
+  border: 1px solid rgba(147, 197, 253, 0.45);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.38);
 }
+
+html[data-theme="light"] .message.user .message-bubble {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.28);
+}
+
 .message.user .message-bubble,
 .message.user .message-bubble *,
 .message.user .message-bubble p,
@@ -3441,8 +3564,12 @@ html[data-theme="light"] .prompt-card.prompt-pill:hover {
 .message-bubble p:last-child { margin-bottom: 0; }
 .message.assistant .message-bubble strong,
 .message.assistant .message-bubble b {
-  color: var(--bubble-strong);
+  color: #ffffff;
   font-weight: 700;
+}
+html[data-theme="light"] .message.assistant .message-bubble strong,
+html[data-theme="light"] .message.assistant .message-bubble b {
+  color: #0f172a;
 }
 html[data-theme="dark"] .message-bubble strong {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.12);
