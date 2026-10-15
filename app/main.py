@@ -102,7 +102,7 @@ def create_app(configured_settings: Settings = settings) -> FastAPI:
                 content={"detail": detail},
                 headers=error.headers,
             )
-        return JSONResponse(status_code=error.status_code, content={"detail": error.detail})
+        return JSONResponse(status_code=error.status_code, content={"detail": error.detail}, headers=error.headers)
 
     @application.exception_handler(RequestValidationError)
     async def validation_error_handler(
