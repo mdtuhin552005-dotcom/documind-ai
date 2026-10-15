@@ -63,6 +63,13 @@
     dropdownBtnHome: document.getElementById("dropdown-btn-home"),
     documentSearchInput: document.getElementById("document-search-input"),
     clearSearchBtn: document.getElementById("clear-search-btn"),
+    sidebarBtnNewChat: document.getElementById("sidebar-btn-new-chat"),
+    sidebarDocCard: document.getElementById("sidebar-doc-card"),
+    sidebarDocTitle: document.getElementById("sidebar-doc-title"),
+    sidebarDocMeta: document.getElementById("sidebar-doc-meta"),
+    sidebarExportPdf: document.getElementById("sidebar-export-pdf"),
+    sidebarExportWord: document.getElementById("sidebar-export-word"),
+    sidebarFooterHome: document.getElementById("sidebar-footer-home"),
 
     // Landing Header & Mobile Hamburger Navigation
     landingHamburgerBtn: document.getElementById("landing-hamburger-btn"),
@@ -761,6 +768,14 @@
       elements.barBtnExportWord.disabled = isDisabled;
       elements.barBtnExportWord.classList.toggle("is-dimmed", isDisabled);
     }
+    if (elements.sidebarExportPdf) {
+      elements.sidebarExportPdf.disabled = isDisabled;
+      elements.sidebarExportPdf.classList.toggle("is-dimmed", isDisabled);
+    }
+    if (elements.sidebarExportWord) {
+      elements.sidebarExportWord.disabled = isDisabled;
+      elements.sidebarExportWord.classList.toggle("is-dimmed", isDisabled);
+    }
   }
 
   // --- Export Modal Controller ---
@@ -811,6 +826,18 @@
       }
     } else if (elements.docMetadataBadge) {
       elements.docMetadataBadge.hidden = true;
+    }
+
+    if (elements.sidebarDocCard) {
+      if (selected) {
+        elements.sidebarDocCard.hidden = false;
+        if (elements.sidebarDocTitle) elements.sidebarDocTitle.textContent = selected.filename || selected.title;
+        if (elements.sidebarDocMeta) {
+          elements.sidebarDocMeta.textContent = `${selected.page_count || 1} Pages · ${selected.chunk_count || 0} Chunks Indexed`;
+        }
+      } else {
+        elements.sidebarDocCard.hidden = true;
+      }
     }
 
     elements.documentList?.querySelectorAll(".document-item").forEach((item) => {
@@ -1954,8 +1981,21 @@
       if (prompt && !prompt.disabled) sendQuestion(prompt.dataset.prompt);
     });
 
-    // Navigation and Mobile
+    // Navigation, Sidebar & Mobile Actions
     elements.newChatButton?.addEventListener("click", createChat);
+    elements.sidebarBtnNewChat?.addEventListener("click", createChat);
+    elements.sidebarFooterHome?.addEventListener("click", () => {
+      closeMobileSidebar();
+      showView("landing");
+    });
+    elements.sidebarExportPdf?.addEventListener("click", () => {
+      closeMobileSidebar();
+      exportConversation("pdf");
+    });
+    elements.sidebarExportWord?.addEventListener("click", () => {
+      closeMobileSidebar();
+      exportConversation("word");
+    });
     elements.mobileSidebarToggle?.addEventListener("click", openMobileSidebar);
     elements.sidebarClose?.addEventListener("click", closeMobileSidebar);
     elements.mobileOverlay?.addEventListener("click", closeMobileSidebar);

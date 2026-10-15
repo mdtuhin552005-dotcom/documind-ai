@@ -2330,6 +2330,89 @@ html[data-theme="light"] .theme-icon-sun { transform: translateY(0); opacity: 1;
   font: 800 10px var(--body);
 }
 
+/* Primary Sidebar Start New Chat Button */
+.sidebar-new-chat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--primary-gradient);
+  color: #ffffff !important;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.35);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 12px;
+}
+.sidebar-new-chat-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.5);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.sidebar-new-chat-btn:active {
+  transform: scale(0.98);
+}
+.sidebar-new-chat-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Active Document Intelligence Card in Sidebar */
+.sidebar-doc-card {
+  padding: 11px 13px;
+  border-radius: 13px;
+  background: rgba(14, 20, 34, 0.7);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  margin-bottom: 12px;
+  animation: fade-up 0.22s ease both;
+}
+html[data-theme="light"] .sidebar-doc-card {
+  background: #f0fdf4;
+  border-color: #a7f3d0;
+}
+.sidebar-doc-card[hidden] {
+  display: none !important;
+}
+.sidebar-doc-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--accent-mint);
+  margin-bottom: 4px;
+}
+.sidebar-doc-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--heading-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 3px;
+}
+.sidebar-doc-meta {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.sidebar-doc-privacy {
+  font-size: 9.5px;
+  color: #38bdf8;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+html[data-theme="light"] .sidebar-doc-privacy {
+  color: #0284c7;
+}
+
 /* Document Search Box */
 .library-search-box {
   display: flex;
@@ -2864,45 +2947,93 @@ html[data-theme="light"] .upload-zone.is-uploaded .highlight-browse {
   background: rgba(239, 68, 68, 0.15);
 }
 
+/* Sidebar Quick Export Hub */
+.sidebar-export-hub {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.sidebar-section-kicker {
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+  margin-bottom: 7px;
+  text-transform: uppercase;
+}
+.sidebar-export-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.sidebar-export-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--text-main);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+.sidebar-export-btn:hover:not(:disabled) {
+  background: var(--surface-hover);
+  border-color: var(--line-focus);
+  color: var(--primary-light);
+  transform: translateY(-1px);
+}
+.sidebar-export-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.export-chip-icon {
+  font-size: 13px;
+}
+
+/* Sidebar Bottom Utility Footer */
 .sidebar-footer {
   display: flex;
   align-items: center;
-  gap: 11px;
+  justify-content: space-between;
+  gap: 8px;
   margin-top: auto;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--surface);
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
 }
-.sidebar-footer strong {
-  display: block;
-  color: var(--heading-color);
+.sidebar-footer-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-sub);
   font-size: 11.5px;
   font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
 }
-.sidebar-footer span {
-  display: block;
-  color: var(--text-muted);
-  font-size: 9.5px;
-  line-height: 1.4;
+.sidebar-footer-home:hover {
+  background: var(--surface-hover);
+  color: var(--text-main);
+  border-color: var(--line-focus);
 }
-.privacy-icon {
-  display: grid;
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  place-items: center;
-  color: var(--primary-light);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--primary-soft);
+.sidebar-footer-home .home-icon {
+  font-size: 13px;
 }
-.privacy-icon svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.7;
+.sidebar-pro-chip {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent-mint);
+  letter-spacing: 0.4px;
 }
 
 /* Chat Header */
@@ -4690,8 +4821,9 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
     gap: 7px;
   }
   .active-document-name {
-    max-width: calc(100vw - 235px);
-    font-size: 12px;
+    max-width: calc(100vw - 140px);
+    font-size: 12.5px;
+    font-weight: 700;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -4702,22 +4834,10 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
     gap: 6px;
     flex-shrink: 0;
   }
-  .chat-header-actions .new-chat-button {
-    padding: 6px 9px;
-    font-size: 11px;
-    height: 32px;
-    min-height: 32px;
-    border-radius: 8px;
-    gap: 4px;
-    white-space: nowrap;
-  }
-  .chat-header-actions .new-chat-button svg {
-    width: 12px;
-    height: 12px;
-  }
   .chat-header-actions .export-btn {
-    padding: 6px 9px;
-    font-size: 11px;
+    padding: 6px 12px;
+    font-size: 11.5px;
+    font-weight: 700;
     height: 32px;
     min-height: 32px;
     border-radius: 8px;
@@ -4762,6 +4882,22 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
     place-items: center;
     width: 30px;
     height: 30px;
+  }
+  .sidebar-new-chat-btn {
+    padding: 11px 16px;
+    font-size: 13.5px;
+    margin-bottom: 14px;
+  }
+  .sidebar-doc-card {
+    padding: 10px 12px;
+  }
+  .sidebar-export-btn {
+    padding: 8px 10px;
+    font-size: 11.5px;
+  }
+  .sidebar-footer-home {
+    padding: 7px 12px;
+    font-size: 12px;
   }
   .mobile-overlay {
     position: fixed;

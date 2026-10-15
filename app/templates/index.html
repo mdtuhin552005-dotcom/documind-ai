@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=59" />
+    <link rel="stylesheet" href="/static/styles.css?v=60" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,7 +42,7 @@
         },
       };
     </script>
-    <script defer src="/static/app.js?v=59"></script>
+    <script defer src="/static/app.js?v=60"></script>
   </head>
   <body>
     <div class="app-shell">
@@ -762,6 +762,25 @@
               </div>
             </div>
 
+            <!-- Primary + New Research Chat Button -->
+            <button type="button" class="sidebar-new-chat-btn" id="sidebar-btn-new-chat" title="Start a fresh conversation">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+              <span>+ Start New Chat</span>
+            </button>
+
+            <!-- Active Document Intelligence Card -->
+            <div class="sidebar-doc-card" id="sidebar-doc-card" hidden>
+              <div class="sidebar-doc-badge">
+                <span class="active-pulse"></span>
+                <span>ACTIVE DOCUMENT</span>
+              </div>
+              <div class="sidebar-doc-title" id="sidebar-doc-title">Document.pdf</div>
+              <div class="sidebar-doc-meta" id="sidebar-doc-meta">0 Pages · 0 Chunks Indexed</div>
+              <div class="sidebar-doc-privacy">🔒 Zero-Retention Sandbox</div>
+            </div>
+
             <!-- Document Search Box -->
             <div class="library-search-box">
               <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -822,6 +841,30 @@
             <div class="recent-chat-list" id="recent-chat-list" aria-live="polite">
               <div class="recent-empty" id="recent-empty">Saved research conversations will appear here.</div>
             </div>
+
+            <!-- Sidebar Quick Export Hub -->
+            <div class="sidebar-export-hub">
+              <span class="sidebar-section-kicker">QUICK EXPORT</span>
+              <div class="sidebar-export-actions">
+                <button type="button" class="sidebar-export-btn" id="sidebar-export-pdf" title="Export as PDF report" disabled>
+                  <span class="export-chip-icon">📄</span>
+                  <span>Export PDF</span>
+                </button>
+                <button type="button" class="sidebar-export-btn" id="sidebar-export-word" title="Export as Word document" disabled>
+                  <span class="export-chip-icon">📝</span>
+                  <span>Export Word</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Sidebar Bottom Utility Footer -->
+            <div class="sidebar-footer">
+              <button type="button" class="sidebar-footer-home" id="sidebar-footer-home" title="Return to Homepage">
+                <span class="home-icon">🏠</span>
+                <span>Return to Home</span>
+              </button>
+              <span class="sidebar-pro-chip">DocuMind AI · Free</span>
+            </div>
           </aside>
 
           <!-- Main Chat Panel -->
@@ -843,12 +886,7 @@
               </div>
 
               <div class="chat-header-actions" id="chat-header-actions">
-                <button class="new-chat-button" id="new-chat-button" type="button" title="Start a fresh conversation">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-                  <span>＋ New chat</span>
-                </button>
-
-                <!-- Export Conversation Button -->
+                <!-- Export Conversation Button (Kept prominent on the outside) -->
                 <button class="header-action-button export-btn" id="btn-export-chat" type="button" title="Export conversation as PDF or Word" disabled>
                   <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1">
                     <path fill-rule="evenodd" d="M3 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Zm3.293-7.707a1 1 0 0 1 1.414 0L9 10.586V3a1 1 0 1 1 2 0v7.586l1.293-1.293a1 1 0 1 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414Z" clip-rule="evenodd" />
