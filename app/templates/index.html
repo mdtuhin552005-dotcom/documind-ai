@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=36" />
+    <link rel="stylesheet" href="/static/styles.css?v=37" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,7 +42,7 @@
         },
       };
     </script>
-    <script defer src="/static/app.js?v=27"></script>
+    <script defer src="/static/app.js?v=28"></script>
   </head>
   <body>
     <!-- Clean, Static Subtle Ambient Background -->
@@ -257,6 +257,87 @@
                     Try with your PDF →
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Product Interface Showcase Section (High-Resolution Graphic Layout & Image Preview) -->
+        <section class="landing-section product-showcase-section" id="interface-preview">
+          <div class="landing-section-header">
+            <span class="landing-section-kicker">ENTERPRISE WORKSPACE INTERFACE</span>
+            <h2 class="landing-section-title">
+              Designed for Research at the Speed of Thought
+            </h2>
+            <p class="landing-section-subtitle">
+              Unified PDF preview, split-screen neural analysis, and realtime citation auditing engineered for deep research.
+            </p>
+          </div>
+
+          <!-- Product App Mockup Frame with Real Image & Floating Visual Pills -->
+          <div class="product-mockup-wrapper">
+            <div class="product-mockup-window">
+              <!-- Window Chrome Bar -->
+              <div class="mockup-chrome-bar">
+                <div class="mockup-traffic-dots">
+                  <span class="mockup-dot dot-red"></span>
+                  <span class="mockup-dot dot-yellow"></span>
+                  <span class="mockup-dot dot-green"></span>
+                </div>
+                <div class="mockup-url-bar">
+                  <span class="mockup-lock-icon">🔒</span>
+                  <span class="mockup-url-text">https://documind.ai/workspace/analysis?doc=executive_report_2026.pdf</span>
+                </div>
+                <div class="mockup-status-tag">⚡ LIVE EMBEDDINGS</div>
+              </div>
+
+              <!-- Main Mockup Image Container with Holographic Overlays -->
+              <div class="mockup-image-stage">
+                <img src="/static/images/ai-research-bg.jpg" alt="DocuMind AI Interactive Document Intelligence Workspace" class="mockup-hero-img" loading="lazy" />
+                <div class="mockup-gradient-scrim"></div>
+
+                <!-- Floating Interactive Feature Badges -->
+                <div class="mockup-floating-badge badge-top-left">
+                  <div class="badge-icon-box">📄</div>
+                  <div class="badge-text-group">
+                    <span class="badge-heading">Multi-page Context Vectorization</span>
+                    <span class="badge-subtext">100% Page-Accurate Citations</span>
+                  </div>
+                </div>
+
+                <div class="mockup-floating-badge badge-bottom-right">
+                  <div class="badge-icon-box">⚡</div>
+                  <div class="badge-text-group">
+                    <span class="badge-heading">Neural Grounding Engine</span>
+                    <span class="badge-subtext">&lt; 0.8s Real-Time Inference</span>
+                  </div>
+                </div>
+
+                <div class="mockup-floating-badge badge-center-cta">
+                  <button type="button" class="btn-mockup-explore" onclick="document.getElementById('btn-hero-launch').click()">
+                    <span>Launch Live Interactive Demo</span>
+                    <span>→</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3 Feature Highlight Columns underneath Mockup -->
+            <div class="mockup-highlights-grid">
+              <div class="mockup-highlight-card">
+                <div class="highlight-icon">🔍</div>
+                <h4>Zero Guesswork Retrieval</h4>
+                <p>Every answer is directly extracted from indexed PDF pages with clickable citation anchors.</p>
+              </div>
+              <div class="mockup-highlight-card">
+                <div class="highlight-icon">📊</div>
+                <h4>Instant Data Extraction</h4>
+                <p>Pull balance sheets, quarterly targets, metrics, and risk factors into structured summaries.</p>
+              </div>
+              <div class="mockup-highlight-card">
+                <div class="highlight-icon">🛡️</div>
+                <h4>Enterprise Vault Retention</h4>
+                <p>Auditable activity logging, persistent vector indexing, and administrative compliance records.</p>
               </div>
             </div>
           </div>
@@ -644,10 +725,10 @@
 
             <!-- Chat Scroll Body -->
             <div class="chat-scroll" id="chat-scroll">
-              <!-- Welcome Empty State -->
-              <div class="welcome-state" id="welcome-state">
-                <div class="welcome-badge-icon" aria-hidden="true">
-                  <div class="welcome-icon-box">
+              <!-- Welcome Empty State (Clean, Compact, Minimal) -->
+              <div class="welcome-state welcome-state-compact" id="welcome-state">
+                <div class="welcome-badge-icon-mini" aria-hidden="true">
+                  <div class="welcome-icon-box-mini">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M7 3.75h6.2L18 8.6v11.65H7V3.75Z" stroke-linejoin="round" />
                       <path d="M13 4v5h4.8M9.5 13h5M9.5 16h3.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -655,43 +736,24 @@
                   </div>
                 </div>
 
-                <span class="welcome-kicker"><span></span> 100% FREE AI RESEARCH WORKSPACE</span>
-                <h2>Summarize &amp; Answer Questions for Free.<br /><span class="gradient-text">Ask Questions to Any PDF to Stay Ahead.</span></h2>
-                <p class="welcome-description">
-                  Summarize and answer questions for free. Ask questions to any PDF to stay ahead — cut research time by 90%, synthesize complex reports, and extract instant page-verified citations with zero guesswork.
+                <h3 class="welcome-title-compact">Ready to analyze your PDF</h3>
+                <p class="welcome-desc-compact">
+                  Select a document from your library or click a shortcut below:
                 </p>
 
-                <!-- 3D Interactive Prompt Grid -->
-                <div class="prompt-grid" id="prompt-grid">
-                  <button type="button" class="prompt-card" data-prompt="Give me a concise executive summary and key objectives of this document.">
-                    <span class="prompt-icon prompt-violet" aria-hidden="true">⚡</span>
-                    <span><strong>Instant Smart Summary</strong><small>Executive bullet points &amp; key insights</small></span>
-                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+                <!-- Compact Quick Prompt Shortcuts -->
+                <div class="prompt-grid prompt-grid-compact" id="prompt-grid">
+                  <button type="button" class="prompt-card prompt-pill" data-prompt="Give me a concise executive summary and key objectives of this document.">
+                    <span class="prompt-pill-icon">⚡</span>
+                    <span class="prompt-pill-text">Executive Summary</span>
                   </button>
-                  <button type="button" class="prompt-card" data-prompt="What are the top 5 key takeaways and decisions in this document?">
-                    <span class="prompt-icon prompt-peach" aria-hidden="true">🎯</span>
-                    <span><strong>Top 5 Takeaways</strong><small>Critical decisions &amp; findings</small></span>
-                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+                  <button type="button" class="prompt-card prompt-pill" data-prompt="What are the top 5 key takeaways and decisions in this document?">
+                    <span class="prompt-pill-icon">🎯</span>
+                    <span class="prompt-pill-text">Top 5 Takeaways</span>
                   </button>
-                  <button type="button" class="prompt-card" data-prompt="List all important dates, deadlines, figures, and numerical metrics mentioned.">
-                    <span class="prompt-icon prompt-mint" aria-hidden="true">📅</span>
-                    <span><strong>Dates &amp; Numerical Metrics</strong><small>Timelines, figures &amp; statistics</small></span>
-                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
-                  </button>
-                  <button type="button" class="prompt-card" data-prompt="Perform an objective critical analysis: what are the key risks, assumptions, or limitations?">
-                    <span class="prompt-icon prompt-rose" aria-hidden="true">⚖️</span>
-                    <span><strong>Critical Risk Analysis</strong><small>Vulnerabilities &amp; limitations</small></span>
-                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
-                  </button>
-                  <button type="button" class="prompt-card" data-prompt="Generate a Q&A study guide with 5 questions and answers based on this document.">
-                    <span class="prompt-icon prompt-blue" aria-hidden="true">❓</span>
-                    <span><strong>Interactive Q&amp;A Guide</strong><small>Self-assessment &amp; deep comprehension</small></span>
-                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
-                  </button>
-                  <button type="button" class="prompt-card" data-prompt="What are the actionable next steps and practical recommendations from this text?">
-                    <span class="prompt-icon prompt-amber" aria-hidden="true">💡</span>
-                    <span><strong>Actionable Next Steps</strong><small>Practical execution roadmap</small></span>
-                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+                  <button type="button" class="prompt-card prompt-pill" data-prompt="Generate a Q&A study guide with 5 questions and answers based on this document.">
+                    <span class="prompt-pill-icon">❓</span>
+                    <span class="prompt-pill-text">Key Q&amp;A Guide</span>
                   </button>
                 </div>
               </div>

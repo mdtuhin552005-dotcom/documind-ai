@@ -1077,6 +1077,317 @@ html[data-theme="light"] .metric-lbl {
   margin: 0;
 }
 
+/* ========================================================
+   ENTERPRISE PRODUCT INTERFACE SHOWCASE
+   ======================================================== */
+.product-showcase-section {
+  max-width: 1100px;
+  margin-bottom: 84px;
+}
+
+.product-mockup-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.product-mockup-window {
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #0b0f19;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(37, 99, 235, 0.2);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+html[data-theme="light"] .product-mockup-window {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(37, 99, 235, 0.15);
+}
+
+.product-mockup-window:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 32px 70px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(37, 99, 235, 0.4);
+}
+
+.mockup-chrome-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: rgba(15, 23, 42, 0.75);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+html[data-theme="light"] .mockup-chrome-bar {
+  background: #f1f5f9;
+  border-bottom-color: #e2e8f0;
+}
+
+.mockup-traffic-dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.mockup-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #f59e0b; }
+.dot-green { background: #10b981; }
+
+.mockup-url-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 5px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #94a3b8;
+  max-width: 520px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html[data-theme="light"] .mockup-url-bar {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.mockup-lock-icon {
+  font-size: 11px;
+}
+
+.mockup-status-tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #3b82f6;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  padding: 3px 10px;
+  border-radius: 9999px;
+}
+
+.mockup-image-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 540px;
+  overflow: hidden;
+  background: #070a12;
+}
+
+.mockup-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.product-mockup-window:hover .mockup-hero-img {
+  transform: scale(1.02);
+}
+
+.mockup-gradient-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7, 10, 18, 0.1) 0%, rgba(7, 10, 18, 0.45) 70%, rgba(7, 10, 18, 0.85) 100%);
+  pointer-events: none;
+}
+
+html[data-theme="light"] .mockup-gradient-scrim {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(15, 23, 42, 0.1) 70%, rgba(15, 23, 42, 0.5) 100%);
+}
+
+.mockup-floating-badge {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: rgba(11, 15, 25, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  z-index: 4;
+  animation: float-slow 4s ease-in-out infinite alternate;
+}
+
+html[data-theme="light"] .mockup-floating-badge {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.15);
+}
+
+.badge-top-left {
+  top: 24px;
+  left: 24px;
+  animation-delay: 0s;
+}
+
+.badge-bottom-right {
+  bottom: 28px;
+  right: 28px;
+  animation-delay: 1.5s;
+}
+
+.badge-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(37, 99, 235, 0.2);
+  border: 1px solid rgba(37, 99, 235, 0.4);
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  color: #60a5fa;
+}
+
+.badge-text-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.badge-heading {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+html[data-theme="light"] .badge-heading {
+  color: #0f172a;
+}
+
+.badge-subtext {
+  font-size: 11px;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.badge-center-cta {
+  bottom: 28px;
+  left: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  animation: none;
+}
+
+.btn-mockup-explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff !important;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-mockup-explore:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.6);
+}
+
+.mockup-highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.mockup-highlight-card {
+  padding: 22px 20px;
+  border-radius: 16px;
+  background: #0f1523;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+html[data-theme="light"] .mockup-highlight-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+.mockup-highlight-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(37, 99, 235, 0.45);
+}
+
+.mockup-highlight-card .highlight-icon {
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.mockup-highlight-card h4 {
+  color: #ffffff;
+  font: 700 15px/1.3 var(--display);
+  margin: 0 0 8px;
+}
+
+html[data-theme="light"] .mockup-highlight-card h4 {
+  color: #0f172a;
+}
+
+.mockup-highlight-card p {
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+html[data-theme="light"] .mockup-highlight-card p {
+  color: #334155;
+}
+
+@keyframes float-slow {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-6px); }
+}
+
+@media (max-width: 768px) {
+  .mockup-highlights-grid {
+    grid-template-columns: 1fr;
+  }
+  .mockup-floating-badge {
+    display: none;
+  }
+  .badge-center-cta {
+    display: block;
+    bottom: 16px;
+    left: 16px;
+  }
+  .mockup-url-bar {
+    max-width: 200px;
+  }
+}
+
 /* Standard 3-Card Core Capabilities */
 .feature-grid-standard {
   display: grid;
@@ -2715,6 +3026,111 @@ html[data-theme="light"] .meta-pill {
   stroke: currentColor;
   stroke-width: 2;
   transform: translateZ(7px);
+}
+
+/* Compact & Minimal Workspace Welcome State */
+.welcome-state.welcome-state-compact {
+  max-width: 520px;
+  padding: 24px 16px 14px;
+  margin: auto;
+  text-align: center;
+}
+
+.welcome-badge-icon-mini {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.welcome-icon-box-mini {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--primary-gradient);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.welcome-icon-box-mini svg {
+  width: 22px;
+  height: 22px;
+}
+
+.welcome-title-compact {
+  margin: 0 0 6px;
+  color: var(--heading-color);
+  font: 700 20px/1.3 var(--display);
+  letter-spacing: -0.4px;
+}
+
+.welcome-desc-compact {
+  margin: 0 auto 16px;
+  color: var(--text-sub);
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 440px;
+}
+
+.prompt-grid-compact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+.prompt-card.prompt-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: var(--surface-card);
+  border: 1px solid var(--line);
+  color: var(--heading-color);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+html[data-theme="light"] .prompt-card.prompt-pill {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+.prompt-card.prompt-pill:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.22);
+}
+
+html[data-theme="light"] .prompt-card.prompt-pill:hover {
+  background: #f8fafc;
+  border-color: #2563eb;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.18);
+}
+
+.prompt-pill-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.prompt-pill-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: inherit;
 }
 
 /* Messages List */

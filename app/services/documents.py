@@ -174,14 +174,8 @@ class DocumentService:
         if record is None:
             return False
 
-        await run_in_threadpool(self._remove_vectors, document_id)
+        # Soft delete in database - preserve physical file and records for Admin Panel audit retention
         deleted = await self.database.delete_document(document_id, user_id)
-        if deleted:
-            file_path = Path(record["file_path"])
-            try:
-                await run_in_threadpool(file_path.unlink, missing_ok=True)
-            except OSError:
-                logger.exception("Could not remove stored PDF for document %s", document_id)
         return deleted
 
     def _remove_vectors(self, document_id: str) -> None:
