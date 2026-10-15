@@ -3414,14 +3414,14 @@ html[data-theme="light"] .export-opt-text small {
   width: 100%;
   padding: 11px 20px;
   border-radius: 12px;
-  background: var(--primary-gradient);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 55%, #b91c1c 100%);
   color: #ffffff !important;
   font-size: 13.5px;
   font-weight: 700;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 18px rgba(5, 150, 105, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 18px rgba(239, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   text-shadow: none;
 }
 .welcome-upload-action-btn svg {
@@ -3430,10 +3430,20 @@ html[data-theme="light"] .export-opt-text small {
 }
 .welcome-upload-action-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(5, 150, 105, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: linear-gradient(135deg, #f87171 0%, #ef4444 55%, #dc2626 100%);
+  box-shadow: 0 6px 24px rgba(239, 68, 68, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 .welcome-upload-action-btn:active {
   transform: scale(0.97);
+}
+.welcome-upload-action-btn.is-uploaded {
+  background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%) !important;
+  border-color: rgba(16, 185, 129, 0.6) !important;
+  box-shadow: 0 4px 18px rgba(5, 150, 105, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+.welcome-upload-action-btn.is-uploaded:hover {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+  box-shadow: 0 6px 24px rgba(5, 150, 105, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
 }
 .welcome-upload-sub {
   font-size: 11px;
@@ -4720,18 +4730,19 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
     font-size: 13px;
   }
 
-  /* Mobile Slide-in Drawer */
+  /* Mobile Slide-in Drawer (Right Side on Android / Mobile) */
   .sidebar {
     position: fixed;
     z-index: 100;
     top: 58px;
     bottom: 8px;
-    left: 8px;
+    left: auto;
+    right: 8px;
     width: min(320px, calc(100vw - 20px));
     min-width: 0;
     border-radius: 16px;
     box-shadow: 0 12px 48px rgba(0, 0, 0, 0.75), 0 0 0 1px var(--line-focus);
-    transform: translateX(calc(-100% - 16px));
+    transform: translateX(calc(100% + 16px));
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     animation: none;
     background: var(--surface-elevated);

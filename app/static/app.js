@@ -420,6 +420,16 @@
       if (elements.uploadZoneSubtitle) {
         elements.uploadZoneSubtitle.innerHTML = '<span class="highlight-browse">Sign up free</span> with Gmail to analyze documents';
       }
+      if (elements.welcomeUploadBtn) {
+        elements.welcomeUploadBtn.classList.remove("is-uploaded");
+        elements.welcomeUploadBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          </svg>
+          <span>Upload PDF Document</span>
+        `;
+        elements.welcomeUploadBtn.title = "Choose a PDF to analyze";
+      }
       return;
     }
 
@@ -437,6 +447,16 @@
       if (elements.uploadZoneSubtitle) {
         elements.uploadZoneSubtitle.innerHTML = `Active: <strong style="color:var(--text-main); font-weight:700;">${escapeHtml(shortName)}</strong> · <span class="highlight-browse">add another</span>`;
       }
+      if (elements.welcomeUploadBtn) {
+        elements.welcomeUploadBtn.classList.add("is-uploaded");
+        elements.welcomeUploadBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Uploaded ✓</span>
+        `;
+        elements.welcomeUploadBtn.title = "PDF uploaded & active! Click to upload or switch document.";
+      }
     } else {
       // Red default state when awaiting file upload
       elements.uploadZone.classList.remove("is-uploaded");
@@ -445,6 +465,16 @@
       }
       if (elements.uploadZoneSubtitle) {
         elements.uploadZoneSubtitle.innerHTML = 'or <span class="highlight-browse">click to browse</span> from device';
+      }
+      if (elements.welcomeUploadBtn) {
+        elements.welcomeUploadBtn.classList.remove("is-uploaded");
+        elements.welcomeUploadBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          </svg>
+          <span>Upload PDF Document</span>
+        `;
+        elements.welcomeUploadBtn.title = "Choose a PDF to analyze";
       }
     }
   }
