@@ -278,28 +278,34 @@ async def documents_page(request: Request, msg: str = ""):
     async with aiosqlite.connect(get_db_path(request)) as conn:
         conn.row_factory = aiosqlite.Row
         cur = await conn.execute(
-            "SELECT d.id, d.filename, d.title, d.page_count, d.created_at, u.email FROM documents d LEFT JOIN users u ON u.id=d.user_id ORDER BY d.created_at DESC"
+            """
+            SELECT d.id, d.filename, d.title, d.page_count, d.created_at, d.is_deleted, d.deleted_at, u.email
+            FROM documents d
+            LEFT JOIN users u ON u.id=d.user_id
+            ORDER BY d.created_at DESC
+            """
         )
         docs = await cur.fetchall()
 
     alert = f'<div class="alert alert-success">{msg}</div>' if msg else ""
     rows = "".join(f"""<tr>
-      <td><code style="font-size:11px;color:#818cf8">{r['id'][:8]}...</code></td>
-      <td class="truncate">{r['filename']}</td>
-      <td class="truncate">{r['title']}</td>
+      <td><code style="font-size:11px;color:#34d399">{r['id'][:8]}...</code></td>
+      <td class="truncate" title="{r['filename']}">{r['filename']}</td>
+      <td class="truncate" title="{r['title']}">{r['title']}</td>
       <td style="text-align:center">{r['page_count']}</td>
-      <td style="color:#64748b">{(r['email'] or 'N/A')}</td>
+      <td>{r['email'] or '<span style="color:#64748b">Anonymous</span>'}</td>
       <td>{r['created_at'][:10]}</td>
+      <td>{'<span class="badge badge-red" title="Deleted by user: ' + (r['deleted_at'] or '') + '">Deleted by User</span>' if r['is_deleted'] else '<span class="badge badge-green">Active</span>'}</td>
       <td><form method="post" action="/admin/documents/{r['id']}/delete" style="display:inline">
-        <button class="btn btn-danger" onclick="return confirm('Delete?')" style="padding:4px 12px;font-size:12px">Delete</button>
+        <button class="btn btn-danger" onclick="return confirm('Permanently remove this document record from database?')" style="padding:4px 10px;font-size:11px">Purge</button>
       </form></td>
-    </tr>""" for r in docs) or f'<tr><td colspan="7" class="empty">No documents.</td></tr>'
+    </tr>""" for r in docs) or '<tr><td colspan="8" class="empty">No documents in database.</td></tr>'
 
     body = f"""{alert}
-<div class="page-sub">{len(docs)} documents uploaded</div>
+<div class="page-sub">{len(docs)} documents stored (including retained user-deleted archives)</div>
 <div class="card">
-  <div class="card-header"><h3>All Documents</h3><span class="badge badge-green">{len(docs)}</span></div>
-  <table><thead><tr><th>ID</th><th>Filename</th><th>Title</th><th>Pages</th><th>Owner</th><th>Date</th><th>Action</th></tr></thead>
+  <div class="card-header"><h3>Document Vault</h3><span class="badge badge-green">{len(docs)} total</span></div>
+  <table><thead><tr><th>ID</th><th>Filename</th><th>Title</th><th>Pages</th><th>Owner</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
   <tbody>{rows}</tbody></table>
 </div>"""
     return HTMLResponse(page("Documents", body, "doc"))
@@ -313,7 +319,7 @@ async def delete_document(doc_id: str, request: Request):
         await conn.execute("DELETE FROM conversations WHERE document_id=?", (doc_id,))
         await conn.execute("DELETE FROM documents WHERE id=?", (doc_id,))
         await conn.commit()
-    return RedirectResponse("/admin/documents?msg=Document+deleted", status_code=302)
+    return RedirectResponse("/admin/documents?msg=Document+purged+from+database", status_code=302)
 
 
 # ── Conversations ────────────────────────────────────────────────────────────
@@ -323,26 +329,34 @@ async def conversations_page(request: Request):
     async with aiosqlite.connect(get_db_path(request)) as conn:
         conn.row_factory = aiosqlite.Row
         cur = await conn.execute(
-            "SELECT c.id, c.title, c.updated_at, u.email, (SELECT COUNT(*) FROM conversation_messages WHERE conversation_id=c.id) as msg_count FROM conversations c LEFT JOIN users u ON u.id=c.user_id ORDER BY c.updated_at DESC LIMIT 50"
+            """
+            SELECT c.id, c.title, c.updated_at, c.is_deleted, c.deleted_at, u.email,
+                   (SELECT COUNT(*) FROM conversation_messages WHERE conversation_id=c.id) as msg_count
+            FROM conversations c
+            LEFT JOIN users u ON u.id=c.user_id
+            ORDER BY c.updated_at DESC
+            LIMIT 100
+            """
         )
         convs = await cur.fetchall()
 
     rows = "".join(f"""<tr>
-      <td><code style="font-size:11px;color:#818cf8">{r['id'][:8]}...</code></td>
-      <td class="truncate">{r['title']}</td>
-      <td>{r['email'] or 'N/A'}</td>
-      <td style="text-align:center">{r['msg_count']}</td>
+      <td><code style="font-size:11px;color:#34d399">{r['id'][:8]}...</code></td>
+      <td class="truncate" title="{r['title']}">{r['title']}</td>
+      <td>{r['email'] or '<span style="color:#64748b">Anonymous</span>'}</td>
+      <td style="text-align:center"><span class="badge badge-blue">{r['msg_count']} msgs</span></td>
       <td>{r['updated_at'][:16]}</td>
+      <td>{'<span class="badge badge-red" title="Deleted by user: ' + (r['deleted_at'] or '') + '">Deleted by User</span>' if r['is_deleted'] else '<span class="badge badge-green">Active</span>'}</td>
       <td><form method="post" action="/admin/conversations/{r['id']}/delete" style="display:inline">
-        <button class="btn btn-danger" onclick="return confirm('Delete?')" style="padding:4px 12px;font-size:12px">Delete</button>
+        <button class="btn btn-danger" onclick="return confirm('Purge conversation?')" style="padding:4px 10px;font-size:11px">Purge</button>
       </form></td>
-    </tr>""" for r in convs) or f'<tr><td colspan="6" class="empty">No conversations.</td></tr>'
+    </tr>""" for r in convs) or '<tr><td colspan="7" class="empty">No conversations in database.</td></tr>'
 
     body = f"""
-<div class="page-sub">Last 50 conversations</div>
+<div class="page-sub">Last 100 conversations (including retained archives)</div>
 <div class="card">
-  <div class="card-header"><h3>All Conversations</h3><span class="badge badge-blue">{len(convs)}</span></div>
-  <table><thead><tr><th>ID</th><th>Title</th><th>User</th><th>Messages</th><th>Updated</th><th>Action</th></tr></thead>
+  <div class="card-header"><h3>Conversation History</h3><span class="badge badge-blue">{len(convs)}</span></div>
+  <table><thead><tr><th>ID</th><th>Title</th><th>User</th><th>Messages</th><th>Updated</th><th>Status</th><th>Action</th></tr></thead>
   <tbody>{rows}</tbody></table>
 </div>"""
     return HTMLResponse(page("Conversations", body, "c"))

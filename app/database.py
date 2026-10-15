@@ -178,6 +178,14 @@ class DocumentDatabase:
                     await database.execute(
                         f"ALTER TABLE {table} ADD COLUMN user_id TEXT REFERENCES users(id)"
                     )
+                if "is_deleted" not in columns:
+                    await database.execute(
+                        f"ALTER TABLE {table} ADD COLUMN is_deleted INTEGER DEFAULT 0"
+                    )
+                if "deleted_at" not in columns:
+                    await database.execute(
+                        f"ALTER TABLE {table} ADD COLUMN deleted_at TEXT DEFAULT NULL"
+                    )
 
             await database.execute(
                 """
@@ -228,6 +236,7 @@ class DocumentDatabase:
                 SELECT id, filename, title, page_count, chunk_count, created_at
                 FROM documents
                 WHERE (? IS NULL OR user_id = ?)
+                  AND (is_deleted = 0 OR is_deleted IS NULL)
                 ORDER BY created_at DESC
                 """,
                 (user_id, user_id),
@@ -243,31 +252,32 @@ class DocumentDatabase:
         async with aiosqlite.connect(self.database_path) as database:
             database.row_factory = aiosqlite.Row
             cursor = await database.execute(
-                "SELECT * FROM documents WHERE id = ? AND (? IS NULL OR user_id = ?)",
+                """
+                SELECT * FROM documents
+                WHERE id = ? AND (? IS NULL OR user_id = ?)
+                  AND (is_deleted = 0 OR is_deleted IS NULL)
+                """,
                 (document_id, user_id, user_id),
             )
             row = await cursor.fetchone()
             return dict(row) if row is not None else None
 
     async def delete_document(self, document_id: str, user_id: str | None = None) -> bool:
+        now = datetime.now(UTC).isoformat()
         async with aiosqlite.connect(self.database_path) as database:
             await database.execute("BEGIN")
+            # Soft delete: update flag so user doesn't see it, but admin retains full data
             await database.execute(
-                """
-                DELETE FROM conversation_messages
-                WHERE conversation_id IN (
-                    SELECT id FROM conversations WHERE document_id = ?
-                )
-                """,
-                (document_id,),
-            )
-            await database.execute(
-                "DELETE FROM conversations WHERE document_id = ?",
-                (document_id,),
+                "UPDATE conversations SET is_deleted = 1, deleted_at = ? WHERE document_id = ?",
+                (now, document_id),
             )
             cursor = await database.execute(
-                "DELETE FROM documents WHERE id = ? AND (? IS NULL OR user_id = ?)",
-                (document_id, user_id, user_id),
+                "UPDATE documents SET is_deleted = 1, deleted_at = ? WHERE id = ? AND (? IS NULL OR user_id = ?)",
+                (now, document_id, user_id, user_id),
+            )
+            await database.execute(
+                "INSERT INTO activity_logs (user_id, action, details, created_at) VALUES (?, ?, ?, ?)",
+                (user_id, "USER_DELETE_DOCUMENT", f"Document soft-deleted: {document_id}", now),
             )
             await database.commit()
             return cursor.rowcount > 0
@@ -306,6 +316,7 @@ class DocumentDatabase:
                 FROM conversations
                 JOIN documents ON documents.id = conversations.document_id
                 WHERE (? IS NULL OR conversations.user_id = ?)
+                  AND (conversations.is_deleted = 0 OR conversations.is_deleted IS NULL)
                 ORDER BY conversations.updated_at DESC
                 LIMIT ?
                 """,
@@ -332,6 +343,7 @@ class DocumentDatabase:
                 FROM conversations
                 JOIN documents ON documents.id = conversations.document_id
                 WHERE conversations.id = ? AND (? IS NULL OR conversations.user_id = ?)
+                  AND (conversations.is_deleted = 0 OR conversations.is_deleted IS NULL)
                 """,
                 (conversation_id, user_id, user_id),
             )
@@ -382,18 +394,15 @@ class DocumentDatabase:
         conversation_id: str,
         user_id: str | None = None,
     ) -> bool:
+        now = datetime.now(UTC).isoformat()
         async with aiosqlite.connect(self.database_path) as database:
-            await database.execute("BEGIN")
-            await database.execute(
-                """DELETE FROM conversation_messages
-                WHERE conversation_id = ?
-                  AND EXISTS (SELECT 1 FROM conversations
-                              WHERE id = ? AND (? IS NULL OR user_id = ?))""",
-                (conversation_id, conversation_id, user_id, user_id),
-            )
             cursor = await database.execute(
-                "DELETE FROM conversations WHERE id = ? AND (? IS NULL OR user_id = ?)",
-                (conversation_id, user_id, user_id),
+                "UPDATE conversations SET is_deleted = 1, deleted_at = ? WHERE id = ? AND (? IS NULL OR user_id = ?)",
+                (now, conversation_id, user_id, user_id),
+            )
+            await database.execute(
+                "INSERT INTO activity_logs (user_id, action, details, created_at) VALUES (?, ?, ?, ?)",
+                (user_id, "USER_DELETE_CONVERSATION", f"Conversation soft-deleted: {conversation_id}", now),
             )
             await database.commit()
             return cursor.rowcount > 0
