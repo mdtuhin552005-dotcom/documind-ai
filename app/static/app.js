@@ -17,7 +17,6 @@
     btnBottomTry: document.getElementById("btn-bottom-try"),
 
     // Workspace Navigation & Topbar
-    btnNavHome: document.getElementById("btn-nav-home"),
     brandLinkWorkspace: document.getElementById("brand-link-workspace"),
     activeName: document.getElementById("active-document-name"),
     chatScroll: document.getElementById("chat-scroll"),
@@ -56,7 +55,6 @@
     docMetadataBadge: document.getElementById("doc-metadata-badge"),
     docPageBadge: document.getElementById("doc-page-badge"),
     docChunkBadge: document.getElementById("doc-chunk-badge"),
-    btnSmartSummary: document.getElementById("btn-smart-summary"),
     btnExportChat: document.getElementById("btn-export-chat"),
     barBtnExportPdf: document.getElementById("bar-btn-export-pdf"),
     barBtnExportWord: document.getElementById("bar-btn-export-word"),
@@ -68,15 +66,6 @@
     landingHamburgerBtn: document.getElementById("landing-hamburger-btn"),
     landingMobileNav: document.getElementById("landing-mobile-nav"),
     landingMobileSignin: document.getElementById("landing-mobile-signin"),
-
-    // Mobile Chat Action Bar & Collapsible Toggle
-    mobileChatBar: document.getElementById("mobile-chat-bar"),
-    btnToggleMobileBar: document.getElementById("btn-toggle-mobile-bar"),
-    mobileBarToggleIcon: document.getElementById("mobile-bar-toggle-icon"),
-    mobileBtnNewChat: document.getElementById("mobile-btn-new-chat"),
-    mobileBtnSummary: document.getElementById("mobile-btn-summary"),
-    mobileBtnExport: document.getElementById("mobile-btn-export"),
-    mobileBtnCollapse: document.getElementById("mobile-btn-collapse"),
 
     // Export Modal Bottom Sheet
     exportModalBackdrop: document.getElementById("export-modal-backdrop"),
@@ -166,8 +155,8 @@
   // High-Impact Research Value & Principles (100% English)
   const wisdomQuotes = [
     {
-      text: "Summarize and answer questions for free. Ask questions to any PDF to stay ahead.",
-      sub: "Extract instant clarity, key data tables, and executive takeaways from any document in seconds.",
+      text: "Transform Any PDF into Deep Intelligence. Instant answers, exact citations & fast research.",
+      sub: "Turn complex textbooks, research papers, and technical reports into instant breakthrough clarity.",
     },
     {
       text: "Read 10x faster: Turn complex textbooks, research papers, and reports into instant answers.",
@@ -732,9 +721,6 @@
       elements.btnExportChat.disabled = isDisabled;
       elements.btnExportChat.classList.toggle("is-dimmed", isDisabled);
     }
-    if (elements.mobileBtnExport) {
-      elements.mobileBtnExport.disabled = isDisabled;
-    }
     if (elements.barBtnExportPdf) {
       elements.barBtnExportPdf.disabled = isDisabled;
       elements.barBtnExportPdf.classList.toggle("is-dimmed", isDisabled);
@@ -781,12 +767,6 @@
       elements.sendButton.disabled = !selected || state.busy || !elements.questionInput.value.trim();
     }
 
-    if (elements.btnSmartSummary) {
-      elements.btnSmartSummary.disabled = !selected || state.busy;
-    }
-    if (elements.mobileBtnSummary) {
-      elements.mobileBtnSummary.disabled = !selected || state.busy;
-    }
     setExportButtonsDisabled(!state.chatId || state.history.length === 0);
 
     if (selected && elements.docMetadataBadge) {
@@ -1783,17 +1763,9 @@
       renderDocuments();
     });
 
-    // Smart Summary and Export Actions
-    elements.btnSmartSummary?.addEventListener("click", triggerSmartSummary);
-
-    // Desktop and Mobile Export Triggers
+    // Export Trigger
     elements.btnExportChat?.addEventListener("click", () => {
       if (elements.btnExportChat.disabled || elements.btnExportChat.classList.contains("is-dimmed")) return;
-      openExportModal();
-    });
-
-    elements.mobileBtnExport?.addEventListener("click", () => {
-      if (elements.mobileBtnExport.disabled) return;
       openExportModal();
     });
 
@@ -1824,34 +1796,6 @@
       if (elements.userDropdown) elements.userDropdown.hidden = true;
       showView("landing");
     });
-
-    // Mobile-Dedicated Chat Action Bar Events (New Chat, Summary, Export)
-    elements.mobileBtnNewChat?.addEventListener("click", () => {
-      createChat();
-    });
-
-    elements.mobileBtnSummary?.addEventListener("click", () => {
-      triggerSmartSummary();
-    });
-
-    // Mobile Action Bar Hide / Unhide Controller (^ / v)
-    function toggleMobileChatBar() {
-      if (!elements.mobileChatBar) return;
-      const isCollapsed = elements.mobileChatBar.classList.toggle("is-collapsed");
-      const icon = isCollapsed ? "▼" : "▲";
-      if (elements.mobileBarToggleIcon) elements.mobileBarToggleIcon.textContent = icon;
-      if (elements.btnToggleMobileBar) {
-        elements.btnToggleMobileBar.classList.toggle("is-collapsed", isCollapsed);
-        elements.btnToggleMobileBar.setAttribute("aria-expanded", String(!isCollapsed));
-        elements.btnToggleMobileBar.title = isCollapsed ? "Unhide action bar (▼)" : "Hide action bar (▲)";
-      }
-      try {
-        localStorage.setItem("documind-mobile-bar-collapsed", isCollapsed ? "1" : "0");
-      } catch {}
-    }
-
-    elements.btnToggleMobileBar?.addEventListener("click", toggleMobileChatBar);
-    elements.mobileBtnCollapse?.addEventListener("click", toggleMobileChatBar);
 
     // Landing 3-Line Mobile Hamburger Menu Toggle
     elements.landingHamburgerBtn?.addEventListener("click", (e) => {
@@ -1995,14 +1939,6 @@
   renderWisdom(0);
   bindEvents();
   updateComposer();
-  try {
-    if (localStorage.getItem("documind-mobile-bar-collapsed") === "1") {
-      elements.mobileChatBar?.classList.add("is-collapsed");
-      if (elements.mobileBarToggleIcon) elements.mobileBarToggleIcon.textContent = "▼";
-      elements.btnToggleMobileBar?.classList.add("is-collapsed");
-      elements.btnToggleMobileBar?.setAttribute("aria-expanded", "false");
-    }
-  } catch {}
   checkAuthSession().then(async () => {
     if (state.currentUser) {
       await loadDocuments();
