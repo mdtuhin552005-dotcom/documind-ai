@@ -703,6 +703,13 @@
     showView("landing");
   }
 
+  // --- Export State Helper ---
+  function setExportButtonsDisabled(disabled) {
+    if (elements.btnExportChat) elements.btnExportChat.disabled = disabled;
+    if (elements.btnExportPdf) elements.btnExportPdf.disabled = disabled;
+    if (elements.btnExportWord) elements.btnExportWord.disabled = disabled;
+  }
+
   // --- Document Selection & UI Updates ---
   function setSelectedDocument(documentId) {
     state.selectedId = documentId;
@@ -729,9 +736,7 @@
     if (elements.btnSmartSummary) {
       elements.btnSmartSummary.disabled = !selected || state.busy;
     }
-    if (elements.btnExportChat) {
-      elements.btnExportChat.disabled = !state.chatId || state.history.length === 0;
-    }
+    setExportButtonsDisabled(!state.chatId || state.history.length === 0);
 
     if (selected && elements.docMetadataBadge) {
       elements.docMetadataBadge.hidden = false;
@@ -862,7 +867,7 @@
     if (elements.messageList) elements.messageList.replaceChildren();
     if (elements.welcomeState) elements.welcomeState.hidden = false;
     if (elements.chatScroll) elements.chatScroll.scrollTop = 0;
-    if (elements.btnExportChat) elements.btnExportChat.disabled = true;
+    setExportButtonsDisabled(true);
     renderChats();
   }
 
@@ -956,7 +961,7 @@
       if (elements.messageList) elements.messageList.replaceChildren();
       if (elements.welcomeState) elements.welcomeState.hidden = false;
       if (elements.chatScroll) elements.chatScroll.scrollTop = 0;
-      if (elements.btnExportChat) elements.btnExportChat.disabled = true;
+      setExportButtonsDisabled(true);
       try {
         localStorage.setItem(activeChatStorageKey, state.chatId);
       } catch {}
@@ -987,7 +992,7 @@
       });
       if (conversation.messages.length === 0 && elements.welcomeState) elements.welcomeState.hidden = false;
       setSelectedDocument(state.selectedId);
-      if (elements.btnExportChat) elements.btnExportChat.disabled = state.history.length === 0;
+      setExportButtonsDisabled(state.history.length === 0);
       renderDocuments();
       renderChats();
       if (closeSidebar) closeMobileSidebar();
@@ -1010,7 +1015,7 @@
         state.history = [];
         if (elements.messageList) elements.messageList.replaceChildren();
         if (elements.welcomeState) elements.welcomeState.hidden = false;
-        if (elements.btnExportChat) elements.btnExportChat.disabled = true;
+        setExportButtonsDisabled(true);
         try {
           localStorage.removeItem(activeChatStorageKey);
         } catch {}
@@ -1311,7 +1316,7 @@
     row.append(avatar, body);
     elements.messageList.append(row);
     if (elements.chatScroll) elements.chatScroll.scrollTop = elements.chatScroll.scrollHeight;
-    if (elements.btnExportChat) elements.btnExportChat.disabled = state.history.length === 0;
+    setExportButtonsDisabled(state.history.length === 0);
     return row;
   }
 
@@ -1408,7 +1413,7 @@
       state.history.push({ role: "user", content: question }, { role: "assistant", content: result.answer });
       typing?.remove();
       addMessage("assistant", result.answer, result.sources);
-      if (elements.btnExportChat) elements.btnExportChat.disabled = false;
+      setExportButtonsDisabled(false);
       await loadChats();
     } catch (error) {
       typing?.remove();

@@ -3066,6 +3066,50 @@ html[data-theme="light"] .meta-pill {
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
 }
 
+.export-pdf-btn {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.35);
+}
+.export-pdf-btn:hover:not(:disabled) {
+  background: #ef4444;
+  color: #ffffff !important;
+  border-color: #ef4444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+}
+html[data-theme="light"] .export-pdf-btn {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+html[data-theme="light"] .export-pdf-btn:hover:not(:disabled) {
+  background: #dc2626;
+  color: #ffffff !important;
+}
+
+.export-word-btn {
+  background: rgba(37, 99, 235, 0.12);
+  color: #60a5fa;
+  border-color: rgba(37, 99, 235, 0.35);
+}
+.export-word-btn:hover:not(:disabled) {
+  background: #2563eb;
+  color: #ffffff !important;
+  border-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+html[data-theme="light"] .export-word-btn {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+html[data-theme="light"] .export-word-btn:hover:not(:disabled) {
+  background: #2563eb;
+  color: #ffffff !important;
+}
+
 /* Export Dropdown Menu */
 .export-dropdown-wrap {
   position: relative;

@@ -134,7 +134,11 @@ async def export_chat_document(request: Request, export_format: str) -> Response
     from docx import Document
     from fastapi.responses import Response
 
-    user = await require_authenticated_user(request)
+    try:
+        user = await require_authenticated_user(request)
+    except Exception:
+        user = None
+
     try:
         body = await request.json()
     except Exception:
