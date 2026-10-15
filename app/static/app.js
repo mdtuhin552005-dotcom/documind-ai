@@ -707,7 +707,7 @@
 
   // --- Export State Helper ---
   function setExportButtonsDisabled(disabled) {
-    if (elements.btnExportChat) elements.btnExportChat.disabled = disabled;
+    if (elements.btnExportChat) elements.btnExportChat.classList.toggle("is-dimmed", disabled);
     if (elements.btnExportPdf) elements.btnExportPdf.classList.toggle("is-dimmed", disabled);
     if (elements.btnExportWord) elements.btnExportWord.classList.toggle("is-dimmed", disabled);
     if (elements.barBtnExportPdf) elements.barBtnExportPdf.classList.toggle("is-dimmed", disabled);
@@ -1784,10 +1784,6 @@
 
     elements.btnExportChat?.addEventListener("click", (e) => {
       e.stopPropagation();
-      if (!state.history.length) {
-        showToast("No conversation to export.", "info");
-        return;
-      }
       if (elements.exportMenu) {
         elements.exportMenu.hidden = !elements.exportMenu.hidden;
       }
@@ -1795,11 +1791,13 @@
 
     elements.btnExportPdf?.addEventListener("click", (e) => {
       e.stopPropagation();
+      if (elements.exportMenu) elements.exportMenu.hidden = true;
       exportChat("pdf");
     });
 
     elements.btnExportWord?.addEventListener("click", (e) => {
       e.stopPropagation();
+      if (elements.exportMenu) elements.exportMenu.hidden = true;
       exportChat("docx");
     });
 
