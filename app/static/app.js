@@ -57,6 +57,9 @@
     docPageBadge: document.getElementById("doc-page-badge"),
     docChunkBadge: document.getElementById("doc-chunk-badge"),
     btnSmartSummary: document.getElementById("btn-smart-summary"),
+    btnExportChat: document.getElementById("btn-export-chat"),
+    barBtnExportPdf: document.getElementById("bar-btn-export-pdf"),
+    barBtnExportWord: document.getElementById("bar-btn-export-word"),
     dropdownBtnHome: document.getElementById("dropdown-btn-home"),
     documentSearchInput: document.getElementById("document-search-input"),
     clearSearchBtn: document.getElementById("clear-search-btn"),
@@ -70,6 +73,15 @@
     mobileChatBar: document.getElementById("mobile-chat-bar"),
     mobileBtnNewChat: document.getElementById("mobile-btn-new-chat"),
     mobileBtnSummary: document.getElementById("mobile-btn-summary"),
+    mobileBtnExport: document.getElementById("mobile-btn-export"),
+
+    // Export Modal Bottom Sheet
+    exportModalBackdrop: document.getElementById("export-modal-backdrop"),
+    exportModalSheet: document.getElementById("export-modal-sheet"),
+    modalExportPdf: document.getElementById("modal-export-pdf"),
+    modalExportWord: document.getElementById("modal-export-word"),
+    btnCloseExportModal: document.getElementById("btn-close-export-modal"),
+    btnCancelExportModal: document.getElementById("btn-cancel-export-modal"),
 
     // Wisdom Topbar Ticker Elements
     topbarWisdomTicker: document.getElementById("topbar-wisdom-ticker"),
@@ -711,13 +723,23 @@
 
   // --- Export State Helper ---
   function setExportButtonsDisabled(disabled) {
-    if (elements.btnExportChat) elements.btnExportChat.classList.toggle("is-dimmed", disabled);
-    if (elements.btnExportPdf) elements.btnExportPdf.classList.toggle("is-dimmed", disabled);
-    if (elements.btnExportWord) elements.btnExportWord.classList.toggle("is-dimmed", disabled);
-    if (elements.barBtnExportPdf) elements.barBtnExportPdf.classList.toggle("is-dimmed", disabled);
-    if (elements.barBtnExportWord) elements.barBtnExportWord.classList.toggle("is-dimmed", disabled);
-    if (elements.mobileBtnExportPdf) elements.mobileBtnExportPdf.disabled = disabled;
-    if (elements.mobileBtnExportWord) elements.mobileBtnExportWord.disabled = disabled;
+    const hasHistory = state.history && state.history.length > 0;
+    const isDisabled = disabled || !hasHistory || !state.selectedId;
+    if (elements.btnExportChat) {
+      elements.btnExportChat.disabled = isDisabled;
+      elements.btnExportChat.classList.toggle("is-dimmed", isDisabled);
+    }
+    if (elements.mobileBtnExport) {
+      elements.mobileBtnExport.disabled = isDisabled;
+    }
+    if (elements.barBtnExportPdf) {
+      elements.barBtnExportPdf.disabled = isDisabled;
+      elements.barBtnExportPdf.classList.toggle("is-dimmed", isDisabled);
+    }
+    if (elements.barBtnExportWord) {
+      elements.barBtnExportWord.disabled = isDisabled;
+      elements.barBtnExportWord.classList.toggle("is-dimmed", isDisabled);
+    }
   }
 
   // --- Export Modal Controller ---
@@ -1484,41 +1506,13 @@
     const cleanDocName = docName.replace(/\.pdf$/i, "").replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "_") || "Report";
     const ts = Date.now();
 
-    if (elements.exportMenu) elements.exportMenu.hidden = true;
-    showToast(`Generating ${format.toUpperCase()} export...`, "info");
+    if (elements.exportModalBackdrop) elements.exportModalBackdrop.hidden = true;
 
-    try {
-      const response = await fetch(`/api/chats/export/${format}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          document_name: docName,
-          messages: state.history,
-        }),
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        const ext = format === "pdf" ? "pdf" : "docx";
-        link.download = `DocuMind_Export_${cleanDocName}_${ts}.${ext}`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        showToast(`Saved as ${ext.toUpperCase()} successfully!`, "success");
-        return;
-      }
-    } catch (err) {
-      console.warn("Backend export failed, using client-side generator:", err);
-    }
-
-    // Client-side fallback
     if (format === "docx" || format === "word") {
+      showToast("Generating Word document (.docx/.doc)...", "info");
       exportChatWordFallback(docName, cleanDocName, ts);
     } else {
+      showToast("Preparing printable PDF document...", "info");
       exportChatPdfFallback(docName);
     }
   }
@@ -1801,8 +1795,42 @@
       renderDocuments();
     });
 
-    // Smart Summary and Export Dropdown Actions
+    // Smart Summary and Export Actions
     elements.btnSmartSummary?.addEventListener("click", triggerSmartSummary);
+
+    // Desktop and Mobile Export Triggers
+    elements.btnExportChat?.addEventListener("click", () => {
+      if (elements.btnExportChat.disabled || elements.btnExportChat.classList.contains("is-dimmed")) return;
+      openExportModal();
+    });
+
+    elements.mobileBtnExport?.addEventListener("click", () => {
+      if (elements.mobileBtnExport.disabled) return;
+      openExportModal();
+    });
+
+    // Quick Research Bar Export Buttons
+    elements.barBtnExportPdf?.addEventListener("click", () => {
+      if (!elements.barBtnExportPdf.disabled) exportChat("pdf");
+    });
+    elements.barBtnExportWord?.addEventListener("click", () => {
+      if (!elements.barBtnExportWord.disabled) exportChat("docx");
+    });
+
+    // Export Modal Bottom Sheet Actions
+    elements.modalExportPdf?.addEventListener("click", () => {
+      closeExportModal();
+      exportChat("pdf");
+    });
+    elements.modalExportWord?.addEventListener("click", () => {
+      closeExportModal();
+      exportChat("docx");
+    });
+    elements.btnCloseExportModal?.addEventListener("click", closeExportModal);
+    elements.btnCancelExportModal?.addEventListener("click", closeExportModal);
+    elements.exportModalBackdrop?.addEventListener("click", (e) => {
+      if (e.target === elements.exportModalBackdrop) closeExportModal();
+    });
 
     elements.dropdownBtnHome?.addEventListener("click", () => {
       if (elements.userDropdown) elements.userDropdown.hidden = true;
@@ -1950,6 +1978,7 @@
       if (event.key === "Escape") {
         closeMobileSidebar();
         closeAuthModal();
+        closeExportModal();
       }
     });
   }

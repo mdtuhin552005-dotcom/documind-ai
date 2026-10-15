@@ -4587,12 +4587,12 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
     display: none !important; /* Replaced cleanly by dedicated mobile-chat-bar */
   }
 
-  /* Dedicated Mobile Action Bar for Phone Users */
+  /* Dedicated Mobile Action Bar for Phone Users (Comfortable touch targets & equal spacing) */
   .mobile-chat-bar {
     display: flex !important;
     align-items: center;
-    gap: 6px;
-    padding: 7px 10px;
+    gap: 8px;
+    padding: 8px 10px;
     background: var(--surface);
     border-bottom: 1px solid var(--line);
     overflow-x: auto;
@@ -4607,21 +4607,24 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
   .mobile-bar-btn {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 11px;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 11px;
+    min-height: 38px;
+    border-radius: 9px;
+    font-size: 12px;
     font-weight: 700;
     white-space: nowrap;
     border: 1px solid var(--line);
     background: var(--surface-hover);
     color: var(--text-main);
     cursor: pointer;
-    flex-shrink: 0;
+    flex: 1 1 0;
+    min-width: 0;
     transition: all 0.15s ease;
   }
   .mobile-bar-btn:active {
-    transform: scale(0.95);
+    transform: scale(0.96);
   }
   .mobile-bar-btn:disabled {
     opacity: 0.4;
@@ -4636,6 +4639,11 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
     background: rgba(16, 185, 129, 0.12);
     color: #34d399;
     border-color: rgba(16, 185, 129, 0.35);
+  }
+  .mobile-bar-export {
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+    border-color: rgba(168, 85, 247, 0.35);
   }
   .mobile-bar-pdf {
     background: rgba(239, 68, 68, 0.12);

@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=47" />
+    <link rel="stylesheet" href="/static/styles.css?v=50" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,7 +42,7 @@
         },
       };
     </script>
-    <script defer src="/static/app.js?v=38"></script>
+    <script defer src="/static/app.js?v=50"></script>
   </head>
   <body>
     <div class="app-shell">
@@ -81,9 +81,6 @@
           </nav>
 
           <div class="landing-nav-right">
-            <!-- Right-side Document AI button -->
-            <button type="button" class="btn-corner-try" id="btn-corner-try" title="Open Document AI Workspace">⚡ Document AI</button>
-
             <!-- Theme Switcher (Dark / Light) -->
             <button class="theme-toggle" id="landing-theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
               <svg class="theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
@@ -96,10 +93,10 @@
               </svg>
             </button>
 
-            <!-- Sign In (Desktop) -->
+            <!-- Sign In (Desktop - hidden on mobile) -->
             <button type="button" class="auth-button auth-button-signin" id="landing-btn-signin">Sign In</button>
 
-            <!-- 3-Line Hamburger Menu for Phone -->
+            <!-- 3-Line Hamburger Menu for Phone (Android / Mobile) -->
             <button type="button" class="landing-hamburger-btn" id="landing-hamburger-btn" aria-label="Toggle navigation menu" aria-expanded="false" title="Menu">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -820,6 +817,14 @@
                   <span>Smart Summary</span>
                 </button>
 
+                <!-- Export Conversation Button -->
+                <button class="header-action-button export-btn" id="btn-export-chat" type="button" title="Export conversation as PDF or Word" disabled>
+                  <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Zm3.293-7.707a1 1 0 0 1 1.414 0L9 10.586V3a1 1 0 1 1 2 0v7.586l1.293-1.293a1 1 0 1 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414Z" clip-rule="evenodd" />
+                  </svg>
+                  <span>Export ▾</span>
+                </button>
+
                 <span class="ready-pill" id="ready-pill"><span></span> Ready</span>
 
                 <button class="new-chat-button" id="new-chat-button" type="button" title="Start a fresh conversation">
@@ -829,14 +834,17 @@
               </div>
             </div>
 
-            <!-- Phone-Dedicated Mobile Chat Action Bar -->
+            <!-- Phone-Dedicated Mobile Chat Action Bar (Comfortable touch targets for Android/Mobile) -->
             <div class="mobile-chat-bar" id="mobile-chat-bar">
               <button class="mobile-bar-btn mobile-bar-new-chat" id="mobile-btn-new-chat" type="button" title="Start a fresh conversation">
                 <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" /></svg>
-                <span>New Chat</span>
+                <span>＋ New Chat</span>
               </button>
               <button class="mobile-bar-btn mobile-bar-summary" id="mobile-btn-summary" type="button" title="Generate Smart Executive Summary" disabled>
-                <span>⚡ Smart Summary</span>
+                <span>⚡ Summary</span>
+              </button>
+              <button class="mobile-bar-btn mobile-bar-export" id="mobile-btn-export" type="button" title="Export conversation as PDF or Word" disabled>
+                <span>📥 Export ▾</span>
               </button>
             </div>
 
@@ -903,6 +911,14 @@
                   <button type="button" class="chat-tool-btn" data-prompt="What are the actionable next steps and practical recommendations from this text?" title="Actionable Next Steps" disabled>
                     <span class="tool-icon">💡</span>
                     <span>Action Roadmap</span>
+                  </button>
+                  <button type="button" class="chat-tool-btn chat-tool-export" id="bar-btn-export-pdf" title="Export conversation as printable PDF (.pdf)" disabled>
+                    <span class="tool-icon">📄</span>
+                    <span>Export PDF</span>
+                  </button>
+                  <button type="button" class="chat-tool-btn chat-tool-export" id="bar-btn-export-word" title="Export conversation as Microsoft Word (.docx)" disabled>
+                    <span class="tool-icon">📝</span>
+                    <span>Export Word</span>
                   </button>
                 </div>
               </div>
@@ -1017,6 +1033,54 @@
           <div class="modal-footer-quote">
             <span class="sparkle-mini">🔒</span>
             <span>Zero spam. Account required solely for isolated workspace security.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export Options Modal / Bottom Sheet -->
+      <div class="export-modal-backdrop" id="export-modal-backdrop" hidden>
+        <div class="export-modal-sheet" id="export-modal-sheet" role="dialog" aria-modal="true" aria-labelledby="export-modal-title">
+          <div class="export-modal-header">
+            <div class="export-modal-title-wrap">
+              <span class="export-modal-badge" aria-hidden="true">📥</span>
+              <div>
+                <h3 class="export-modal-title" id="export-modal-title">Export Research Conversation</h3>
+                <p class="export-modal-subtitle">Download complete chat history with verified source citations</p>
+              </div>
+            </div>
+            <button type="button" class="export-modal-close" id="btn-close-export-modal" aria-label="Close export dialog">✕</button>
+          </div>
+
+          <div class="export-modal-options">
+            <!-- PDF Option Card -->
+            <button type="button" class="export-modal-card-btn opt-pdf" id="modal-export-pdf">
+              <span class="export-card-icon" aria-hidden="true">📄</span>
+              <div class="export-card-content">
+                <div class="export-card-top">
+                  <span class="export-card-name">PDF Document</span>
+                  <span class="format-badge badge-pdf">.PDF</span>
+                </div>
+                <p class="export-card-desc">Clean printable report with verified page sources &amp; full Q&amp;A</p>
+              </div>
+              <span class="export-card-action">Export PDF →</span>
+            </button>
+
+            <!-- Word Option Card -->
+            <button type="button" class="export-modal-card-btn opt-word" id="modal-export-word">
+              <span class="export-card-icon" aria-hidden="true">📝</span>
+              <div class="export-card-content">
+                <div class="export-card-top">
+                  <span class="export-card-name">Word Document</span>
+                  <span class="format-badge badge-word">.DOCX</span>
+                </div>
+                <p class="export-card-desc">Fully editable document compatible with Microsoft Word &amp; Google Docs</p>
+              </div>
+              <span class="export-card-action">Export Word →</span>
+            </button>
+          </div>
+
+          <div class="export-modal-footer">
+            <button type="button" class="export-modal-cancel" id="btn-cancel-export-modal">Cancel</button>
           </div>
         </div>
       </div>
