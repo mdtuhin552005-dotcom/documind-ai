@@ -212,6 +212,111 @@
       <path d="M4 2.5h5l3 3v8H4v-11Z"></path>
       <path d="M9 2.7v3h2.8"></path>
     </svg>`;
+  const moreIcon = `
+    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+      <circle cx="4" cy="10" r="1.8"/>
+      <circle cx="10" cy="10" r="1.8"/>
+      <circle cx="16" cy="10" r="1.8"/>
+    </svg>`;
+
+  const pinnedDocsStorageKey = "documind-pinned-docs";
+  const pinnedChatsStorageKey = "documind-pinned-chats";
+
+  function getPinnedDocIds() {
+    try {
+      return JSON.parse(localStorage.getItem(pinnedDocsStorageKey) || "[]");
+    } catch {
+      return [];
+    }
+  }
+
+  function togglePinDoc(docId) {
+    let pinned = getPinnedDocIds();
+    if (pinned.includes(docId)) {
+      pinned = pinned.filter((id) => id !== docId);
+      showToast("Document unpinned.");
+    } else {
+      pinned.unshift(docId);
+      showToast("Document pinned to top! 📌", "success");
+    }
+    try {
+      localStorage.setItem(pinnedDocsStorageKey, JSON.stringify(pinned));
+    } catch {}
+    renderDocuments();
+  }
+
+  function getPinnedChatIds() {
+    try {
+      return JSON.parse(localStorage.getItem(pinnedChatsStorageKey) || "[]");
+    } catch {
+      return [];
+    }
+  }
+
+  function togglePinChat(chatId) {
+    let pinned = getPinnedChatIds();
+    if (pinned.includes(chatId)) {
+      pinned = pinned.filter((id) => id !== chatId);
+      showToast("Chat unpinned.");
+    } else {
+      pinned.unshift(chatId);
+      showToast("Chat pinned to top! 📌", "success");
+    }
+    try {
+      localStorage.setItem(pinnedChatsStorageKey, JSON.stringify(pinned));
+    } catch {}
+    renderChats();
+  }
+
+  function closeAllItemMenus() {
+    document.querySelectorAll(".item-dropdown-menu").forEach((m) => m.remove());
+  }
+
+  function openItemMenu(event, options) {
+    event.stopPropagation();
+    closeAllItemMenus();
+    const trigger = event.currentTarget;
+    const parent = trigger.closest(".document-item, .recent-chat-item") || trigger.parentElement;
+    if (!parent) return;
+
+    if (window.getComputedStyle(parent).position === "static") {
+      parent.style.position = "relative";
+    }
+
+    const menu = document.createElement("div");
+    menu.className = "item-dropdown-menu";
+
+    const rect = trigger.getBoundingClientRect();
+    if (rect.bottom + 95 > window.innerHeight) {
+      menu.style.bottom = "32px";
+    } else {
+      menu.style.top = "32px";
+    }
+
+    options.forEach((opt) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "item-menu-option";
+      if (opt.danger) btn.classList.add("danger-option");
+
+      const icon = document.createElement("span");
+      icon.className = "menu-opt-icon";
+      icon.textContent = opt.icon;
+
+      const label = document.createElement("span");
+      label.textContent = opt.label;
+
+      btn.append(icon, label);
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeAllItemMenus();
+        opt.action();
+      });
+      menu.appendChild(btn);
+    });
+
+    parent.appendChild(menu);
+  }
 
   function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, (character) => ({
@@ -801,7 +906,7 @@
     if (elements.questionInput) {
       elements.questionInput.disabled = !selected || state.busy;
       elements.questionInput.placeholder = selected
-        ? `Ask anything about ${selected.title}…`
+        ? `Ask anything about ${selected.title || selected.filename}…`
         : "Choose a document to get started…";
     }
     elements.promptGrid?.querySelectorAll(".prompt-card").forEach((button) => {
@@ -840,9 +945,36 @@
       }
     }
 
+    // Dynamic Welcome State feedback for Current Document
+    const welcomeTitle = document.getElementById("welcome-title-compact");
+    const welcomeDesc = document.getElementById("welcome-desc-compact");
+    if (welcomeDesc) {
+      if (selected) {
+        welcomeDesc.innerHTML = `Current document: <strong style="color:var(--accent-mint); font-weight:700;">${escapeHtml(selected.filename)}</strong> (${selected.page_count} ${selected.page_count === 1 ? "page" : "pages"})`;
+      } else {
+        welcomeDesc.textContent = "Select or upload a PDF document to begin.";
+      }
+    }
+    if (welcomeTitle) {
+      welcomeTitle.textContent = selected ? `Ready to analyze ${selected.filename}` : "Ready to analyze your PDF";
+    }
+
+    // Synchronize selection and Current Document badge in library list
     elements.documentList?.querySelectorAll(".document-item").forEach((item) => {
-      item.classList.toggle("is-selected", item.dataset.id === documentId);
+      const isCurrent = item.dataset.id === documentId;
+      item.classList.toggle("is-selected", isCurrent);
+      const docNameEl = item.querySelector(".document-name");
+      const existingPill = docNameEl?.querySelector(".current-doc-pill");
+      if (isCurrent && !existingPill && docNameEl) {
+        const pill = document.createElement("span");
+        pill.className = "current-doc-pill";
+        pill.textContent = "Current";
+        docNameEl.appendChild(pill);
+      } else if (!isCurrent && existingPill) {
+        existingPill.remove();
+      }
     });
+
     updateUploadZoneState();
   }
 
@@ -855,15 +987,31 @@
       return doc.filename.toLowerCase().includes(query) || doc.title.toLowerCase().includes(query);
     });
 
+    const pinnedDocIds = getPinnedDocIds();
+    // Sort pinned documents to top
+    documents.sort((a, b) => {
+      const aPinned = pinnedDocIds.includes(a.id);
+      const bPinned = pinnedDocIds.includes(b.id);
+      if (aPinned && !bPinned) return -1;
+      if (!aPinned && bPinned) return 1;
+      return 0;
+    });
+
     if (elements.libraryEmpty) elements.libraryEmpty.hidden = documents.length > 0;
     if (elements.documentTotal) elements.documentTotal.textContent = String(state.documents.length);
     if (elements.libraryCount) elements.libraryCount.textContent = String(state.documents.length);
 
     documents.forEach((doc) => {
-      const item = document.createElement("button");
-      item.type = "button";
+      const isPinned = pinnedDocIds.includes(doc.id);
+      const isCurrent = doc.id === state.selectedId;
+
+      const item = document.createElement("div");
       item.className = "document-item";
+      if (isPinned) item.classList.add("is-pinned");
+      if (isCurrent) item.classList.add("is-selected");
       item.dataset.id = doc.id;
+      item.tabIndex = 0;
+      item.setAttribute("role", "button");
       item.setAttribute("aria-label", `Select ${doc.filename}`);
 
       const icon = document.createElement("span");
@@ -876,6 +1024,22 @@
       name.className = "document-name";
       name.textContent = doc.filename;
       name.title = doc.filename;
+
+      if (isPinned) {
+        const pinBadge = document.createElement("span");
+        pinBadge.className = "pinned-indicator";
+        pinBadge.textContent = "📌";
+        pinBadge.title = "Pinned document";
+        name.appendChild(pinBadge);
+      }
+
+      if (isCurrent) {
+        const currentPill = document.createElement("span");
+        currentPill.className = "current-doc-pill";
+        currentPill.textContent = "Current";
+        name.appendChild(currentPill);
+      }
+
       const meta = document.createElement("span");
       meta.className = "document-meta";
       meta.textContent = `${doc.page_count} ${doc.page_count === 1 ? "page" : "pages"} · ${formatDate(doc.created_at)}`;
@@ -885,28 +1049,40 @@
       check.className = "document-check";
       check.innerHTML = checkIcon;
 
-      const remove = document.createElement("span");
-      remove.className = "document-delete";
-      remove.setAttribute("role", "button");
-      remove.setAttribute("tabindex", "0");
-      remove.setAttribute("aria-label", `Remove ${doc.filename}`);
-      remove.innerHTML = deleteIcon;
-      remove.addEventListener("click", (event) => {
-        event.stopPropagation();
-        deleteDocument(doc.id);
-      });
-      remove.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          event.stopPropagation();
-          deleteDocument(doc.id);
-        }
+      // 3-dot More Options Button (Pin, Delete)
+      const moreBtn = document.createElement("button");
+      moreBtn.type = "button";
+      moreBtn.className = "item-more-btn";
+      moreBtn.setAttribute("aria-label", `Options for ${doc.filename}`);
+      moreBtn.setAttribute("title", "Options (Pin, Delete)");
+      moreBtn.innerHTML = moreIcon;
+      moreBtn.addEventListener("click", (event) => {
+        openItemMenu(event, [
+          {
+            icon: isPinned ? "📍" : "📌",
+            label: isPinned ? "Unpin document" : "Pin to top",
+            action: () => togglePinDoc(doc.id),
+          },
+          {
+            icon: "🗑️",
+            label: "Delete document",
+            danger: true,
+            action: () => deleteDocument(doc.id),
+          },
+        ]);
       });
 
-      item.append(icon, copy, check, remove);
+      item.append(icon, copy, check, moreBtn);
       item.addEventListener("click", () => selectDocument(doc.id));
+      item.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectDocument(doc.id);
+        }
+      });
       elements.documentList.append(item);
     });
+
     setSelectedDocument(state.selectedId);
   }
 
@@ -940,12 +1116,24 @@
     if (elements.mobileOverlay) elements.mobileOverlay.classList.add("is-visible");
   }
 
-  function selectDocument(documentId) {
+  async function selectDocument(documentId) {
     if (state.busy || state.uploading) return;
     const changed = state.selectedId !== documentId;
     setSelectedDocument(documentId);
-    closeMobileSidebar();
-    if (changed) clearConversation();
+
+    // If an existing conversation exists for this document, resume it smoothly
+    const matchingChat = state.chats.find((c) => c.document_id === documentId);
+    if (matchingChat) {
+      await openChat(matchingChat.id, true);
+    } else {
+      if (changed) clearConversation();
+      closeMobileSidebar();
+    }
+
+    const doc = state.documents.find((d) => d.id === documentId);
+    if (doc) {
+      showToast(`“${doc.filename}” set as Current Document ✓`, "success");
+    }
   }
 
   function clearConversation() {
@@ -964,13 +1152,23 @@
   function renderChats() {
     if (!elements.recentChatList) return;
     elements.recentChatList.querySelectorAll(".recent-chat-item").forEach((item) => item.remove());
-    const conversations = state.chats;
+    const pinnedChatIds = getPinnedChatIds();
+    const conversations = [...state.chats].sort((a, b) => {
+      const aPinned = pinnedChatIds.includes(a.id);
+      const bPinned = pinnedChatIds.includes(b.id);
+      if (aPinned && !bPinned) return -1;
+      if (!aPinned && bPinned) return 1;
+      return 0;
+    });
+
     if (elements.recentChatTotal) elements.recentChatTotal.textContent = String(conversations.length);
     if (elements.recentEmpty) elements.recentEmpty.hidden = conversations.length > 0;
 
     conversations.forEach((conversation, index) => {
+      const isPinned = pinnedChatIds.includes(conversation.id);
       const item = document.createElement("div");
       item.className = "recent-chat-item";
+      if (isPinned) item.classList.add("is-pinned");
       item.dataset.id = conversation.id;
       item.classList.toggle("is-active", conversation.id === state.chatId);
       item.tabIndex = 0;
@@ -986,22 +1184,44 @@
       title.className = "recent-chat-title";
       title.textContent = conversation.title;
       title.title = conversation.title;
+
+      if (isPinned) {
+        const pinBadge = document.createElement("span");
+        pinBadge.className = "pinned-indicator";
+        pinBadge.textContent = "📌";
+        pinBadge.title = "Pinned chat";
+        title.appendChild(pinBadge);
+      }
+
       const meta = document.createElement("span");
       meta.className = "recent-chat-meta";
       meta.textContent = `${conversation.document_filename} · ${formatDate(conversation.updated_at)}`;
       copy.append(title, meta);
 
-      const remove = document.createElement("button");
-      remove.type = "button";
-      remove.className = "recent-chat-delete";
-      remove.setAttribute("aria-label", `Delete chat ${conversation.title}`);
-      remove.innerHTML = deleteIcon;
-      remove.addEventListener("click", (event) => {
-        event.stopPropagation();
-        deleteChat(conversation.id);
+      // 3-dot More Options Button (Pin, Delete)
+      const moreBtn = document.createElement("button");
+      moreBtn.type = "button";
+      moreBtn.className = "item-more-btn";
+      moreBtn.setAttribute("aria-label", `Options for ${conversation.title}`);
+      moreBtn.setAttribute("title", "Options (Pin, Delete)");
+      moreBtn.innerHTML = moreIcon;
+      moreBtn.addEventListener("click", (event) => {
+        openItemMenu(event, [
+          {
+            icon: isPinned ? "📍" : "📌",
+            label: isPinned ? "Unpin chat" : "Pin chat to top",
+            action: () => togglePinChat(conversation.id),
+          },
+          {
+            icon: "🗑️",
+            label: "Delete chat",
+            danger: true,
+            action: () => deleteChat(conversation.id),
+          },
+        ]);
       });
 
-      item.append(glyph, copy, remove);
+      item.append(glyph, copy, moreBtn);
       item.addEventListener("click", () => openChat(conversation.id));
       item.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -1889,6 +2109,7 @@
     });
 
     document.addEventListener("click", (e) => {
+      closeAllItemMenus();
       if (elements.exportMenu && !elements.exportDropdownWrap?.contains(e.target)) {
         elements.exportMenu.hidden = true;
       }
@@ -1897,6 +2118,24 @@
         elements.landingHamburgerBtn?.setAttribute("aria-expanded", "false");
       }
     });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeAllItemMenus();
+      }
+    });
+
+    // Support Drag and Drop PDF onto Chat Workspace
+    if (elements.chatScroll) {
+      elements.chatScroll.addEventListener("dragover", (event) => {
+        event.preventDefault();
+      });
+      elements.chatScroll.addEventListener("drop", (event) => {
+        event.preventDefault();
+        const file = event.dataTransfer?.files?.[0];
+        if (file) uploadFile(file);
+      });
+    }
 
     // Quick Chat Composer & Chat Box Welcome State PDF Upload Buttons
     function handlePdfUploadTrigger() {

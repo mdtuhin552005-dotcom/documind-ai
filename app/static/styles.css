@@ -2459,6 +2459,12 @@ html[data-theme="light"] .sidebar-doc-privacy {
 }
 .clear-search-btn:hover { color: var(--text-main); }
 
+/* Hide upload zone inside sidebar on both desktop (Windows) and mobile per user request */
+.sidebar .upload-zone,
+.sidebar .upload-progress {
+  display: none !important;
+}
+
 /* 3D Upload Zone with Account Gate (Red by default -> Automatic Green when file is uploaded) */
 .upload-zone {
   display: flex;
@@ -2692,8 +2698,8 @@ html[data-theme="light"] .upload-zone.is-uploaded .highlight-browse {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-height: 145px;
-  max-height: 195px;
+  min-height: 140px;
+  max-height: 240px;
   flex: 0 0 auto; /* STABLE AND FIXED! NEVER SQUISHED BY CHATS */
   overflow-y: auto;
   margin: 0 -4px;
@@ -2777,24 +2783,139 @@ html[data-theme="light"] .upload-zone.is-uploaded .highlight-browse {
   transition: opacity 0.15s;
 }
 .is-selected .document-check { opacity: 1; }
-.document-delete {
+/* Item Action: 3-dot More Button (Replaces exposed trash cans) */
+.item-more-btn {
   display: grid;
-  width: 25px;
-  height: 25px;
-  flex: 0 0 25px;
   place-items: center;
-  color: var(--text-muted);
-  border: 0;
-  border-radius: 7px;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border: none;
   background: transparent;
-  opacity: 0;
+  color: var(--text-muted);
+  border-radius: 7px;
   cursor: pointer;
-  transition: all 0.15s;
+  opacity: 0.65;
+  transition: all 0.18s ease;
+  margin-left: auto;
+  position: relative;
+  z-index: 2;
 }
-.document-item:hover .document-delete { opacity: 1; }
-.document-delete:hover {
+.document-item:hover .item-more-btn,
+.recent-chat-item:hover .item-more-btn {
+  opacity: 1;
+}
+.item-more-btn:hover {
+  opacity: 1 !important;
+  color: var(--text-main);
+  background: var(--surface-hover);
+  transform: scale(1.08);
+}
+.item-more-btn:active {
+  transform: scale(0.95);
+}
+.item-more-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* 3-dot Floating Dropdown Menu (Pin, Delete, etc.) */
+.item-dropdown-menu {
+  position: absolute;
+  right: 6px;
+  z-index: 1000;
+  min-width: 145px;
+  padding: 5px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 1px var(--line-focus);
+  backdrop-filter: blur(20px);
+  animation: fade-up 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+html[data-theme="light"] .item-dropdown-menu {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+}
+.item-menu-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 11.5px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.item-menu-option:hover {
+  background: var(--surface-hover);
+  color: var(--heading-color);
+}
+.item-menu-option.danger-option {
   color: #f87171;
-  background: rgba(239, 68, 68, 0.15);
+}
+.item-menu-option.danger-option:hover {
+  background: rgba(239, 68, 68, 0.14);
+  color: #ef4444;
+}
+.menu-opt-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* Pin indicator */
+.pinned-indicator {
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0.9;
+  margin-left: 4px;
+}
+.document-item.is-pinned,
+.recent-chat-item.is-pinned {
+  border-left: 3px solid var(--accent-mint) !important;
+}
+
+/* Current active document badge pill inside document item */
+.current-doc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.22);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+html[data-theme="light"] .current-doc-pill {
+  background: #d1fae5;
+  color: #047857;
+  border-color: #6ee7b7;
+}
+
+@media (max-width: 850px) {
+  .item-more-btn {
+    opacity: 0.85;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+  }
 }
 
 .library-empty {
@@ -2927,24 +3048,6 @@ html[data-theme="light"] .upload-zone.is-uploaded .highlight-browse {
   text-overflow: ellipsis;
   white-space: nowrap;
   opacity: 0.85;
-}
-.recent-chat-delete {
-  display: grid;
-  width: 24px;
-  height: 24px;
-  place-items: center;
-  color: var(--text-muted);
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  border-radius: 6px;
-  opacity: 0;
-  transition: all 0.15s;
-}
-.recent-chat-item:hover .recent-chat-delete { opacity: 1; }
-.recent-chat-delete:hover {
-  color: #f87171;
-  background: rgba(239, 68, 68, 0.15);
 }
 
 /* Sidebar Quick Export Hub */
