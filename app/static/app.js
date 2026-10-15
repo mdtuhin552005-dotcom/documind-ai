@@ -64,6 +64,13 @@
     btnExportWord: document.getElementById("btn-export-word"),
     barBtnExportPdf: document.getElementById("bar-btn-export-pdf"),
     barBtnExportWord: document.getElementById("bar-btn-export-word"),
+    exportModalBackdrop: document.getElementById("export-modal-backdrop"),
+    exportModalSheet: document.getElementById("export-modal-sheet"),
+    modalExportPdf: document.getElementById("modal-export-pdf"),
+    modalExportWord: document.getElementById("modal-export-word"),
+    btnCloseExportModal: document.getElementById("btn-close-export-modal"),
+    btnCancelExportModal: document.getElementById("btn-cancel-export-modal"),
+    dropdownBtnHome: document.getElementById("dropdown-btn-home"),
     documentSearchInput: document.getElementById("document-search-input"),
     clearSearchBtn: document.getElementById("clear-search-btn"),
 
@@ -712,6 +719,19 @@
     if (elements.btnExportWord) elements.btnExportWord.classList.toggle("is-dimmed", disabled);
     if (elements.barBtnExportPdf) elements.barBtnExportPdf.classList.toggle("is-dimmed", disabled);
     if (elements.barBtnExportWord) elements.barBtnExportWord.classList.toggle("is-dimmed", disabled);
+  }
+
+  // --- Export Modal Controller ---
+  function openExportModal() {
+    if (elements.exportModalBackdrop) {
+      elements.exportModalBackdrop.hidden = false;
+    }
+  }
+
+  function closeExportModal() {
+    if (elements.exportModalBackdrop) {
+      elements.exportModalBackdrop.hidden = true;
+    }
   }
 
   // --- Document Selection & UI Updates ---
@@ -1784,20 +1804,48 @@
 
     elements.btnExportChat?.addEventListener("click", (e) => {
       e.stopPropagation();
+      openExportModal();
       if (elements.exportMenu) {
         elements.exportMenu.hidden = !elements.exportMenu.hidden;
       }
     });
 
+    elements.modalExportPdf?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeExportModal();
+      exportChat("pdf");
+    });
+
+    elements.modalExportWord?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeExportModal();
+      exportChat("docx");
+    });
+
+    elements.btnCloseExportModal?.addEventListener("click", closeExportModal);
+    elements.btnCancelExportModal?.addEventListener("click", closeExportModal);
+    elements.exportModalBackdrop?.addEventListener("click", (e) => {
+      if (e.target === elements.exportModalBackdrop) {
+        closeExportModal();
+      }
+    });
+
+    elements.dropdownBtnHome?.addEventListener("click", () => {
+      if (elements.userDropdown) elements.userDropdown.hidden = true;
+      showView("landing");
+    });
+
     elements.btnExportPdf?.addEventListener("click", (e) => {
       e.stopPropagation();
       if (elements.exportMenu) elements.exportMenu.hidden = true;
+      closeExportModal();
       exportChat("pdf");
     });
 
     elements.btnExportWord?.addEventListener("click", (e) => {
       e.stopPropagation();
       if (elements.exportMenu) elements.exportMenu.hidden = true;
+      closeExportModal();
       exportChat("docx");
     });
 
