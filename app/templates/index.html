@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="DocuMind AI — Summarize and answer questions for free. Ask questions to any PDF to stay ahead with instant page citations."
+    />
+    <meta name="theme-color" content="#07090e" />
+    <title>DocuMind AI — Summarize &amp; Answer Questions for Free</title>
+    <script>
+      try {
+        const savedTheme = localStorage.getItem("documind-theme");
+        if (savedTheme === "dark" || savedTheme === "light") {
+          document.documentElement.dataset.theme = savedTheme;
+        } else {
+          document.documentElement.dataset.theme = "dark";
+        }
+      } catch {
+        document.documentElement.dataset.theme = "dark";
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css?v=26" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Plus Jakarta Sans", "sans-serif"],
+              display: ["Space Grotesk", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+    <script defer src="/static/app.js?v=26"></script>
+  </head>
+  <body>
+    <!-- 3D Animated Ambient Glows & Cyber Canvas Grid -->
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+    <div class="ambient ambient-three" aria-hidden="true"></div>
+    <div class="ambient ambient-four" aria-hidden="true"></div>
+    <div class="perspective-grid" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <!-- =========================================================
+           1. ANIMATION-FULL HOMEPAGE / LANDING VIEW
+           ========================================================= -->
+      <div class="landing-page" id="landing-page">
+        <!-- Landing Topbar with Corner "Try for Free" -->
+        <header class="landing-header">
+          <a class="brand" href="/" aria-label="DocuMind AI home">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 32 32" fill="none">
+                <defs>
+                  <linearGradient id="brand-grad-landing" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#818cf8" />
+                    <stop offset="50%" stop-color="#6366f1" />
+                    <stop offset="100%" stop-color="#06b6d4" />
+                  </linearGradient>
+                </defs>
+                <path d="M9 6.5h8.8L24 12.7v12.8H9V6.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                <path d="M17.5 6.8v6.4h6.2M12.5 18h8M12.5 21.8h5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="m22.9 4.4.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z" fill="#818cf8" />
+              </svg>
+            </span>
+            <span class="brand-copy">
+              <span class="brand-name">DocuMind<span class="brand-name-ai"> AI</span></span>
+              <span class="brand-caption">DEEP INTELLIGENCE &amp; RESEARCH</span>
+            </span>
+          </a>
+
+          <nav class="landing-nav-links">
+            <a href="#simulation" class="landing-nav-anchor">Preview</a>
+            <a href="#features" class="landing-nav-anchor">Capabilities</a>
+            <a href="#workflow" class="landing-nav-anchor">How It Works</a>
+            <a href="#faq" class="landing-nav-anchor">FAQ</a>
+          </nav>
+
+          <div class="landing-nav-right">
+            <button class="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
+              <svg class="theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+              </svg>
+              <svg class="theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.1 15.2A8.5 8.5 0 0 1 8.8 3.9 8.6 8.6 0 1 0 20.1 15.2Z"></path>
+                <path d="m17 3 .5 1.5L19 5l-1.5.5L17 7l-.5-1.5L15 5l1.5-.5L17 3Z"></path>
+              </svg>
+            </button>
+            <button type="button" class="auth-button auth-button-signin" id="landing-btn-signin">Sign In</button>
+            <!-- Requested Corner "Try for Free" Button -->
+            <button type="button" class="btn-corner-try" id="btn-corner-try">⚡ Try for Free →</button>
+          </div>
+        </header>
+
+        <!-- Hero Section (Clean, High-Impact, Professional) -->
+        <section class="hero-section">
+          <div class="hero-badge">
+            <span class="hero-badge-pulse" aria-hidden="true"></span>
+            <span>NEXT-GEN AI DOCUMENT INTELLIGENCE · 100% FREE</span>
+          </div>
+
+          <h1 class="hero-title">
+            Summarize &amp; Answer Questions for Free.<br />
+            <span class="gradient-text">Ask Questions to Any PDF to Stay Ahead.</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Summarize and answer questions for free. Ask questions to any PDF to stay ahead — cut research time by 90%, synthesize complex reports, and extract instant page-verified citations with zero guesswork.
+          </p>
+
+          <div class="hero-actions">
+            <button type="button" class="btn-hero-primary" id="btn-hero-launch">
+              <span>⚡ Launch Workspace Free</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <!-- Professional Metrics Strip -->
+          <div class="hero-metrics-strip">
+            <div class="hero-metric-item">
+              <strong class="metric-val">100%</strong>
+              <span class="metric-lbl">Free Access</span>
+            </div>
+            <div class="hero-metric-divider" aria-hidden="true"></div>
+            <div class="hero-metric-item">
+              <strong class="metric-val">&lt;0.8s</strong>
+              <span class="metric-lbl">Vector Retrieval</span>
+            </div>
+            <div class="hero-metric-divider" aria-hidden="true"></div>
+            <div class="hero-metric-item">
+              <strong class="metric-val">100%</strong>
+              <span class="metric-lbl">Page Grounded</span>
+            </div>
+            <div class="hero-metric-divider" aria-hidden="true"></div>
+            <div class="hero-metric-item">
+              <strong class="metric-val">Private</strong>
+              <span class="metric-lbl">Isolated Vault</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Interactive 3D Simulation Showcase (Document Input -> AI Vector Scan -> Rapid AI Result) -->
+        <section class="simulation-container" id="simulation">
+          <div class="sim-stage-kicker">INTERACTIVE RAG SIMULATION</div>
+          <div class="simulation-stage" id="simulation-stage">
+            <!-- Background Photonic Conduit SVG (animated data particles) -->
+            <svg class="sim-data-conduit" viewBox="0 0 1000 240" fill="none" preserveAspectRatio="none" aria-hidden="true">
+              <path class="conduit-track conduit-left" d="M 280 120 C 340 120, 360 120, 430 120" stroke="rgba(99, 102, 241, 0.25)" stroke-width="2" stroke-dasharray="4 4" />
+              <path class="conduit-beam conduit-left-beam" d="M 280 120 C 340 120, 360 120, 430 120" stroke="url(#beam-gradient-left)" stroke-width="3" stroke-linecap="round" />
+              <path class="conduit-track conduit-right" d="M 570 120 C 640 120, 660 120, 720 120" stroke="rgba(6, 182, 212, 0.25)" stroke-width="2" stroke-dasharray="4 4" />
+              <path class="conduit-beam conduit-right-beam" d="M 570 120 C 640 120, 660 120, 720 120" stroke="url(#beam-gradient-right)" stroke-width="3" stroke-linecap="round" />
+              <defs>
+                <linearGradient id="beam-gradient-left" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#6366f1" stop-opacity="0" />
+                  <stop offset="50%" stop-color="#06b6d4" stop-opacity="1" />
+                  <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="beam-gradient-right" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0" />
+                  <stop offset="50%" stop-color="#10b981" stop-opacity="1" />
+                  <stop offset="100%" stop-color="#06b6d4" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            <!-- Col 1: PDF Document Input with Moving Laser Scanner -->
+            <div class="sim-col-doc">
+              <span class="sim-box-label">
+                <span>📄</span> STEP 1: DOCUMENT INPUT
+              </span>
+              <div class="sim-doc-card is-scanning" id="sim-doc-card">
+                <!-- Laser Scanning Beam -->
+                <div class="sim-laser-beam" id="sim-laser-beam" aria-hidden="true">
+                  <div class="sim-laser-glow"></div>
+                </div>
+
+                <div class="sim-doc-header">
+                  <div class="sim-doc-icon">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M7 3.75h6.2L18 8.6v11.65H7V3.75Z" />
+                      <path d="M13 4v5h4.8M9.5 13h6M9.5 16h6" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="sim-doc-title">Executive_Strategy_2026.pdf</div>
+                    <div class="sim-doc-meta">18 Pages · Financial &amp; Strategy Report</div>
+                  </div>
+                </div>
+
+                <!-- Animated Document Text & Chunks -->
+                <div class="sim-doc-lines">
+                  <div class="sim-line sim-line-w80 sim-chunk-item active" id="sim-chunk-1"></div>
+                  <div class="sim-line sim-line-w60 sim-chunk-item" id="sim-chunk-2"></div>
+                  <div class="sim-line sim-line-w90 sim-chunk-item active" id="sim-chunk-3"></div>
+                  <div class="sim-line sim-line-w70 sim-chunk-item" id="sim-chunk-4"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Col 2: Holographic Neural Nexus & Vector Scanner Core -->
+            <div class="sim-col-core">
+              <div class="sim-core-container is-active" id="sim-core-container">
+                <!-- Outer rotating orbital rings -->
+                <div class="sim-orbital-ring ring-outer" aria-hidden="true"></div>
+                <div class="sim-orbital-ring ring-mid" aria-hidden="true"></div>
+                <div class="sim-radar-wave" aria-hidden="true"></div>
+
+                <!-- AI Brain Core -->
+                <div class="sim-core-orb" id="sim-core-orb">
+                  <span class="sim-brain-emoji">🧠</span>
+                  <span class="sim-core-ping" aria-hidden="true"></span>
+                </div>
+              </div>
+
+              <!-- Live Dynamic Status -->
+              <div class="sim-core-scan-status">
+                <span class="sim-pulse-dot" id="sim-pulse-dot"></span>
+                <span id="sim-scan-status-text">Vector Embedding...</span>
+              </div>
+            </div>
+
+            <!-- Col 3: Rapid AI Result & Citations Output -->
+            <div class="sim-col-result">
+              <span class="sim-box-label">
+                <span>⚡</span> STEP 2: INSTANT GROUNDED RESULT
+              </span>
+              <div class="sim-result-card is-streaming" id="sim-result-card">
+                <div class="sim-result-header">
+                  <span class="sim-result-author">
+                    <span class="sim-sparkle">✳</span> DocuMind AI Synthesis
+                  </span>
+                  <span class="sim-speed-badge" id="sim-speed-badge">⚡ 0.8s Vector Retrieval</span>
+                </div>
+                <p class="sim-result-text" id="sim-result-text">
+                  Key Findings: Enterprise gross margins expanded by <strong>34.2% YoY</strong>. Operational resilience achieved across four decoupled regional clouds with full data confidentiality.
+                </p>
+                <div class="sim-citation-row">
+                  <span class="sim-citation-pill" id="citation-pill-1">📌 Page 4: Financial Metrics</span>
+                  <span class="sim-citation-pill" id="citation-pill-2">📌 Page 11: Cloud Architecture</span>
+                </div>
+                <div class="sim-controls-bar">
+                  <button type="button" class="sim-replay-btn" id="btn-replay-sim">
+                    <span>↻ Run Simulation Again</span>
+                  </button>
+                  <button type="button" class="btn-corner-try" style="padding: 4px 14px; font-size: 11px;" id="btn-sim-try">
+                    Try with your PDF →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Standard Core Capabilities (3 Concise, Professional Cards) -->
+        <section class="landing-section" id="features">
+          <div class="landing-section-header">
+            <span class="landing-section-kicker">CORE CAPABILITIES</span>
+            <h2 class="landing-section-title">
+              Engineered for Precision &amp; Speed
+            </h2>
+            <p class="landing-section-subtitle">
+              Combine neural vector embeddings with deterministic grounding to turn passive reading into verified breakthrough intelligence.
+            </p>
+          </div>
+
+          <div class="feature-grid-standard">
+            <!-- Card 1 -->
+            <div class="feature-card-standard">
+              <div class="feature-card-icon-wrap icon-grad-violet">
+                <span>⚡</span>
+              </div>
+              <h3 class="feature-card-title">Instant Executive Summary</h3>
+              <p class="feature-card-desc">
+                Synthesize lengthy PDFs, financial reports, and whitepapers in seconds. Extract key takeaways, deadlines, and critical metrics with 1-click.
+              </p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="feature-card-standard">
+              <div class="feature-card-icon-wrap icon-grad-cyan">
+                <span>🎯</span>
+              </div>
+              <h3 class="feature-card-title">Page-Accurate Citations</h3>
+              <p class="feature-card-desc">
+                Zero hallucinations. Every generated response is tethered to verifiable page citations and exact paragraph sources for instant forensic auditability.
+              </p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="feature-card-standard">
+              <div class="feature-card-icon-wrap icon-grad-mint">
+                <span>🔒</span>
+              </div>
+              <h3 class="feature-card-title">Private Local Storage</h3>
+              <p class="feature-card-desc">
+                Your intellectual property stays yours. Indexed securely in isolated local storage, never leaked to public clouds, and never used to train third-party AI.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Standard How It Works (3 Clean Steps) -->
+        <section class="landing-section" id="workflow">
+          <div class="landing-section-header">
+            <span class="landing-section-kicker">RESEARCH WORKFLOW</span>
+            <h2 class="landing-section-title">
+              Three Simple Steps to Document Mastery
+            </h2>
+            <p class="landing-section-subtitle">
+              From raw document upload to cited breakthrough in less than a second.
+            </p>
+          </div>
+
+          <div class="workflow-steps-standard">
+            <div class="workflow-step-standard">
+              <div class="step-num">01</div>
+              <h4>Upload PDF</h4>
+              <p>Drag and drop your document up to 15 MB. Text and tables are vectorized into semantic chunks in an isolated vault.</p>
+            </div>
+
+            <div class="workflow-step-standard">
+              <div class="step-num">02</div>
+              <h4>Ask Custom Inquiries</h4>
+              <p>Type any complex question or choose 1-touch research shortcuts like Executive Summary or Risk Analysis.</p>
+            </div>
+
+            <div class="workflow-step-standard">
+              <div class="step-num">03</div>
+              <h4>Receive Verified Answers</h4>
+              <p>Get answers grounded strictly in document evidence with clickable page citations and full auditability.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Standard FAQ (3 Clear Questions) -->
+        <section class="landing-section" id="faq">
+          <div class="landing-section-header">
+            <span class="landing-section-kicker">FAQ</span>
+            <h2 class="landing-section-title">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
+          <div class="faq-container-standard">
+            <details class="faq-item-standard" open>
+              <summary class="faq-question-standard">
+                <span>Is DocuMind AI truly 100% free to use?</span>
+                <span class="faq-indicator" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer-standard">
+                <p>Yes. You can summarize and answer questions for free, ask questions to any PDF to stay ahead, and extract cited insights with zero subscription fees or hidden costs.</p>
+              </div>
+            </details>
+
+            <details class="faq-item-standard">
+              <summary class="faq-question-standard">
+                <span>How does DocuMind AI eliminate hallucinations?</span>
+                <span class="faq-indicator" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer-standard">
+                <p>DocuMind AI uses strict Retrieval-Augmented Generation (RAG). Every answer is tethered strictly to verified passages in your PDF with clickable page citations so you can verify truth immediately.</p>
+              </div>
+            </details>
+
+            <details class="faq-item-standard">
+              <summary class="faq-question-standard">
+                <span>Can I use prompt research tools during an ongoing conversation?</span>
+                <span class="faq-indicator" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer-standard">
+                <p>Yes. A persistent research tools bar is pinned directly above the message composer at all times, allowing you to trigger Executive Summaries, Takeaways, and Risk Analyses on any turn.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Standard Focused Final CTA Banner -->
+        <section class="landing-section landing-cta-clean" id="landing-cta">
+          <div class="landing-cta-inner">
+            <h2 class="landing-cta-clean-title">
+              Summarize &amp; Answer Questions for Free.<br />
+              <span class="gradient-text">Ask Questions to Any PDF to Stay Ahead.</span>
+            </h2>
+            <p class="landing-cta-clean-desc">
+              Experience the fastest, most accurate document research intelligence today.
+            </p>
+            <div class="landing-cta-actions">
+              <button type="button" class="btn-hero-primary" id="btn-bottom-try">
+                <span>⚡ Launch Free Research Workspace</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="landing-cta-trust-chips">
+              <span>✓ 100% Free Forever</span>
+              <span>✓ No Credit Card Required</span>
+              <span>✓ Private Local Sandbox</span>
+              <span>✓ Page-Accurate Citations</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- =========================================================
+           2. INTERACTIVE WORKSPACE APPLICATION VIEW
+           ========================================================= -->
+      <div class="workspace-view" id="workspace-view" hidden>
+        <!-- Top Navigation Bar -->
+        <header class="topbar">
+          <div style="display: flex; align-items: center;">
+            <a class="brand" href="/" id="brand-link-workspace" aria-label="DocuMind AI home">
+              <span class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none">
+                  <defs>
+                    <linearGradient id="brand-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#818cf8" />
+                      <stop offset="50%" stop-color="#6366f1" />
+                      <stop offset="100%" stop-color="#06b6d4" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M9 6.5h8.8L24 12.7v12.8H9V6.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                  <path d="M17.5 6.8v6.4h6.2M12.5 18h8M12.5 21.8h5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="m22.9 4.4.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z" fill="#818cf8" />
+                </svg>
+              </span>
+              <span class="brand-copy">
+                <span class="brand-name">DocuMind<span class="brand-name-ai"> AI</span></span>
+                <span class="brand-caption">DEEP INTELLIGENCE &amp; RESEARCH</span>
+              </span>
+            </a>
+            <!-- Return to Landing Page Button -->
+            <button type="button" class="btn-nav-home" id="btn-nav-home" title="Return to homepage">
+              <span>🏠 Home</span>
+            </button>
+          </div>
+
+          <!-- Value & Wisdom Header Ticker -->
+          <div class="topbar-center wisdom-ticker-wrap" id="topbar-wisdom-ticker" title="Summarize and answer questions for free">
+            <span class="wisdom-badge-icon" aria-hidden="true">⚡</span>
+            <span class="wisdom-ticker-text" id="topbar-wisdom-text">
+              Summarize and answer questions for free. Ask questions to any PDF to stay ahead.
+            </span>
+            <button type="button" class="wisdom-next-mini" id="topbar-wisdom-next" aria-label="Next Value Point" title="Show next insight">↻</button>
+          </div>
+
+          <!-- Right Controls: Auth, Theme, Mobile Toggle -->
+          <div class="topbar-right">
+            <!-- User Authentication Section -->
+            <div class="auth-container" id="auth-container">
+              <!-- Unauthenticated State -->
+              <div class="auth-logged-out" id="auth-logged-out">
+                <button type="button" class="auth-button auth-button-signin" id="btn-open-signin">
+                  Sign In
+                </button>
+              </div>
+
+              <!-- Authenticated State -->
+              <div class="auth-logged-in" id="auth-logged-in" hidden>
+                <div class="user-pill" id="user-pill" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" title="Click to view account">
+                  <span class="user-avatar-badge" id="user-avatar-badge">US</span>
+                  <div class="user-pill-info">
+                    <span class="user-pill-name" id="user-pill-name">User</span>
+                    <span class="user-pill-status">Verified <span class="active-pulse"></span></span>
+                  </div>
+                  <svg class="user-pill-chevron" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+
+                <!-- User Profile Dropdown -->
+                <div class="user-dropdown" id="user-dropdown" hidden>
+                  <div class="user-dropdown-header">
+                    <div class="dropdown-avatar" id="dropdown-avatar">US</div>
+                    <div class="dropdown-details">
+                      <strong id="dropdown-user-name">User Name</strong>
+                      <span id="dropdown-user-email"></span>
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div class="dropdown-status-card">
+                    <span class="status-chip">🌟 Pro Researcher</span>
+                    <p class="status-desc">Private RAG, vector memory &amp; verified citations.</p>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <button type="button" class="dropdown-item logout-btn" id="btn-logout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <span class="secure-badge"><span class="secure-dot"></span> Private</span>
+            
+            <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
+              <svg class="theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+              </svg>
+              <svg class="theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.1 15.2A8.5 8.5 0 0 1 8.8 3.9 8.6 8.6 0 1 0 20.1 15.2Z"></path>
+                <path d="m17 3 .5 1.5L19 5l-1.5.5L17 7l-.5-1.5L15 5l1.5-.5L17 3Z"></path>
+              </svg>
+            </button>
+            
+            <button class="icon-button mobile-sidebar-toggle" id="mobile-sidebar-toggle" aria-label="Show documents" title="Show documents">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16M4 12h16M4 18.5h16" /></svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+          <!-- Sidebar: Library & Recent Chats -->
+          <aside class="sidebar" id="sidebar" aria-label="Document workspace">
+            <div class="sidebar-heading">
+              <div>
+                <p class="eyebrow">WORKSPACE REPOSITORY</p>
+                <h1>Library <span class="library-count" id="library-count">0</span></h1>
+              </div>
+              <button class="icon-button sidebar-close" id="sidebar-close" aria-label="Close documents">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+              </button>
+            </div>
+
+            <!-- Document Search Box -->
+            <div class="library-search-box">
+              <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd" />
+              </svg>
+              <input type="text" id="document-search-input" placeholder="Search document library..." aria-label="Search documents" />
+              <button type="button" class="clear-search-btn" id="clear-search-btn" hidden title="Clear search">✕</button>
+            </div>
+
+            <!-- 3D Upload Card with Account Gate -->
+            <label class="upload-zone" id="upload-zone" for="file-input">
+              <input id="file-input" type="file" accept="application/pdf,.pdf" hidden />
+              <span class="upload-icon" id="upload-icon" aria-hidden="true">
+                <svg class="icon-upload-arrow" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 15V4m0 0L8 8m4-4 4 4M5 14.5v3A2.5 2.5 0 0 0 7.5 20h9a2.5 2.5 0 0 0 2.5-2.5v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <svg class="icon-upload-check" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <div class="upload-zone-copy">
+                <span class="upload-title" id="upload-zone-title"><strong class="upload-highlight-badge">DRAG &amp; DROP PDF HERE</strong></span>
+                <span class="upload-subtitle" id="upload-zone-subtitle">or <span class="highlight-browse">click to browse</span></span>
+              </div>
+              <span class="upload-meta" id="upload-zone-meta" hidden>PDF format · up to 15 MB</span>
+            </label>
+
+            <!-- Upload Progress Banner -->
+            <div class="upload-progress" id="upload-progress" hidden>
+              <span class="progress-spinner" aria-hidden="true"></span>
+              <span id="upload-progress-label">Reading and vectorizing your document…</span>
+            </div>
+
+            <!-- Documents List Heading -->
+            <div class="documents-heading">
+              <span>YOUR DOCUMENTS</span>
+              <span id="document-total">0</span>
+            </div>
+
+            <!-- Document List Container -->
+            <div class="document-list" id="document-list" aria-live="polite">
+              <div class="library-empty" id="library-empty">
+                <span class="empty-file-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 3.75h6.2L18 8.6v11.65H7V3.75Z" /><path d="M13 4v5h4.8M9.5 13h6M9.5 16h6" /></svg>
+                </span>
+                <span>Your library is empty</span>
+                <small>Upload a PDF document to begin intelligent inquiry.</small>
+              </div>
+            </div>
+
+            <!-- Recent Chats Heading -->
+            <div class="recent-heading">
+              <span>SAVED CONVERSATIONS</span>
+              <span id="recent-chat-total">0</span>
+            </div>
+
+            <!-- Recent Chat List Container -->
+            <div class="recent-chat-list" id="recent-chat-list" aria-live="polite">
+              <div class="recent-empty" id="recent-empty">Saved research conversations will appear here.</div>
+            </div>
+          </aside>
+
+          <!-- Main Chat Panel -->
+          <section class="chat-panel" aria-label="Chat with your document">
+            <!-- Chat Header with Actions -->
+            <div class="chat-header">
+              <div class="active-document-wrap">
+                <span class="active-file-mark" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 3.75h6.2L18 8.6v11.65H7V3.75Z" /><path d="M13 4v5h4.8M9.5 13h6M9.5 16h6" /></svg>
+                </span>
+                <div class="active-document-copy">
+                  <span class="active-label">CURRENT ACTIVE DOCUMENT</span>
+                  <span class="active-document-name" id="active-document-name">No document selected</span>
+                </div>
+                <div class="doc-metadata-badge" id="doc-metadata-badge" hidden>
+                  <span id="doc-page-badge" class="meta-pill">0 Pages</span>
+                  <span id="doc-chunk-badge" class="meta-pill">0 Chunks</span>
+                </div>
+              </div>
+
+              <div class="chat-header-actions">
+                <!-- Smart Summary Button -->
+                <button class="header-action-button summary-btn" id="btn-smart-summary" type="button" title="Generate Instant Executive Summary" disabled>
+                  <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1">
+                    <path d="M11.983 1.907a.75.75 0 0 0-1.292-.657l-8.5 9.5A.75.75 0 0 0 2.75 12h6.5l-1.233 6.093a.75.75 0 0 0 1.292.657l8.5-9.5A.75.75 0 0 0 17.25 8h-6.5l1.233-6.093Z" />
+                  </svg>
+                  <span>Smart Summary</span>
+                </button>
+
+                <!-- Export Conversation Button -->
+                <button class="header-action-button export-btn" id="btn-export-chat" type="button" title="Export conversation as Markdown" disabled>
+                  <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1">
+                    <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
+                    <path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />
+                  </svg>
+                  <span>Export</span>
+                </button>
+
+                <span class="ready-pill" id="ready-pill"><span></span> Ready</span>
+
+                <button class="new-chat-button" id="new-chat-button" type="button" title="Start a fresh conversation">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                  <span>New chat</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat Scroll Body -->
+            <div class="chat-scroll" id="chat-scroll">
+              <!-- Welcome Empty State -->
+              <div class="welcome-state" id="welcome-state">
+                <div class="welcome-orbit" aria-hidden="true">
+                  <span class="orbit-ring orbit-ring-one"></span>
+                  <span class="orbit-ring orbit-ring-two"></span>
+                  <span class="orbit-ring orbit-ring-three"></span>
+                  <span class="welcome-core">
+                    <svg viewBox="0 0 40 40" fill="none">
+                      <path d="M11 7.5h11.3L29 14.2v18.3H11V7.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                      <path d="M22 7.8v7h6.8M15 21h10M15 25.5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="m29.8 5 .85 2.15L33 8l-2.35.85L29.8 11l-.85-2.15L26.6 8l2.35-.85L29.8 5Z" fill="#818cf8" />
+                    </svg>
+                  </span>
+                  <span class="orbit-star star-one">✳</span>
+                  <span class="orbit-star star-two">✦</span>
+                  <span class="orbit-star star-three">✧</span>
+                </div>
+
+                <span class="welcome-kicker"><span></span> 100% FREE AI RESEARCH WORKSPACE</span>
+                <h2>Summarize &amp; Answer Questions for Free.<br /><span class="gradient-text">Ask Questions to Any PDF to Stay Ahead.</span></h2>
+                <p class="welcome-description">
+                  Summarize and answer questions for free. Ask questions to any PDF to stay ahead — cut research time by 90%, synthesize complex reports, and extract instant page-verified citations with zero guesswork.
+                </p>
+
+                <!-- 3D Interactive Prompt Grid -->
+                <div class="prompt-grid" id="prompt-grid">
+                  <button type="button" class="prompt-card" data-prompt="Give me a concise executive summary and key objectives of this document.">
+                    <span class="prompt-icon prompt-violet" aria-hidden="true">⚡</span>
+                    <span><strong>Instant Smart Summary</strong><small>Executive bullet points &amp; key insights</small></span>
+                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+                  </button>
+                  <button type="button" class="prompt-card" data-prompt="What are the top 5 key takeaways and decisions in this document?">
+                    <span class="prompt-icon prompt-peach" aria-hidden="true">🎯</span>
+                    <span><strong>Top 5 Takeaways</strong><small>Critical decisions &amp; findings</small></span>
+                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+                  </button>
+                  <button type="button" class="prompt-card" data-prompt="List all important dates, deadlines, figures, and numerical metrics mentioned.">
+                    <span class="prompt-icon prompt-mint" aria-hidden="true">📅</span>
+                    <span><strong>Dates &amp; Numerical Metrics</strong><small>Timelines, figures &amp; statistics</small></span>
+                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+                  </button>
+                  <button type="button" class="prompt-card" data-prompt="Perform an objective critical analysis: what are the key risks, assumptions, or limitations?">
+                    <span class="prompt-icon prompt-rose" aria-hidden="true">⚖️</span>
+                    <span><strong>Critical Risk Analysis</strong><small>Vulnerabilities &amp; limitations</small></span>
+                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+                  </button>
+                  <button type="button" class="prompt-card" data-prompt="Generate a Q&A study guide with 5 questions and answers based on this document.">
+                    <span class="prompt-icon prompt-blue" aria-hidden="true">❓</span>
+                    <span><strong>Interactive Q&amp;A Guide</strong><small>Self-assessment &amp; deep comprehension</small></span>
+                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+                  </button>
+                  <button type="button" class="prompt-card" data-prompt="What are the actionable next steps and practical recommendations from this text?">
+                    <span class="prompt-icon prompt-amber" aria-hidden="true">💡</span>
+                    <span><strong>Actionable Next Steps</strong><small>Practical execution roadmap</small></span>
+                    <svg class="prompt-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Messages List Container -->
+              <div class="message-list" id="message-list" aria-live="polite"></div>
+            </div>
+
+            <!-- Bottom Composer Section -->
+            <div class="composer-wrap">
+              <!-- Persistent Quick Research Tools Bar (Accessible at ANY time during active conversation) -->
+              <div class="chat-tools-bar" id="chat-tools-bar" role="toolbar" aria-label="Persistent research tools">
+                <span class="chat-tools-label">
+                  <svg viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5" aria-hidden="true">
+                    <path d="M11.983 1.907a.75.75 0 0 0-1.292-.657l-8.5 9.5A.75.75 0 0 0 2.75 12h6.5l-1.233 6.093a.75.75 0 0 0 1.292.657l8.5-9.5A.75.75 0 0 0 17.25 8h-6.5l1.233-6.093Z" />
+                  </svg>
+                  <span>RESEARCH TOOLS</span>
+                </span>
+                <div class="chat-tools-scroll" id="chat-tools-scroll">
+                  <button type="button" class="chat-tool-btn" data-prompt="Give me a concise executive summary and key objectives of this document." title="Executive Summary" disabled>
+                    <span class="tool-icon">⚡</span>
+                    <span>Executive Summary</span>
+                  </button>
+                  <button type="button" class="chat-tool-btn" data-prompt="What are the top 5 key takeaways and decisions in this document?" title="Top 5 Takeaways" disabled>
+                    <span class="tool-icon">🎯</span>
+                    <span>Top 5 Takeaways</span>
+                  </button>
+                  <button type="button" class="chat-tool-btn" data-prompt="List all important dates, deadlines, figures, and numerical metrics mentioned." title="Dates & Metrics" disabled>
+                    <span class="tool-icon">📅</span>
+                    <span>Dates &amp; Metrics</span>
+                  </button>
+                  <button type="button" class="chat-tool-btn" data-prompt="Perform an objective critical analysis: what are the key risks, assumptions, or limitations?" title="Critical Risk Analysis" disabled>
+                    <span class="tool-icon">⚖️</span>
+                    <span>Risk Analysis</span>
+                  </button>
+                  <button type="button" class="chat-tool-btn" data-prompt="Generate a Q&A study guide with 5 questions and answers based on this document." title="Interactive Q&A Guide" disabled>
+                    <span class="tool-icon">❓</span>
+                    <span>Q&amp;A Study Guide</span>
+                  </button>
+                  <button type="button" class="chat-tool-btn" data-prompt="Extract all major numerical statistics, tables, and key performance indicators from this document." title="Statistics & KPIs" disabled>
+                    <span class="tool-icon">📊</span>
+                    <span>Statistics &amp; KPIs</span>
+                  </button>
+                  <button type="button" class="chat-tool-btn" data-prompt="What are the actionable next steps and practical recommendations from this text?" title="Actionable Next Steps" disabled>
+                    <span class="tool-icon">💡</span>
+                    <span>Action Roadmap</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="composer" id="composer">
+                <textarea id="question-input" rows="1" maxlength="4000" placeholder="Choose a document to begin asking questions…" aria-label="Ask a question about the selected document" disabled></textarea>
+                <div class="composer-bottom">
+                  <div class="composer-hint">
+                    <span class="sparkle-small" aria-hidden="true">✳</span>
+                    <span>Answers grounded in document truth with page citations</span>
+                  </div>
+                  <div class="composer-send">
+                    <span class="character-count" id="character-count">0 / 4000</span>
+                    <button id="send-button" class="send-button" type="button" aria-label="Send message" disabled>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 14-7-5.5 14-2.1-5.9L5 12Z" /><path d="m11.4 13.1 4.2-4.2" /></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <p class="disclaimer">Ethical Information Notice: AI can make mistakes. Always verify critical facts with original page citations.</p>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <!-- =========================================================
+           3. EMAIL AND GOOGLE ACCOUNT MODAL
+           ========================================================= -->
+      <div class="modal-backdrop" id="auth-modal-backdrop" hidden>
+        <div class="auth-modal-card" id="auth-modal-card" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+          <button type="button" class="modal-close-btn" id="btn-close-auth-modal" aria-label="Close modal">✕</button>
+          
+          <div class="auth-modal-header">
+            <div class="modal-brand-emblem" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 15V4m0 0L8 8m4-4 4 4M5 14.5v3A2.5 2.5 0 0 0 7.5 20h9a2.5 2.5 0 0 0 2.5-2.5v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h2 id="auth-modal-title" class="auth-modal-title">Create Your Free Account</h2>
+            <p class="auth-modal-subtitle" id="auth-modal-subtitle">Create an account to start analyzing PDFs</p>
+          </div>
+
+          <!-- Email and password account form -->
+          <form class="auth-form" id="auth-form" novalidate>
+            <!-- Full Name (Only for Sign Up) -->
+            <div class="form-group" id="group-fullname">
+              <label for="auth-fullname">Full Name</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
+                </svg>
+                <input type="text" id="auth-fullname" autocomplete="name" />
+              </div>
+            </div>
+
+            <!-- Email / Gmail Address -->
+            <div class="form-group">
+              <label for="auth-email">Gmail / Email Address</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.162V6a2 2 0 0 0-2-2H3Z" />
+                  <path d="m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z" />
+                </svg>
+                <input type="email" id="auth-email" required autocomplete="email" />
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+              <label for="auth-password">Password</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z" clip-rule="evenodd" />
+                </svg>
+                <input type="password" id="auth-password" required autocomplete="current-password" />
+                <button type="button" class="btn-toggle-pwd" id="btn-toggle-pwd" aria-label="Toggle password visibility" title="Show password">
+                  👁️
+                </button>
+              </div>
+              <small class="form-hint" id="password-hint">Minimum 6 characters required.</small>
+            </div>
+
+            <div class="auth-error-msg" id="auth-error-msg" hidden></div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="auth-submit-btn" id="btn-auth-submit">
+              <span id="auth-submit-text">🚀 Create Free Account</span>
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </button>
+
+            <div class="auth-google-section">
+              <div class="auth-divider">
+                <span>or continue with Google</span>
+              </div>
+              <div id="google-signin-button" class="google-signin-button"></div>
+              <p id="google-auth-status" class="form-hint" role="status" hidden></p>
+            </div>
+
+            <!-- Mode Switch Link -->
+            <p class="auth-switch-mode-text" id="auth-switch-wrap">
+              <span id="auth-switch-prompt">Already have an account?</span>
+              <button type="button" class="auth-switch-link" id="btn-switch-auth-mode">Sign In</button>
+            </p>
+          </form>
+
+          <div class="modal-footer-quote">
+            <span class="sparkle-mini">🔒</span>
+            <span>Zero spam. Account required solely for isolated workspace security.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mobile-overlay" id="mobile-overlay"></div>
+      <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
+    </div>
+  </body>
+</html>
