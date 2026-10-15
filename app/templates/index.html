@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=52" />
+    <link rel="stylesheet" href="/static/styles.css?v=53" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,7 +42,7 @@
         },
       };
     </script>
-    <script defer src="/static/app.js?v=52"></script>
+    <script defer src="/static/app.js?v=53"></script>
   </head>
   <body>
     <div class="app-shell">
@@ -835,6 +835,11 @@
                 </div>
               </div>
 
+              <!-- Mobile Bar Hide/Unhide Toggle Button (Phone only) -->
+              <button type="button" class="mobile-bar-toggle-btn" id="btn-toggle-mobile-bar" aria-label="Toggle quick actions bar" aria-expanded="true" title="Hide/Unhide quick actions (▲/▼)">
+                <span id="mobile-bar-toggle-icon">▲</span>
+              </button>
+
               <div class="chat-header-actions">
                 <!-- Smart Summary Button -->
                 <button class="header-action-button summary-btn" id="btn-smart-summary" type="button" title="Generate Instant Executive Summary" disabled>
@@ -861,7 +866,7 @@
               </div>
             </div>
 
-            <!-- Phone-Dedicated Mobile Chat Action Bar (Comfortable touch targets for Android/Mobile) -->
+            <!-- Phone-Dedicated Mobile Chat Action Bar (Comfortable touch targets for Android/Mobile with ^ Collapse) -->
             <div class="mobile-chat-bar" id="mobile-chat-bar">
               <button class="mobile-bar-btn mobile-bar-new-chat" id="mobile-btn-new-chat" type="button" title="Start a fresh conversation">
                 <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" /></svg>
@@ -872,6 +877,9 @@
               </button>
               <button class="mobile-bar-btn mobile-bar-export" id="mobile-btn-export" type="button" title="Export conversation as PDF or Word" disabled>
                 <span>📥 Export ▾</span>
+              </button>
+              <button class="mobile-bar-btn mobile-bar-collapse-btn" id="mobile-btn-collapse" type="button" aria-label="Hide action bar" title="Hide action bar (▲)">
+                <span>▲</span>
               </button>
             </div>
 

@@ -69,11 +69,14 @@
     landingMobileNav: document.getElementById("landing-mobile-nav"),
     landingMobileSignin: document.getElementById("landing-mobile-signin"),
 
-    // Mobile Chat Action Bar
+    // Mobile Chat Action Bar & Collapsible Toggle
     mobileChatBar: document.getElementById("mobile-chat-bar"),
+    btnToggleMobileBar: document.getElementById("btn-toggle-mobile-bar"),
+    mobileBarToggleIcon: document.getElementById("mobile-bar-toggle-icon"),
     mobileBtnNewChat: document.getElementById("mobile-btn-new-chat"),
     mobileBtnSummary: document.getElementById("mobile-btn-summary"),
     mobileBtnExport: document.getElementById("mobile-btn-export"),
+    mobileBtnCollapse: document.getElementById("mobile-btn-collapse"),
 
     // Export Modal Bottom Sheet
     exportModalBackdrop: document.getElementById("export-modal-backdrop"),
@@ -1822,14 +1825,33 @@
       showView("landing");
     });
 
-    // Mobile-Dedicated Chat Action Bar Events
+    // Mobile-Dedicated Chat Action Bar Events (New Chat, Summary, Export)
     elements.mobileBtnNewChat?.addEventListener("click", () => {
-      startNewChat();
+      createChat();
     });
 
     elements.mobileBtnSummary?.addEventListener("click", () => {
       triggerSmartSummary();
     });
+
+    // Mobile Action Bar Hide / Unhide Controller (^ / v)
+    function toggleMobileChatBar() {
+      if (!elements.mobileChatBar) return;
+      const isCollapsed = elements.mobileChatBar.classList.toggle("is-collapsed");
+      const icon = isCollapsed ? "▼" : "▲";
+      if (elements.mobileBarToggleIcon) elements.mobileBarToggleIcon.textContent = icon;
+      if (elements.btnToggleMobileBar) {
+        elements.btnToggleMobileBar.classList.toggle("is-collapsed", isCollapsed);
+        elements.btnToggleMobileBar.setAttribute("aria-expanded", String(!isCollapsed));
+        elements.btnToggleMobileBar.title = isCollapsed ? "Unhide action bar (▼)" : "Hide action bar (▲)";
+      }
+      try {
+        localStorage.setItem("documind-mobile-bar-collapsed", isCollapsed ? "1" : "0");
+      } catch {}
+    }
+
+    elements.btnToggleMobileBar?.addEventListener("click", toggleMobileChatBar);
+    elements.mobileBtnCollapse?.addEventListener("click", toggleMobileChatBar);
 
     // Landing 3-Line Mobile Hamburger Menu Toggle
     elements.landingHamburgerBtn?.addEventListener("click", (e) => {
@@ -1973,6 +1995,14 @@
   renderWisdom(0);
   bindEvents();
   updateComposer();
+  try {
+    if (localStorage.getItem("documind-mobile-bar-collapsed") === "1") {
+      elements.mobileChatBar?.classList.add("is-collapsed");
+      if (elements.mobileBarToggleIcon) elements.mobileBarToggleIcon.textContent = "▼";
+      elements.btnToggleMobileBar?.classList.add("is-collapsed");
+      elements.btnToggleMobileBar?.setAttribute("aria-expanded", "false");
+    }
+  } catch {}
   checkAuthSession().then(async () => {
     if (state.currentUser) {
       await loadDocuments();
