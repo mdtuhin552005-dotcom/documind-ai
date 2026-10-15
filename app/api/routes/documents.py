@@ -28,6 +28,16 @@ async def upload_document(
     user = await require_authenticated_user(request)
     try:
         result = await get_service(request).upload_pdf(file, user["id"])
+        try:
+            ip = request.client.host if request.client else None
+            await request.app.state.database.log_activity(
+                "UPLOAD_DOCUMENT",
+                f"Uploaded: {result.filename} ({result.page_count} pages)",
+                user_id=user["id"],
+                ip_address=ip,
+            )
+        except Exception:
+            pass
         return DocumentResponse.model_validate(result)
     finally:
         await file.close()

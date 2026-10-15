@@ -111,6 +111,11 @@ async def register(
         "created_at": now,
     }
     await database.create_user(user_data)
+    try:
+        ip = request.client.host if request.client else None
+        await database.log_activity("USER_REGISTER", f"Registered: {email}", user_id=user_id, ip_address=ip)
+    except Exception:
+        pass
 
     token = generate_token()
     expires_at = (datetime.now(UTC) + timedelta(days=30)).isoformat()
@@ -205,6 +210,11 @@ async def google_auth(
         "created_at": now,
         "expires_at": expires_at,
     })
+    try:
+        ip = request.client.host if request.client else None
+        await database.log_activity("USER_LOGIN_GOOGLE", f"Google Sign-In: {email}", user_id=user["id"], ip_address=ip)
+    except Exception:
+        pass
 
     response.set_cookie(
         key="documind_token",
@@ -257,6 +267,11 @@ async def login(
         "created_at": now,
         "expires_at": expires_at,
     })
+    try:
+        ip = request.client.host if request.client else None
+        await database.log_activity("USER_LOGIN_PASSWORD", f"Password Sign-In: {email}", user_id=user["id"], ip_address=ip)
+    except Exception:
+        pass
 
     response.set_cookie(
         key="documind_token",

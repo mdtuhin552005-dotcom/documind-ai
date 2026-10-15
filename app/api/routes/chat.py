@@ -1,4 +1,5 @@
 import json
+import time
 import uuid
 from datetime import UTC, datetime
 
@@ -24,7 +25,29 @@ conversations_router = APIRouter(prefix="/api/chats", tags=["chat history"])
 async def chat(request: Request, payload: ChatRequest) -> ChatResponse:
     user = await require_authenticated_user(request)
     service: ChatService = request.app.state.chat_service
-    return await service.answer(payload, user["id"])
+    start_time = time.time()
+    result = await service.answer(payload, user["id"])
+    duration_ms = round((time.time() - start_time) * 1000, 2)
+    try:
+        chunks_count = len(result.sources) if getattr(result, "sources", None) else 0
+        await request.app.state.database.log_query(
+            query_text=payload.message,
+            response_time_ms=duration_ms,
+            user_id=user["id"],
+            document_id=payload.document_id,
+            retrieved_chunks=chunks_count,
+        )
+        ip = request.client.host if request.client else None
+        preview = payload.message[:50] + ("..." if len(payload.message) > 50 else "")
+        await request.app.state.database.log_activity(
+            "ASK_QUERY",
+            f"Query: {preview} ({duration_ms}ms)",
+            user_id=user["id"],
+            ip_address=ip,
+        )
+    except Exception:
+        pass
+    return result
 
 
 @conversations_router.get("", response_model=ConversationListResponse)

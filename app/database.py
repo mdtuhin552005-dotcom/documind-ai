@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -96,6 +97,80 @@ class DocumentDatabase:
                 ON users(email)
                 """
             )
+            await database.execute(
+                """
+                CREATE TABLE IF NOT EXISTS activity_logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT REFERENCES users(id),
+                    action TEXT NOT NULL,
+                    details TEXT,
+                    ip_address TEXT,
+                    created_at TEXT NOT NULL
+                )
+                """
+            )
+            await database.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_activity_created
+                ON activity_logs(created_at DESC)
+                """
+            )
+            await database.execute(
+                """
+                CREATE TABLE IF NOT EXISTS query_analytics (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT REFERENCES users(id),
+                    document_id TEXT REFERENCES documents(id),
+                    query_text TEXT NOT NULL,
+                    response_time_ms REAL,
+                    retrieved_chunks INTEGER DEFAULT 0,
+                    created_at TEXT NOT NULL
+                )
+                """
+            )
+            await database.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_analytics_created
+                ON query_analytics(created_at DESC)
+                """
+            )
+            await database.execute(
+                """
+                CREATE TABLE IF NOT EXISTS system_settings (
+                    key TEXT PRIMARY KEY,
+                    value TEXT NOT NULL,
+                    description TEXT,
+                    updated_at TEXT NOT NULL
+                )
+                """
+            )
+            await database.execute(
+                """
+                CREATE TABLE IF NOT EXISTS user_feedback (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT REFERENCES users(id),
+                    rating TEXT NOT NULL,
+                    comment TEXT,
+                    created_at TEXT NOT NULL
+                )
+                """
+            )
+            now_iso = datetime.now(UTC).isoformat()
+            default_settings = [
+                ("app_version", "2.1.0", "Current production deployment version"),
+                ("max_upload_size_mb", "15", "Maximum document upload limit in MB"),
+                ("default_model", "gemini-1.5-flash", "Active LLM engine for Q&A and RAG synthesis"),
+                ("maintenance_mode", "false", "Global maintenance toggle"),
+            ]
+            for s_key, s_val, s_desc in default_settings:
+                await database.execute(
+                    """
+                    INSERT OR IGNORE INTO system_settings (key, value, description, updated_at)
+                    VALUES (?, ?, ?, ?)
+                    """,
+                    (s_key, s_val, s_desc, now_iso),
+                )
+
             for table in ("documents", "conversations"):
                 cursor = await database.execute(f"PRAGMA table_info({table})")
                 columns = {row[1] for row in await cursor.fetchall()}
@@ -400,3 +475,115 @@ class DocumentDatabase:
             cursor = await database.execute("DELETE FROM sessions WHERE token = ?", (token,))
             await database.commit()
             return cursor.rowcount > 0
+
+    async def log_activity(
+        self,
+        action: str,
+        details: str | None = None,
+        user_id: str | None = None,
+        ip_address: str | None = None,
+    ) -> None:
+        async with aiosqlite.connect(self.database_path) as database:
+            await database.execute(
+                """
+                INSERT INTO activity_logs (user_id, action, details, ip_address, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (user_id, action, details, ip_address, datetime.now(UTC).isoformat()),
+            )
+            await database.commit()
+
+    async def log_query(
+        self,
+        query_text: str,
+        response_time_ms: float,
+        user_id: str | None = None,
+        document_id: str | None = None,
+        retrieved_chunks: int = 0,
+    ) -> None:
+        async with aiosqlite.connect(self.database_path) as database:
+            await database.execute(
+                """
+                INSERT INTO query_analytics (user_id, document_id, query_text, response_time_ms, retrieved_chunks, created_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (user_id, document_id, query_text, response_time_ms, retrieved_chunks, datetime.now(UTC).isoformat()),
+            )
+            await database.commit()
+
+    async def get_recent_activities(self, limit: int = 50) -> list[dict[str, Any]]:
+        async with aiosqlite.connect(self.database_path) as database:
+            database.row_factory = aiosqlite.Row
+            cursor = await database.execute(
+                """
+                SELECT a.id, a.user_id, a.action, a.details, a.ip_address, a.created_at, u.email, u.full_name
+                FROM activity_logs a
+                LEFT JOIN users u ON u.id = a.user_id
+                ORDER BY a.id DESC
+                LIMIT ?
+                """,
+                (limit,),
+            )
+            return [dict(row) for row in await cursor.fetchall()]
+
+    async def get_query_analytics(self, limit: int = 50) -> list[dict[str, Any]]:
+        async with aiosqlite.connect(self.database_path) as database:
+            database.row_factory = aiosqlite.Row
+            cursor = await database.execute(
+                """
+                SELECT q.id, q.user_id, q.document_id, q.query_text, q.response_time_ms, q.retrieved_chunks, q.created_at,
+                       d.filename, u.email
+                FROM query_analytics q
+                LEFT JOIN documents d ON d.id = q.document_id
+                LEFT JOIN users u ON u.id = q.user_id
+                ORDER BY q.id DESC
+                LIMIT ?
+                """,
+                (limit,),
+            )
+            return [dict(row) for row in await cursor.fetchall()]
+
+    async def get_system_settings(self) -> dict[str, str]:
+        async with aiosqlite.connect(self.database_path) as database:
+            cursor = await database.execute("SELECT key, value FROM system_settings")
+            return {row[0]: row[1] for row in await cursor.fetchall()}
+
+    async def set_system_setting(self, key: str, value: str, description: str = "") -> None:
+        now = datetime.now(UTC).isoformat()
+        async with aiosqlite.connect(self.database_path) as database:
+            await database.execute(
+                """
+                INSERT INTO system_settings (key, value, description, updated_at)
+                VALUES (?, ?, ?, ?)
+                ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at
+                """,
+                (key, value, description, now),
+            )
+            await database.commit()
+
+    async def add_feedback(self, rating: str, comment: str | None = None, user_id: str | None = None) -> None:
+        async with aiosqlite.connect(self.database_path) as database:
+            await database.execute(
+                """
+                INSERT INTO user_feedback (user_id, rating, comment, created_at)
+                VALUES (?, ?, ?, ?)
+                """,
+                (user_id, rating, comment, datetime.now(UTC).isoformat()),
+            )
+            await database.commit()
+
+    async def get_feedback(self, limit: int = 50) -> list[dict[str, Any]]:
+        async with aiosqlite.connect(self.database_path) as database:
+            database.row_factory = aiosqlite.Row
+            cursor = await database.execute(
+                """
+                SELECT f.id, f.user_id, f.rating, f.comment, f.created_at, u.email
+                FROM user_feedback f
+                LEFT JOIN users u ON u.id = f.user_id
+                ORDER BY f.id DESC
+                LIMIT ?
+                """,
+                (limit,),
+            )
+            return [dict(row) for row in await cursor.fetchall()]
+
