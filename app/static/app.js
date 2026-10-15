@@ -17,6 +17,7 @@
     btnBottomTry: document.getElementById("btn-bottom-try"),
 
     // Workspace Navigation & Topbar
+    btnNavHome: document.getElementById("btn-nav-home"),
     brandLinkWorkspace: document.getElementById("brand-link-workspace"),
     activeName: document.getElementById("active-document-name"),
     chatScroll: document.getElementById("chat-scroll"),
@@ -50,6 +51,7 @@
     uploadZoneSubtitle: document.getElementById("upload-zone-subtitle"),
     uploadZoneMeta: document.getElementById("upload-zone-meta"),
     welcomeState: document.getElementById("welcome-state"),
+    welcomeUploadBtn: document.getElementById("welcome-upload-btn"),
 
     // Metadata & Productivity Badges
     docMetadataBadge: document.getElementById("doc-metadata-badge"),
@@ -1839,15 +1841,17 @@
       }
     });
 
-    // Quick Chat Composer PDF Upload Button
-    elements.btnComposerUpload?.addEventListener("click", () => {
+    // Quick Chat Composer & Chat Box Welcome State PDF Upload Buttons
+    function handlePdfUploadTrigger() {
       if (!state.currentUser) {
         showToast("Account required: Please create a free account to upload and analyze PDF documents.", "info");
         openAuthModal("signup");
         return;
       }
       elements.fileInput?.click();
-    });
+    }
+    elements.btnComposerUpload?.addEventListener("click", handlePdfUploadTrigger);
+    elements.welcomeUploadBtn?.addEventListener("click", handlePdfUploadTrigger);
 
     // Strict Account Gated File Upload Zone
     if (elements.uploadZone) {

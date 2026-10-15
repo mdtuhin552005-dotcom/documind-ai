@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=55" />
+    <link rel="stylesheet" href="/static/styles.css?v=56" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,7 +42,7 @@
         },
       };
     </script>
-    <script defer src="/static/app.js?v=55"></script>
+    <script defer src="/static/app.js?v=56"></script>
   </head>
   <body>
     <div class="app-shell">
@@ -91,6 +91,12 @@
                 <path d="M20.1 15.2A8.5 8.5 0 0 1 8.8 3.9 8.6 8.6 0 1 0 20.1 15.2Z"></path>
                 <path d="m17 3 .5 1.5L19 5l-1.5.5L17 7l-.5-1.5L15 5l1.5-.5L17 3Z"></path>
               </svg>
+            </button>
+
+            <!-- Open Workspace Button (Available next to theme toggle on Android & Desktop) -->
+            <button type="button" class="btn-corner-try btn-landing-workspace" id="btn-corner-try" title="Open Workspace">
+              <span>Workspace</span>
+              <span aria-hidden="true">→</span>
             </button>
 
             <!-- Sign In (Desktop - hidden on mobile) -->
@@ -719,6 +725,11 @@
 
             <span class="secure-badge"><span class="secure-dot"></span> Private</span>
             
+            <button type="button" class="btn-workspace-home" id="btn-nav-home" aria-label="Return to Homepage" title="Return to Homepage">
+              <span class="home-icon">🏠</span>
+              <span class="home-text">Home</span>
+            </button>
+
             <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
               <svg class="theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="12" cy="12" r="4"></circle>
@@ -867,6 +878,18 @@
                 <p class="welcome-desc-compact">
                   Select or upload a PDF document to begin.
                 </p>
+
+                <!-- Dedicated Chat Box Upload Button for Android & Desktop -->
+                <div class="welcome-upload-container">
+                  <button type="button" class="welcome-upload-action-btn" id="welcome-upload-btn" title="Choose a PDF to analyze">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                    </svg>
+                    <span>Upload PDF Document</span>
+                  </button>
+                  <span class="welcome-upload-sub">Instant semantic indexing &amp; deep analysis</span>
+                </div>
+
                 <!-- Hidden prompt grid placeholder for app.js handler compatibility -->
                 <div id="prompt-grid" style="display: none;"></div>
               </div>
