@@ -2531,69 +2531,71 @@ html[data-theme="light"] .highlight-browse {
 .upload-meta { display: none !important; }
 
 /* ========================================================
-   AUTOMATIC GREEN STATE ONCE FILE IS UPLOADED
+   AUTOMATIC GREEN STATE ONCE FILE IS UPLOADED OR DRAGGED
    ======================================================== */
 .upload-zone.is-uploaded {
-  border-color: rgba(37, 99, 235, 0.75);
-  background: linear-gradient(145deg, rgba(37, 99, 235, 0.12), rgba(29, 78, 216, 0.04));
-  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.18);
+  border-color: rgba(16, 185, 129, 0.85);
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.14), rgba(5, 150, 105, 0.05));
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.22);
 }
 html[data-theme="light"] .upload-zone.is-uploaded {
   background: linear-gradient(145deg, #ffffff, #f0fdf4);
-  border-color: rgba(37, 99, 235, 0.65);
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+  border-color: rgba(16, 185, 129, 0.85);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
 }
 .upload-zone.is-uploaded:hover,
-.upload-zone.is-uploaded.is-dragging {
-  border-color: #3b82f6;
-  background: rgba(37, 99, 235, 0.16);
+.upload-zone.is-uploaded.is-dragging,
+.upload-zone.is-dragging {
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.18) !important;
   transform: translateY(-2px);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25), 0 8px 24px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3), 0 8px 24px rgba(16, 185, 129, 0.4) !important;
 }
 html[data-theme="light"] .upload-zone.is-uploaded:hover,
-html[data-theme="light"] .upload-zone.is-uploaded.is-dragging {
-  background: #f0fdf4;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2), 0 8px 20px rgba(37, 99, 235, 0.2);
+html[data-theme="light"] .upload-zone.is-uploaded.is-dragging,
+html[data-theme="light"] .upload-zone.is-dragging {
+  background: #f0fdf4 !important;
+  border-color: #059669 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25), 0 8px 20px rgba(16, 185, 129, 0.25) !important;
 }
 .upload-zone.is-uploaded .upload-icon {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 60%, #1d4ed8 100%);
-  box-shadow: 0 3px 14px rgba(37, 99, 235, 0.5);
-  border-color: rgba(255, 255, 255, 0.35);
+  background: linear-gradient(135deg, #10b981 0%, #059669 60%, #047857 100%);
+  box-shadow: 0 3px 14px rgba(16, 185, 129, 0.55);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 .upload-zone.is-uploaded .upload-icon .icon-upload-arrow { display: none; }
 .upload-zone.is-uploaded .upload-icon .icon-upload-check { display: block; }
 .upload-zone.is-uploaded .upload-highlight-badge {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 60%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #10b981 0%, #059669 60%, #047857 100%);
   color: #ffffff !important;
-  box-shadow: 0 3px 14px rgba(37, 99, 235, 0.5);
+  box-shadow: 0 3px 14px rgba(16, 185, 129, 0.5);
   border-color: rgba(255, 255, 255, 0.35);
 }
 html[data-theme="light"] .upload-zone.is-uploaded .upload-highlight-badge {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #ffffff !important;
-  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
   border-color: rgba(255, 255, 255, 0.4);
 }
 .upload-zone.is-uploaded .highlight-browse {
-  color: #60a5fa;
+  color: #34d399;
 }
 html[data-theme="light"] .upload-zone.is-uploaded .highlight-browse {
-  color: #2563eb;
+  color: #059669;
 }
 
 /* Success celebratory pulse animation */
 @keyframes upload-pulse-green {
   0% {
-    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7), 0 4px 18px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.8), 0 4px 18px rgba(16, 185, 129, 0.4);
     transform: scale(0.98);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0), 0 8px 26px rgba(37, 99, 235, 0.45);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0), 0 8px 26px rgba(16, 185, 129, 0.55);
     transform: scale(1.02);
   }
   100% {
-    box-shadow: 0 4px 18px rgba(37, 99, 235, 0.18);
+    box-shadow: 0 4px 18px rgba(16, 185, 129, 0.22);
     transform: scale(1);
   }
 }
