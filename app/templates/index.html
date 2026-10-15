@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=46" />
+    <link rel="stylesheet" href="/static/styles.css?v=47" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,15 +42,9 @@
         },
       };
     </script>
-    <script defer src="/static/app.js?v=37"></script>
+    <script defer src="/static/app.js?v=38"></script>
   </head>
   <body>
-    <!-- Clean, Static Subtle Ambient Background -->
-    <div class="ambient ambient-one" aria-hidden="true"></div>
-    <div class="ambient ambient-two" aria-hidden="true"></div>
-    <div class="ambient ambient-three" aria-hidden="true"></div>
-    <div class="ambient ambient-four" aria-hidden="true"></div>
-
     <div class="app-shell">
       <!-- =========================================================
            1. ANIMATION-FULL HOMEPAGE / LANDING VIEW
@@ -842,13 +836,7 @@
                 <span>New Chat</span>
               </button>
               <button class="mobile-bar-btn mobile-bar-summary" id="mobile-btn-summary" type="button" title="Generate Smart Executive Summary" disabled>
-                <span>⚡ Summary</span>
-              </button>
-              <button class="mobile-bar-btn mobile-bar-pdf" id="mobile-btn-export-pdf" type="button" title="Download Full Chat as PDF" disabled>
-                <span>📄 Full Chat PDF</span>
-              </button>
-              <button class="mobile-bar-btn mobile-bar-word" id="mobile-btn-export-word" type="button" title="Download Full Chat as Word" disabled>
-                <span>📝 Word</span>
+                <span>⚡ Smart Summary</span>
               </button>
             </div>
 
@@ -888,15 +876,6 @@
                   <span>RESEARCH TOOLS</span>
                 </span>
                 <div class="chat-tools-scroll" id="chat-tools-scroll">
-                  <!-- Direct Export Action Buttons in Tools Bar -->
-                  <button type="button" class="chat-tool-btn tool-export-pdf" id="bar-btn-export-pdf" title="Export conversation as PDF (.pdf)">
-                    <span class="tool-icon">📄</span>
-                    <span>Export PDF</span>
-                  </button>
-                  <button type="button" class="chat-tool-btn tool-export-word" id="bar-btn-export-word" title="Export conversation as Word (.docx)">
-                    <span class="tool-icon">📝</span>
-                    <span>Export Word</span>
-                  </button>
                   <button type="button" class="chat-tool-btn" data-prompt="Give me a concise executive summary and key objectives of this document." title="Executive Summary" disabled>
                     <span class="tool-icon">⚡</span>
                     <span>Executive Summary</span>
@@ -1038,56 +1017,6 @@
           <div class="modal-footer-quote">
             <span class="sparkle-mini">🔒</span>
             <span>Zero spam. Account required solely for isolated workspace security.</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- =========================================================
-           4. EXPORT CONVERSATION MODAL (Mobile Bottom-Sheet & Desktop Modal)
-           ========================================================= -->
-      <div class="export-modal-backdrop" id="export-modal-backdrop" hidden>
-        <div class="export-modal-sheet" id="export-modal-sheet" role="dialog" aria-modal="true" aria-labelledby="export-modal-title">
-          <div class="export-modal-header">
-            <div class="export-modal-title-wrap">
-              <span class="export-modal-badge" aria-hidden="true">📥</span>
-              <div>
-                <h3 id="export-modal-title" class="export-modal-title">Export Research Conversation</h3>
-                <p class="export-modal-subtitle">Choose your preferred download file format:</p>
-              </div>
-            </div>
-            <button type="button" class="export-modal-close" id="btn-close-export-modal" aria-label="Close export dialog">✕</button>
-          </div>
-
-          <div class="export-modal-options">
-            <!-- Option 1: PDF -->
-            <button type="button" class="export-modal-card-btn opt-pdf" id="modal-export-pdf">
-              <div class="export-card-icon icon-pdf">📄</div>
-              <div class="export-card-content">
-                <div class="export-card-top">
-                  <strong class="export-card-name">Export as PDF (.pdf)</strong>
-                  <span class="format-badge badge-pdf">Standard PDF</span>
-                </div>
-                <p class="export-card-desc">Formatted research report with full Q&amp;A and verified citations</p>
-              </div>
-              <div class="export-card-action">Download PDF ↓</div>
-            </button>
-
-            <!-- Option 2: Word -->
-            <button type="button" class="export-modal-card-btn opt-word" id="modal-export-word">
-              <div class="export-card-icon icon-word">📝</div>
-              <div class="export-card-content">
-                <div class="export-card-top">
-                  <strong class="export-card-name">Export as Word (.docx)</strong>
-                  <span class="format-badge badge-word">Editable DOCX</span>
-                </div>
-                <p class="export-card-desc">Fully editable Microsoft Word document ready for reports &amp; essays</p>
-              </div>
-              <div class="export-card-action">Download Word ↓</div>
-            </button>
-          </div>
-
-          <div class="export-modal-footer">
-            <button type="button" class="export-modal-cancel" id="btn-cancel-export-modal">Close</button>
           </div>
         </div>
       </div>

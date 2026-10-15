@@ -57,19 +57,6 @@
     docPageBadge: document.getElementById("doc-page-badge"),
     docChunkBadge: document.getElementById("doc-chunk-badge"),
     btnSmartSummary: document.getElementById("btn-smart-summary"),
-    btnExportChat: document.getElementById("btn-export-chat"),
-    exportDropdownWrap: document.getElementById("export-dropdown-wrap"),
-    exportMenu: document.getElementById("export-menu"),
-    btnExportPdf: document.getElementById("btn-export-pdf"),
-    btnExportWord: document.getElementById("btn-export-word"),
-    barBtnExportPdf: document.getElementById("bar-btn-export-pdf"),
-    barBtnExportWord: document.getElementById("bar-btn-export-word"),
-    exportModalBackdrop: document.getElementById("export-modal-backdrop"),
-    exportModalSheet: document.getElementById("export-modal-sheet"),
-    modalExportPdf: document.getElementById("modal-export-pdf"),
-    modalExportWord: document.getElementById("modal-export-word"),
-    btnCloseExportModal: document.getElementById("btn-close-export-modal"),
-    btnCancelExportModal: document.getElementById("btn-cancel-export-modal"),
     dropdownBtnHome: document.getElementById("dropdown-btn-home"),
     documentSearchInput: document.getElementById("document-search-input"),
     clearSearchBtn: document.getElementById("clear-search-btn"),
@@ -83,8 +70,6 @@
     mobileChatBar: document.getElementById("mobile-chat-bar"),
     mobileBtnNewChat: document.getElementById("mobile-btn-new-chat"),
     mobileBtnSummary: document.getElementById("mobile-btn-summary"),
-    mobileBtnExportPdf: document.getElementById("mobile-btn-export-pdf"),
-    mobileBtnExportWord: document.getElementById("mobile-btn-export-word"),
 
     // Wisdom Topbar Ticker Elements
     topbarWisdomTicker: document.getElementById("topbar-wisdom-ticker"),
@@ -1819,61 +1804,9 @@
     // Smart Summary and Export Dropdown Actions
     elements.btnSmartSummary?.addEventListener("click", triggerSmartSummary);
 
-    elements.btnExportChat?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      openExportModal();
-      if (elements.exportMenu) {
-        elements.exportMenu.hidden = !elements.exportMenu.hidden;
-      }
-    });
-
-    elements.modalExportPdf?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      closeExportModal();
-      exportChat("pdf");
-    });
-
-    elements.modalExportWord?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      closeExportModal();
-      exportChat("docx");
-    });
-
-    elements.btnCloseExportModal?.addEventListener("click", closeExportModal);
-    elements.btnCancelExportModal?.addEventListener("click", closeExportModal);
-    elements.exportModalBackdrop?.addEventListener("click", (e) => {
-      if (e.target === elements.exportModalBackdrop) {
-        closeExportModal();
-      }
-    });
-
     elements.dropdownBtnHome?.addEventListener("click", () => {
       if (elements.userDropdown) elements.userDropdown.hidden = true;
       showView("landing");
-    });
-
-    elements.btnExportPdf?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (elements.exportMenu) elements.exportMenu.hidden = true;
-      closeExportModal();
-      exportChat("pdf");
-    });
-
-    elements.btnExportWord?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (elements.exportMenu) elements.exportMenu.hidden = true;
-      closeExportModal();
-      exportChat("docx");
-    });
-
-    elements.barBtnExportPdf?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      exportChat("pdf");
-    });
-
-    elements.barBtnExportWord?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      exportChat("docx");
     });
 
     // Mobile-Dedicated Chat Action Bar Events
@@ -1883,16 +1816,6 @@
 
     elements.mobileBtnSummary?.addEventListener("click", () => {
       triggerSmartSummary();
-    });
-
-    elements.mobileBtnExportPdf?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      exportChat("pdf");
-    });
-
-    elements.mobileBtnExportWord?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      exportChat("docx");
     });
 
     // Landing 3-Line Mobile Hamburger Menu Toggle

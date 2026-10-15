@@ -123,62 +123,9 @@ body {
 button, textarea, input { font: inherit; }
 button { color: inherit; }
 
-/* Clean, Static Executive Ambient Background (Royal Blue, Cyan, Indigo, Violet on Black/White) */
+/* Clean Ambient Disabled to eliminate blurry blue reflection & haziness */
 .ambient {
-  position: fixed;
-  z-index: -1;
-  border-radius: 50%;
-  filter: blur(140px);
-  pointer-events: none;
-}
-.ambient-one {
-  top: -180px;
-  left: 15%;
-  width: 620px;
-  height: 620px;
-  background: radial-gradient(circle, #2563eb 0%, #1d4ed8 50%, transparent 75%);
-  opacity: 0.14;
-}
-.ambient-two {
-  right: -200px;
-  bottom: -150px;
-  width: 580px;
-  height: 580px;
-  background: radial-gradient(circle, #06b6d4 0%, #0369a1 50%, transparent 75%);
-  opacity: 0.12;
-}
-.ambient-three {
-  top: 35%;
-  right: -100px;
-  width: 480px;
-  height: 480px;
-  background: radial-gradient(circle, #6366f1 0%, #4338ca 50%, transparent 75%);
-  opacity: 0.10;
-}
-.ambient-four {
-  bottom: 5%;
-  left: 4%;
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, #7c3aed 0%, #1e1b4b 60%, transparent 80%);
-  opacity: 0.12;
-}
-
-html[data-theme="light"] .ambient-one {
-  background: radial-gradient(circle, #93c5fd 0%, #60a5fa 60%, transparent 80%);
-  opacity: 0.14;
-}
-html[data-theme="light"] .ambient-two {
-  background: radial-gradient(circle, #a5f3fc 0%, #38bdf8 60%, transparent 80%);
-  opacity: 0.12;
-}
-html[data-theme="light"] .ambient-three {
-  background: radial-gradient(circle, #c7d2fe 0%, #818cf8 60%, transparent 80%);
-  opacity: 0.10;
-}
-html[data-theme="light"] .ambient-four {
-  background: radial-gradient(circle, #ddd6fe 0%, #a78bfa 60%, transparent 80%);
-  opacity: 0.08;
+  display: none !important;
 }
 
 /* Checkered Grid Disabled for Clean Standard Enterprise Appearance */
@@ -206,21 +153,19 @@ html[data-theme="light"] .ambient-four {
   z-index: 5;
   background-color: #080c15;
   background-image: 
-    radial-gradient(ellipse 80% 30% at 50% 0%, rgba(37, 99, 235, 0.08), transparent 70%),
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 100% 100%, 48px 48px, 48px 48px;
-  background-position: top center, 0 0, 0 0;
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px;
+  background-position: 0 0, 0 0;
 }
 
 html[data-theme="light"] .landing-page {
   background-color: #f8fafc;
   background-image: 
-    radial-gradient(ellipse 80% 30% at 50% 0%, rgba(37, 99, 235, 0.04), transparent 70%),
     linear-gradient(to right, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
-  background-size: 100% 100%, 48px 48px, 48px 48px;
-  background-position: top center, 0 0, 0 0;
+  background-size: 48px 48px, 48px 48px;
+  background-position: 0 0, 0 0;
 }
 
 .landing-header {
@@ -287,22 +232,24 @@ html[data-theme="light"] .landing-page {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 16px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: #2563eb;
+  padding: 7px 15px;
+  border-radius: 9px;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  background: #1d4ed8;
   color: #ffffff !important;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  text-shadow: none;
+  transition: all 0.18s ease;
   white-space: nowrap;
 }
 .btn-corner-try:hover {
-  background: #1d4ed8;
+  background: #1e40af;
+  border-color: #60a5fa;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 /* Landing Hamburger & Mobile Navigation (Hidden on Desktop) */
@@ -420,23 +367,25 @@ html[data-theme="light"] .hero-subtitle {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 13px 28px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: #2563eb;
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  background: #1d4ed8;
   color: #ffffff !important;
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  text-shadow: none;
+  transition: all 0.18s ease;
   position: relative;
   text-decoration: none;
 }
 .btn-hero-primary:hover {
-  background: #1d4ed8;
+  background: #1e40af;
+  border-color: #60a5fa;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .btn-hero-secondary {
@@ -1477,22 +1426,24 @@ html[data-theme="light"] .terminal-cta-strip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 18px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  padding: 7px 16px;
+  border-radius: 8px;
+  background: #1d4ed8;
   color: #ffffff !important;
   font-size: 12px;
   font-weight: 700;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  text-shadow: none;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.18s ease;
 }
 
 .btn-terminal-launch:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.55);
+  transform: translateY(-1px);
+  background: #1e40af;
+  border-color: #60a5fa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .terminal-stat-note {
@@ -1796,7 +1747,7 @@ html[data-theme="light"] .faq-answer-standard {
   border-radius: 24px;
   border: 1px solid var(--line-focus);
   background: linear-gradient(135deg, rgba(23, 34, 64, 0.9), rgba(15, 22, 42, 0.95));
-  box-shadow: 0 20px 50px var(--shadow), 0 0 30px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   text-align: center;
 }
 html[data-theme="light"] .landing-cta-inner {
