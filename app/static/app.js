@@ -1352,22 +1352,7 @@
       pauseBtn.addEventListener("click", () => speechController.togglePause());
       stopBtn.addEventListener("click", () => speechController.stop());
 
-      // Direct PDF & Word Export Buttons inside SMS Box
-      const pdfBtn = document.createElement("button");
-      pdfBtn.type = "button";
-      pdfBtn.className = "msg-action-btn export-pdf-msg-btn";
-      pdfBtn.innerHTML = `<span>📄 Export PDF</span>`;
-      pdfBtn.title = "Save conversation as PDF document (.pdf)";
-      pdfBtn.addEventListener("click", () => exportChat("pdf"));
-
-      const wordBtn = document.createElement("button");
-      wordBtn.type = "button";
-      wordBtn.className = "msg-action-btn export-word-msg-btn";
-      wordBtn.innerHTML = `<span>📝 Export Word</span>`;
-      wordBtn.title = "Save conversation as Word document (.docx)";
-      wordBtn.addEventListener("click", () => exportChat("docx"));
-
-      actions.append(copyBtn, speechBtn, pauseBtn, stopBtn, pdfBtn, wordBtn);
+      actions.append(copyBtn, speechBtn, pauseBtn, stopBtn);
       body.append(actions);
     }
 
