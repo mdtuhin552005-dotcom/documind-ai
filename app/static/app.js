@@ -1100,7 +1100,13 @@
         state.selectedId = state.documents[0]?.id ?? null;
       }
       renderDocuments();
-      if (state.selectedId) setSelectedDocument(state.selectedId);
+      if (state.selectedId) {
+        setSelectedDocument(state.selectedId);
+        const matchingChat = state.chats?.find((c) => c.document_id === state.selectedId);
+        if (matchingChat && !state.chatId) {
+          await openChat(matchingChat.id, false);
+        }
+      }
     } catch (error) {
       showToast(error.message, "error");
     }
@@ -1246,6 +1252,9 @@
         } catch {}
         if (lastChatId && state.chats.some((conversation) => conversation.id === lastChatId)) {
           await openChat(lastChatId, false);
+        } else if (state.selectedId) {
+          const matchingChat = state.chats.find((conversation) => conversation.document_id === state.selectedId);
+          if (matchingChat) await openChat(matchingChat.id, false);
         }
       }
     } catch (error) {

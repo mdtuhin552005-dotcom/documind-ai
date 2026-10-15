@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=62" />
+    <link rel="stylesheet" href="/static/styles.css?v=63" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,7 +42,7 @@
         },
       };
     </script>
-    <script defer src="/static/app.js?v=62"></script>
+    <script defer src="/static/app.js?v=63"></script>
   </head>
   <body>
     <div class="app-shell">
@@ -727,11 +727,6 @@
             </div>
 
             <span class="secure-badge"><span class="secure-dot"></span> Private</span>
-            
-            <button type="button" class="btn-workspace-home" id="btn-nav-home" aria-label="Return to Homepage" title="Return to Homepage">
-              <span class="home-icon">🏠</span>
-              <span class="home-text">Home</span>
-            </button>
 
             <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
               <svg class="theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
@@ -829,17 +824,6 @@
                 <span>Your library is empty</span>
                 <small>Upload a PDF document to begin intelligent inquiry.</small>
               </div>
-            </div>
-
-            <!-- Recent Chats Heading -->
-            <div class="recent-heading">
-              <span>SAVED CONVERSATIONS</span>
-              <span id="recent-chat-total">0</span>
-            </div>
-
-            <!-- Recent Chat List Container -->
-            <div class="recent-chat-list" id="recent-chat-list" aria-live="polite">
-              <div class="recent-empty" id="recent-empty">Saved research conversations will appear here.</div>
             </div>
 
             <!-- Sidebar Quick Export Hub -->
