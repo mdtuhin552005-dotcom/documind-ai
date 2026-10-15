@@ -7,7 +7,18 @@ import os
 router = APIRouter(prefix="/admin", tags=["admin"])
 from app.core.config import settings
 
-def get_db_path() -> Path:
+def get_db_path(request: Request | None = None) -> Path:
+    if request and hasattr(request.app.state, "database"):
+        return request.app.state.database.database_path
+    if request and hasattr(request.app.state, "settings"):
+        return request.app.state.settings.database_path
+    # Check if /var/data exists (Render mount)
+    render_db = Path("/var/data/documind.sqlite3")
+    if render_db.exists():
+        return render_db
+    local_db = Path("data/documind.db")
+    if local_db.exists():
+        return local_db
     return settings.database_path
 
 import time
@@ -165,7 +176,7 @@ async def logout(request: Request):
 @router.get("/", response_class=HTMLResponse)
 async def dashboard(request: Request):
     check_admin(request)
-    async with aiosqlite.connect(get_db_path()) as conn:
+    async with aiosqlite.connect(get_db_path(request)) as conn:
         stats = {}
         for tbl in ("users", "documents", "conversations", "conversation_messages", "sessions"):
             c = await conn.execute(f"SELECT COUNT(*) FROM {tbl}")
@@ -197,7 +208,7 @@ async def dashboard(request: Request):
 @router.get("/users", response_class=HTMLResponse)
 async def users_page(request: Request, msg: str = ""):
     check_admin(request)
-    async with aiosqlite.connect(get_db_path()) as conn:
+    async with aiosqlite.connect(get_db_path(request)) as conn:
         conn.row_factory = aiosqlite.Row
         cur = await conn.execute("SELECT id, email, full_name, created_at FROM users ORDER BY created_at DESC")
         users = await cur.fetchall()
@@ -226,7 +237,7 @@ async def users_page(request: Request, msg: str = ""):
 @router.post("/users/{user_id}/delete")
 async def delete_user(user_id: str, request: Request):
     check_admin(request)
-    async with aiosqlite.connect(get_db_path()) as conn:
+    async with aiosqlite.connect(get_db_path(request)) as conn:
         await conn.execute("DELETE FROM sessions WHERE user_id=?", (user_id,))
         await conn.execute("DELETE FROM users WHERE id=?", (user_id,))
         await conn.commit()
@@ -237,7 +248,7 @@ async def delete_user(user_id: str, request: Request):
 @router.get("/documents", response_class=HTMLResponse)
 async def documents_page(request: Request, msg: str = ""):
     check_admin(request)
-    async with aiosqlite.connect(get_db_path()) as conn:
+    async with aiosqlite.connect(get_db_path(request)) as conn:
         conn.row_factory = aiosqlite.Row
         cur = await conn.execute(
             "SELECT d.id, d.filename, d.title, d.page_count, d.created_at, u.email FROM documents d LEFT JOIN users u ON u.id=d.user_id ORDER BY d.created_at DESC"
@@ -270,7 +281,7 @@ async def documents_page(request: Request, msg: str = ""):
 @router.post("/documents/{doc_id}/delete")
 async def delete_document(doc_id: str, request: Request):
     check_admin(request)
-    async with aiosqlite.connect(get_db_path()) as conn:
+    async with aiosqlite.connect(get_db_path(request)) as conn:
         await conn.execute("DELETE FROM conversation_messages WHERE conversation_id IN (SELECT id FROM conversations WHERE document_id=?)", (doc_id,))
         await conn.execute("DELETE FROM conversations WHERE document_id=?", (doc_id,))
         await conn.execute("DELETE FROM documents WHERE id=?", (doc_id,))
@@ -282,7 +293,7 @@ async def delete_document(doc_id: str, request: Request):
 @router.get("/conversations", response_class=HTMLResponse)
 async def conversations_page(request: Request):
     check_admin(request)
-    async with aiosqlite.connect(get_db_path()) as conn:
+    async with aiosqlite.connect(get_db_path(request)) as conn:
         conn.row_factory = aiosqlite.Row
         cur = await conn.execute(
             "SELECT c.id, c.title, c.updated_at, u.email, (SELECT COUNT(*) FROM conversation_messages WHERE conversation_id=c.id) as msg_count FROM conversations c LEFT JOIN users u ON u.id=c.user_id ORDER BY c.updated_at DESC LIMIT 50"
@@ -313,7 +324,7 @@ async def conversations_page(request: Request):
 @router.post("/conversations/{conv_id}/delete")
 async def delete_conversation(conv_id: str, request: Request):
     check_admin(request)
-    async with aiosqlite.connect(get_db_path()) as conn:
+    async with aiosqlite.connect(get_db_path(request)) as conn:
         await conn.execute("DELETE FROM conversation_messages WHERE conversation_id=?", (conv_id,))
         await conn.execute("DELETE FROM conversations WHERE id=?", (conv_id,))
         await conn.commit()
@@ -324,7 +335,7 @@ async def delete_conversation(conv_id: str, request: Request):
 @router.get("/sessions", response_class=HTMLResponse)
 async def sessions_page(request: Request, msg: str = ""):
     check_admin(request)
-    async with aiosqlite.connect(get_db_path()) as conn:
+    async with aiosqlite.connect(get_db_path(request)) as conn:
         conn.row_factory = aiosqlite.Row
         cur = await conn.execute(
             "SELECT s.token, s.created_at, s.expires_at, u.email FROM sessions s JOIN users u ON u.id=s.user_id ORDER BY s.created_at DESC"
@@ -360,7 +371,7 @@ async def sessions_page(request: Request, msg: str = ""):
 @router.post("/sessions/clear")
 async def clear_sessions(request: Request):
     check_admin(request)
-    async with aiosqlite.connect(get_db_path()) as conn:
+    async with aiosqlite.connect(get_db_path(request)) as conn:
         await conn.execute("DELETE FROM sessions")
         await conn.commit()
     return RedirectResponse("/admin/sessions?msg=All+sessions+cleared", status_code=302)
@@ -369,7 +380,7 @@ async def clear_sessions(request: Request):
 @router.post("/sessions/{token}/delete")
 async def delete_session(token: str, request: Request):
     check_admin(request)
-    async with aiosqlite.connect(get_db_path()) as conn:
+    async with aiosqlite.connect(get_db_path(request)) as conn:
         await conn.execute("DELETE FROM sessions WHERE token=?", (token,))
         await conn.commit()
     return RedirectResponse("/admin/sessions?msg=Session+revoked", status_code=302)
