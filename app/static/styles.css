@@ -2939,12 +2939,14 @@ html[data-theme="light"] .upload-zone.is-uploaded .highlight-browse {
 
 /* Chat Header */
 .chat-header {
-  height: 68px;
-  min-height: 68px;
+  min-height: 56px;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 18px;
   border-bottom: 1px solid var(--line);
   background: var(--surface);
   backdrop-filter: blur(18px);
@@ -3021,24 +3023,26 @@ html[data-theme="light"] .meta-pill {
 .chat-header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 .header-action-button {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 7px 12px;
-  font-size: 11px;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 11.5px;
   font-weight: 700;
-  border-radius: 10px;
+  border-radius: 9px;
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   transform-style: preserve-3d;
+  white-space: nowrap;
 }
-.header-action-button:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+.header-action-button:disabled,
+.header-action-button.is-dimmed {
+  opacity: 0.78;
   transform: none !important;
   box-shadow: none !important;
 }
@@ -3067,46 +3071,48 @@ html[data-theme="light"] .meta-pill {
 }
 
 .export-pdf-btn {
-  background: rgba(239, 68, 68, 0.12);
-  color: #f87171;
-  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.16) !important;
+  color: #fca5a5 !important;
+  border: 1.5px solid rgba(239, 68, 68, 0.5) !important;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
 }
-.export-pdf-btn:hover:not(:disabled) {
-  background: #ef4444;
+.export-pdf-btn:hover {
+  background: #ef4444 !important;
   color: #ffffff !important;
-  border-color: #ef4444;
+  border-color: #ef4444 !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.45);
 }
 html[data-theme="light"] .export-pdf-btn {
-  background: #fef2f2;
-  color: #dc2626;
-  border-color: #fca5a5;
+  background: #fef2f2 !important;
+  color: #b91c1c !important;
+  border: 1.5px solid #f87171 !important;
 }
-html[data-theme="light"] .export-pdf-btn:hover:not(:disabled) {
-  background: #dc2626;
+html[data-theme="light"] .export-pdf-btn:hover {
+  background: #dc2626 !important;
   color: #ffffff !important;
 }
 
 .export-word-btn {
-  background: rgba(37, 99, 235, 0.12);
-  color: #60a5fa;
-  border-color: rgba(37, 99, 235, 0.35);
+  background: rgba(37, 99, 235, 0.16) !important;
+  color: #93c5fd !important;
+  border: 1.5px solid rgba(37, 99, 235, 0.5) !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
 }
-.export-word-btn:hover:not(:disabled) {
-  background: #2563eb;
+.export-word-btn:hover {
+  background: #2563eb !important;
   color: #ffffff !important;
-  border-color: #2563eb;
+  border-color: #2563eb !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
 }
 html[data-theme="light"] .export-word-btn {
-  background: #eff6ff;
-  color: #1d4ed8;
-  border-color: #bfdbfe;
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border: 1.5px solid #60a5fa !important;
 }
-html[data-theme="light"] .export-word-btn:hover:not(:disabled) {
-  background: #2563eb;
+html[data-theme="light"] .export-word-btn:hover {
+  background: #2563eb !important;
   color: #ffffff !important;
 }
 
@@ -3739,6 +3745,50 @@ html[data-theme="light"] .source-chip {
   border-color: #ef4444;
   color: #ffffff !important;
 }
+
+/* SMS Box Action Toolbar Export Buttons */
+.msg-action-btn.export-pdf-msg-btn {
+  background: rgba(239, 68, 68, 0.14);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+.msg-action-btn.export-pdf-msg-btn:hover {
+  background: #ef4444;
+  color: #ffffff !important;
+  border-color: #ef4444;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+}
+html[data-theme="light"] .msg-action-btn.export-pdf-msg-btn {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+html[data-theme="light"] .msg-action-btn.export-pdf-msg-btn:hover {
+  background: #dc2626;
+  color: #ffffff !important;
+}
+
+.msg-action-btn.export-word-msg-btn {
+  background: rgba(37, 99, 235, 0.14);
+  color: #60a5fa;
+  border-color: rgba(37, 99, 235, 0.4);
+}
+.msg-action-btn.export-word-msg-btn:hover {
+  background: #2563eb;
+  color: #ffffff !important;
+  border-color: #2563eb;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+html[data-theme="light"] .msg-action-btn.export-word-msg-btn {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+html[data-theme="light"] .msg-action-btn.export-word-msg-btn:hover {
+  background: #2563eb;
+  color: #ffffff !important;
+}
+
 .message-time {
   font-size: 9px;
   color: var(--text-muted);
@@ -3850,6 +3900,46 @@ html[data-theme="light"] .chat-tool-btn {
 }
 .chat-tool-btn .tool-icon {
   font-size: 11px;
+}
+
+.chat-tool-btn.tool-export-pdf {
+  background: rgba(239, 68, 68, 0.16) !important;
+  color: #fca5a5 !important;
+  border: 1.5px solid rgba(239, 68, 68, 0.5) !important;
+}
+.chat-tool-btn.tool-export-pdf:hover {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+html[data-theme="light"] .chat-tool-btn.tool-export-pdf {
+  background: #fef2f2 !important;
+  color: #b91c1c !important;
+  border-color: #f87171 !important;
+}
+html[data-theme="light"] .chat-tool-btn.tool-export-pdf:hover {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+.chat-tool-btn.tool-export-word {
+  background: rgba(37, 99, 235, 0.16) !important;
+  color: #93c5fd !important;
+  border: 1.5px solid rgba(37, 99, 235, 0.5) !important;
+}
+.chat-tool-btn.tool-export-word:hover {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+html[data-theme="light"] .chat-tool-btn.tool-export-word {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border-color: #60a5fa !important;
+}
+html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
+  background: #2563eb !important;
+  color: #ffffff !important;
 }
 
 /* Compact Composer Input Bar */
@@ -4424,8 +4514,28 @@ html[data-theme="light"] .chat-tool-btn {
     border-width: 1px;
   }
   .chat-header {
-    padding: 8px 12px;
-    min-height: 44px;
+    padding: 8px 10px;
+    min-height: 48px;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chat-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 3px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .chat-header-actions::-webkit-scrollbar {
+    display: none;
+  }
+  .header-action-button {
+    flex-shrink: 0;
+    padding: 5px 9px;
+    font-size: 11px;
   }
   .chat-header-title {
     font-size: 13px;

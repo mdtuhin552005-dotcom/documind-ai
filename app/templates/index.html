@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=41" />
+    <link rel="stylesheet" href="/static/styles.css?v=42" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,7 +42,7 @@
         },
       };
     </script>
-    <script defer src="/static/app.js?v=32"></script>
+    <script defer src="/static/app.js?v=33"></script>
   </head>
   <body>
     <!-- Clean, Static Subtle Ambient Background -->
@@ -771,12 +771,12 @@
                 </button>
 
                 <!-- Direct PDF & Word Export Buttons -->
-                <button class="header-action-button export-pdf-btn" id="btn-export-pdf" type="button" title="Export conversation as PDF (.pdf)" disabled>
+                <button class="header-action-button export-pdf-btn" id="btn-export-pdf" type="button" title="Export conversation as PDF (.pdf)">
                   <span class="mr-1">📄</span>
                   <span>Export PDF</span>
                 </button>
 
-                <button class="header-action-button export-word-btn" id="btn-export-word" type="button" title="Export conversation as Word (.docx)" disabled>
+                <button class="header-action-button export-word-btn" id="btn-export-word" type="button" title="Export conversation as Word (.docx)">
                   <span class="mr-1">📝</span>
                   <span>Export Word</span>
                 </button>
@@ -826,6 +826,15 @@
                   <span>RESEARCH TOOLS</span>
                 </span>
                 <div class="chat-tools-scroll" id="chat-tools-scroll">
+                  <!-- Direct Export Action Buttons in Tools Bar -->
+                  <button type="button" class="chat-tool-btn tool-export-pdf" id="bar-btn-export-pdf" title="Export conversation as PDF (.pdf)">
+                    <span class="tool-icon">📄</span>
+                    <span>Export PDF</span>
+                  </button>
+                  <button type="button" class="chat-tool-btn tool-export-word" id="bar-btn-export-word" title="Export conversation as Word (.docx)">
+                    <span class="tool-icon">📝</span>
+                    <span>Export Word</span>
+                  </button>
                   <button type="button" class="chat-tool-btn" data-prompt="Give me a concise executive summary and key objectives of this document." title="Executive Summary" disabled>
                     <span class="tool-icon">⚡</span>
                     <span>Executive Summary</span>

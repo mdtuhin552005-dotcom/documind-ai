@@ -62,6 +62,8 @@
     exportMenu: document.getElementById("export-menu"),
     btnExportPdf: document.getElementById("btn-export-pdf"),
     btnExportWord: document.getElementById("btn-export-word"),
+    barBtnExportPdf: document.getElementById("bar-btn-export-pdf"),
+    barBtnExportWord: document.getElementById("bar-btn-export-word"),
     documentSearchInput: document.getElementById("document-search-input"),
     clearSearchBtn: document.getElementById("clear-search-btn"),
 
@@ -706,8 +708,10 @@
   // --- Export State Helper ---
   function setExportButtonsDisabled(disabled) {
     if (elements.btnExportChat) elements.btnExportChat.disabled = disabled;
-    if (elements.btnExportPdf) elements.btnExportPdf.disabled = disabled;
-    if (elements.btnExportWord) elements.btnExportWord.disabled = disabled;
+    if (elements.btnExportPdf) elements.btnExportPdf.classList.toggle("is-dimmed", disabled);
+    if (elements.btnExportWord) elements.btnExportWord.classList.toggle("is-dimmed", disabled);
+    if (elements.barBtnExportPdf) elements.barBtnExportPdf.classList.toggle("is-dimmed", disabled);
+    if (elements.barBtnExportWord) elements.barBtnExportWord.classList.toggle("is-dimmed", disabled);
   }
 
   // --- Document Selection & UI Updates ---
@@ -1304,7 +1308,22 @@
       pauseBtn.addEventListener("click", () => speechController.togglePause());
       stopBtn.addEventListener("click", () => speechController.stop());
 
-      actions.append(copyBtn, speechBtn, pauseBtn, stopBtn);
+      // Direct PDF & Word Export Buttons inside SMS Box
+      const pdfBtn = document.createElement("button");
+      pdfBtn.type = "button";
+      pdfBtn.className = "msg-action-btn export-pdf-msg-btn";
+      pdfBtn.innerHTML = `<span>📄 Export PDF</span>`;
+      pdfBtn.title = "Save conversation as PDF document (.pdf)";
+      pdfBtn.addEventListener("click", () => exportChat("pdf"));
+
+      const wordBtn = document.createElement("button");
+      wordBtn.type = "button";
+      wordBtn.className = "msg-action-btn export-word-msg-btn";
+      wordBtn.innerHTML = `<span>📝 Export Word</span>`;
+      wordBtn.title = "Save conversation as Word document (.docx)";
+      wordBtn.addEventListener("click", () => exportChat("docx"));
+
+      actions.append(copyBtn, speechBtn, pauseBtn, stopBtn, pdfBtn, wordBtn);
       body.append(actions);
     }
 
@@ -1435,7 +1454,7 @@
   // --- Export Chat as PDF or Word (.docx / .doc) ---
   async function exportChat(format) {
     if (!state.history.length) {
-      showToast("No conversation to export.", "info");
+      showToast("No conversation to export yet. Please select a document and ask a question first.", "info");
       return;
     }
     const selectedDoc = state.documents.find((d) => d.id === state.selectedId);
@@ -1780,6 +1799,16 @@
     });
 
     elements.btnExportWord?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      exportChat("docx");
+    });
+
+    elements.barBtnExportPdf?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      exportChat("pdf");
+    });
+
+    elements.barBtnExportWord?.addEventListener("click", (e) => {
       e.stopPropagation();
       exportChat("docx");
     });
