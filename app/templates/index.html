@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=27" />
+    <link rel="stylesheet" href="/static/styles.css?v=28" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -758,6 +758,12 @@
                     <span>Answers grounded in document truth with page citations</span>
                   </div>
                   <div class="composer-send">
+                    <button id="btn-composer-upload" class="composer-upload-btn" type="button" aria-label="Upload PDF Document" title="Upload PDF document">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 5v14M5 12h14" />
+                      </svg>
+                      <span class="composer-upload-text">PDF</span>
+                    </button>
                     <span class="character-count" id="character-count">0 / 4000</span>
                     <button id="send-button" class="send-button" type="button" aria-label="Send message" disabled>
                       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 14-7-5.5 14-2.1-5.9L5 12Z" /><path d="m11.4 13.1 4.2-4.2" /></svg>

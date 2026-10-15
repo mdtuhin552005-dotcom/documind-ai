@@ -129,7 +129,8 @@ button:hover{{background:#4338ca}}
 async def login_submit(password: str = Form(...)):
     if password == ADMIN_PASSWORD:
         resp = RedirectResponse("/admin", status_code=302)
-        resp.set_cookie("admin_auth", ADMIN_PASSWORD, httponly=True, max_age=86400)
+        # Session cookie (expires when browser is closed, or max 15 minutes)
+        resp.set_cookie("admin_auth", ADMIN_PASSWORD, httponly=True, max_age=900, samesite="lax")
         return resp
     return RedirectResponse("/admin/login?error=1", status_code=302)
 

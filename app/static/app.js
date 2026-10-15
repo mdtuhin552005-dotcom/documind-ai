@@ -24,6 +24,7 @@
     characterCount: document.getElementById("character-count"),
     chatToolsBar: document.getElementById("chat-tools-bar"),
     composer: document.getElementById("composer"),
+    btnComposerUpload: document.getElementById("btn-composer-upload"),
     documentList: document.getElementById("document-list"),
     documentTotal: document.getElementById("document-total"),
     fileInput: document.getElementById("file-input"),
@@ -1647,6 +1648,16 @@
     // Smart Summary and Export Actions
     elements.btnSmartSummary?.addEventListener("click", triggerSmartSummary);
     elements.btnExportChat?.addEventListener("click", exportChatMarkdown);
+
+    // Quick Chat Composer PDF Upload Button
+    elements.btnComposerUpload?.addEventListener("click", () => {
+      if (!state.currentUser) {
+        showToast("Account required: Please create a free account to upload and analyze PDF documents.", "info");
+        openAuthModal("signup");
+        return;
+      }
+      elements.fileInput?.click();
+    });
 
     // Strict Account Gated File Upload Zone
     if (elements.uploadZone) {
