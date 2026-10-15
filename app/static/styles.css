@@ -2698,13 +2698,13 @@ html[data-theme="light"] .upload-zone.is-uploaded .highlight-browse {
   letter-spacing: 1.2px;
 }
 
-/* Document List (Flex-fills sidebar now that Saved Conversations is removed) */
+/* Document List (Flex-fills sidebar now that Saved Conversations & Quick Export are removed) */
 .document-list {
   display: flex;
   flex-direction: column;
   gap: 7px;
-  min-height: 180px;
-  max-height: calc(100vh - 330px);
+  min-height: 200px;
+  max-height: calc(100vh - 265px);
   flex: 1 1 auto;
   overflow-y: auto;
   margin: 0 -4px;
