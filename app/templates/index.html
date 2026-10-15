@@ -27,7 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css?v=58" />
+    <link rel="stylesheet" href="/static/styles.css?v=59" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,7 +42,7 @@
         },
       };
     </script>
-    <script defer src="/static/app.js?v=58"></script>
+    <script defer src="/static/app.js?v=59"></script>
   </head>
   <body>
     <div class="app-shell">
@@ -638,7 +638,10 @@
       <div class="workspace-view" id="workspace-view" hidden>
         <!-- Top Navigation Bar -->
         <header class="topbar">
-          <div style="display: flex; align-items: center;">
+          <div class="topbar-left" style="display: flex; align-items: center; gap: 8px;">
+            <button class="icon-button mobile-sidebar-toggle" id="mobile-sidebar-toggle" aria-label="Show documents and chat history" title="Documents & Chats">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16M4 12h16M4 18.5h16" /></svg>
+            </button>
             <a class="brand" href="/" id="brand-link-workspace" aria-label="DocuMind AI home">
               <span class="brand-mark" aria-hidden="true">
                 <svg viewBox="0 0 32 32" fill="none">
@@ -739,10 +742,6 @@
                 <path d="M20.1 15.2A8.5 8.5 0 0 1 8.8 3.9 8.6 8.6 0 1 0 20.1 15.2Z"></path>
                 <path d="m17 3 .5 1.5L19 5l-1.5.5L17 7l-.5-1.5L15 5l1.5-.5L17 3Z"></path>
               </svg>
-            </button>
-            
-            <button class="icon-button mobile-sidebar-toggle" id="mobile-sidebar-toggle" aria-label="Show documents" title="Show documents">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16M4 12h16M4 18.5h16" /></svg>
             </button>
           </div>
         </header>

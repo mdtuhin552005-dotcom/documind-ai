@@ -4730,19 +4730,19 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
     font-size: 13px;
   }
 
-  /* Mobile Slide-in Drawer (Right Side on Android / Mobile) */
+  /* Mobile Slide-in Drawer (Left Side on Android / Mobile) */
   .sidebar {
     position: fixed;
     z-index: 100;
     top: 58px;
     bottom: 8px;
-    left: auto;
-    right: 8px;
+    left: 8px;
+    right: auto;
     width: min(320px, calc(100vw - 20px));
     min-width: 0;
     border-radius: 16px;
     box-shadow: 0 12px 48px rgba(0, 0, 0, 0.75), 0 0 0 1px var(--line-focus);
-    transform: translateX(calc(100% + 16px));
+    transform: translateX(calc(-100% - 16px));
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     animation: none;
     background: var(--surface-elevated);
@@ -4750,6 +4750,12 @@ html[data-theme="light"] .chat-tool-btn.tool-export-word:hover {
   }
   .sidebar.is-open {
     transform: translateX(0);
+  }
+
+  /* Hide upload zone inside mobile drawer per user request (Upload is available in chat box & composer on mobile) */
+  .sidebar .upload-zone,
+  .sidebar .upload-progress {
+    display: none !important;
   }
   .sidebar-close {
     display: grid;
