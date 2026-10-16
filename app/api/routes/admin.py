@@ -46,54 +46,422 @@ def check_admin(request: Request):
 
 ADMIN_CSS = """
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #090e0c; color: #e2e8f0; min-height: 100vh; }
-.sidebar { position: fixed; left: 0; top: 0; width: 230px; height: 100vh; background: #0e1713; border-right: 1px solid #1a2e24; padding: 24px 0; display: flex; flex-direction: column; }
-.sidebar .logo { padding: 0 20px 20px; border-bottom: 1px solid #1a2e24; margin-bottom: 12px; }
-.sidebar .logo h2 { font-size: 18px; color: #10b981; font-weight: 700; letter-spacing: -0.3px; }
-.sidebar .logo small { color: #6ee7b7; font-size: 11px; font-weight: 600; opacity: 0.8; }
-.nav-link { display: flex; align-items: center; gap: 10px; padding: 9px 20px; color: #94a3b8; text-decoration: none; font-size: 13.5px; font-weight: 500; transition: all .15s; }
-.nav-link:hover, .nav-link.active { background: #13241c; color: #34d399; border-right: 3px solid #10b981; }
-.nav-link .icon { font-size: 15px; width: 20px; }
-.main { margin-left: 230px; padding: 32px 36px; max-width: 1400px; }
-.page-title { font-size: 24px; font-weight: 800; color: #ffffff; margin-bottom: 6px; letter-spacing: -0.5px; }
-.page-sub { color: #6ee7b7; font-size: 13.5px; margin-bottom: 24px; font-weight: 500; opacity: 0.85; }
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 28px; }
-.stat-card { background: #0f1c16; border: 1px solid #1c362a; border-radius: 14px; padding: 18px 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
-.stat-card .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; font-weight: 700; }
-.stat-card .value { font-size: 30px; font-weight: 800; color: #34d399; line-height: 1.1; }
-.stat-card .icon { font-size: 24px; margin-bottom: 10px; }
-.card { background: #0f1c16; border: 1px solid #1c362a; border-radius: 14px; overflow: hidden; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
-.card-header { padding: 16px 20px; border-bottom: 1px solid #1c362a; display: flex; justify-content: space-between; align-items: center; }
-.card-header h3 { font-size: 15px; font-weight: 700; color: #ffffff; }
-.badge { padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; }
-.badge-blue { background: #0369a122; color: #38bdf8; border: 1px solid #0284c744; }
-.badge-green { background: #04785722; color: #34d399; border: 1px solid #05966944; }
-.badge-red { background: #88133722; color: #fb7185; border: 1px solid #e11d4844; }
-table { width: 100%; border-collapse: collapse; }
-th { padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: #6ee7b7; border-bottom: 1px solid #1c362a; background: #0b1611; font-weight: 700; }
-td { padding: 12px 16px; font-size: 13px; color: #e2e8f0; border-bottom: 1px solid #15261e; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: #13241c; }
-.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 15px; border-radius: 8px; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; text-decoration: none; transition: all .15s; }
-.btn-danger { background: #7f1d1d; color: #fca5a5; }
-.btn-danger:hover { background: #991b1b; }
-.btn-primary { background: #047857; color: #ffffff; }
-.btn-primary:hover { background: #059669; }
-.btn-warning { background: #78350f; color: #fcd34d; }
-.btn-warning:hover { background: #92400e; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif;
+  background: #07090e;
+  color: #f1f5f9;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Desktop Sidebar */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 240px;
+  height: 100vh;
+  background: #0d111c;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 24px 0 16px;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sidebar .logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sidebar .logo h2 {
+  font-size: 18px;
+  background: linear-gradient(135deg, #f5d0fe 0%, #c084fc 50%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+.sidebar .logo small {
+  color: #c084fc;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: block;
+}
+.sidebar-close-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  place-items: center;
+  line-height: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+.nav-link:hover {
+  background: rgba(124, 58, 237, 0.10);
+  color: #e9d5ff;
+}
+.nav-link.active {
+  background: rgba(124, 58, 237, 0.18);
+  color: #c084fc;
+  border-right: 3px solid #a855f7;
+  font-weight: 700;
+}
+.nav-link .icon {
+  font-size: 16px;
+  width: 22px;
+  display: inline-grid;
+  place-items: center;
+}
+
+/* Mobile Topbar for Android/iOS */
+.mobile-topbar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: rgba(13, 17, 28, 0.95);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0 16px;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 40;
+}
+.mobile-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mobile-menu-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.mobile-topbar-title {
+  font-size: 15px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f5d0fe 0%, #c084fc 50%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.mobile-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Drawer Backdrop for Mobile */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 45;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* Main Content Area */
+.main {
+  margin-left: 240px;
+  padding: 32px 36px 60px;
+  max-width: 1400px;
+  min-height: 100vh;
+}
+.page-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+.page-sub {
+  color: #a855f7;
+  font-size: 13.5px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: #0e1320;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.18s ease;
+}
+.stat-card .label {
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+.stat-card .value {
+  font-size: 30px;
+  font-weight: 800;
+  color: #c084fc;
+  line-height: 1.1;
+}
+.stat-card .icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+/* Cards & Tables */
+.card {
+  background: #0e1320;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+.card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.card-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Responsive Table Wrapper */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+}
+th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #c084fc;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #090e18;
+  font-weight: 700;
+  white-space: nowrap;
+}
+td {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #e2e8f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+tr:last-child td {
+  border-bottom: none;
+}
+tr:hover td {
+  background: rgba(124, 58, 237, 0.06);
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.badge-blue { background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25); }
+.badge-green { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25); }
+.badge-red { background: rgba(244, 63, 94, 0.12); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.25); }
+.badge-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 15px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.35);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  transform: translateY(-1px);
+}
+.btn-danger {
+  background: #e11d48;
+  color: #ffffff;
+}
+.btn-danger:hover {
+  background: #f43f5e;
+}
+.btn-warning {
+  background: #d97706;
+  color: #ffffff;
+}
+.btn-warning:hover {
+  background: #f59e0b;
+}
+
 .empty { padding: 40px; text-align: center; color: #64748b; font-size: 14px; }
 .alert { padding: 14px 20px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
-.alert-success { background: #04785722; border: 1px solid #059669; color: #34d399; }
-.alert-error { background: #88133722; border: 1px solid #e11d48; color: #fb7185; }
-.truncate { max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.chip { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; }
-.chip-user { background: #0284c722; color: #38bdf8; }
-.chip-assistant { background: #04785722; color: #34d399; }
+.alert-success { background: rgba(124, 58, 237, 0.15); border: 1px solid #7c3aed; color: #e9d5ff; }
+.alert-error { background: rgba(225, 29, 72, 0.15); border: 1px solid #e11d48; color: #fca5a5; }
+.truncate { max-width: 240px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Mobile & Android Optimizations */
+@media (max-width: 850px) {
+  .mobile-topbar {
+    display: flex;
+  }
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.85);
+  }
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+  .sidebar-backdrop.is-open {
+    display: block;
+    opacity: 1;
+  }
+  .sidebar-close-btn {
+    display: grid;
+  }
+  .main {
+    margin-left: 0;
+    padding: 16px 14px 40px;
+    margin-top: 56px;
+    width: 100%;
+  }
+  .page-title {
+    font-size: 20px;
+  }
+  .page-sub {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .stat-card {
+    padding: 12px 14px;
+    border-radius: 12px;
+  }
+  .stat-card .icon {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .stat-card .label {
+    font-size: 10px;
+  }
+  .stat-card .value {
+    font-size: 22px;
+  }
+  .card {
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .card-header {
+    padding: 12px 14px;
+  }
+  .card-header h3 {
+    font-size: 14px;
+  }
+  th, td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  .truncate {
+    max-width: 140px;
+  }
+  .btn {
+    padding: 6px 12px;
+    font-size: 11.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .truncate {
+    max-width: 110px;
+  }
+}
 """
 
 SIDEBAR = """
+<div class="sidebar-backdrop" onclick="toggleSidebar(false)"></div>
 <div class="sidebar">
-  <div class="logo"><h2>⚡ DocuMind</h2><small>Enterprise Admin</small></div>
+  <div class="logo">
+    <div>
+      <h2>⚡ DocuMind AI</h2>
+      <small>Enterprise Admin</small>
+    </div>
+    <button class="sidebar-close-btn" onclick="toggleSidebar(false)" aria-label="Close menu">✕</button>
+  </div>
   <a href="/admin" class="nav-link {d}"><span class="icon">📊</span> Dashboard</a>
   <a href="/admin/users" class="nav-link {u}"><span class="icon">👤</span> Users</a>
   <a href="/admin/documents" class="nav-link {doc}"><span class="icon">📄</span> Documents</a>
@@ -103,6 +471,16 @@ SIDEBAR = """
   <a href="/admin/settings" class="nav-link {cfg}"><span class="icon">⚙️</span> Settings</a>
   <a href="/admin/sessions" class="nav-link {s}"><span class="icon">🔑</span> Sessions</a>
   <a href="/" class="nav-link" style="margin-top:auto;padding-bottom:18px"><span class="icon">🏠</span> Back to App</a>
+</div>
+<div class="mobile-topbar">
+  <div class="mobile-topbar-left">
+    <button class="mobile-menu-btn" onclick="toggleSidebar(true)" aria-label="Open menu">☰</button>
+    <span class="mobile-topbar-title">⚡ DocuMind Admin</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/" class="btn btn-primary" style="padding:4px 10px;font-size:11px">App</a>
+    <a href="/admin/logout" class="btn btn-danger" style="padding:4px 8px;font-size:11px">🚪</a>
+  </div>
 </div>
 """
 
@@ -120,14 +498,38 @@ def page(title, body, active="d"):
     )
     return f"""<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#07090e">
 <title>{title} — DocuMind Admin</title>
-<style>{ADMIN_CSS}</style></head>
-<body>{sidebar}
+<style>{ADMIN_CSS}</style>
+<script>
+function toggleSidebar(open) {{
+  const sb = document.querySelector('.sidebar');
+  const bd = document.querySelector('.sidebar-backdrop');
+  if (sb && bd) {{
+    if (open) {{
+      sb.classList.add('is-open');
+      bd.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }} else {{
+      sb.classList.remove('is-open');
+      bd.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }}
+  }}
+}}
+</script>
+</head>
+<body>
+{sidebar}
 <div class="main">
-<div class="page-title">{title}</div>
-{body}
-</div></body></html>"""
+  <div class="page-title">{title}</div>
+  {body}
+</div>
+</body>
+</html>"""
 
 
 # ── Login ────────────────────────────────────────────────────────────────────
@@ -135,17 +537,17 @@ def page(title, body, active="d"):
 async def login_page(error: str = ""):
     err = f'<div class="alert alert-error">Wrong password!</div>' if error else ""
     html = f"""<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Admin Login</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Login</title>
 <style>
 {ADMIN_CSS}
-.login-wrap{{display:flex;align-items:center;justify-content:center;min-height:100vh}}
-.login-box{{background:#0f1c16;border:1px solid #1c362a;border-radius:16px;padding:40px;width:360px;box-shadow:0 8px 32px rgba(0,0,0,0.4)}}
-h2{{color:#34d399;font-size:22px;margin-bottom:6px}} p{{color:#94a3b8;font-size:13px;margin-bottom:24px}}
-input{{width:100%;padding:10px 14px;background:#090e0c;border:1px solid #1c362a;border-radius:8px;
+.login-wrap{{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}}
+.login-box{{background:#0e1320;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:36px 24px;width:100%;max-width:380px;box-shadow:0 8px 32px rgba(0,0,0,0.5)}}
+h2{{color:#c084fc;font-size:22px;margin-bottom:6px;font-weight:800}} p{{color:#94a3b8;font-size:13px;margin-bottom:24px}}
+input{{width:100%;padding:12px 14px;background:#07090e;border:1px solid rgba(255,255,255,0.12);border-radius:8px;
        color:#f1f5f9;font-size:14px;margin-bottom:16px;outline:none}}
-input:focus{{border-color:#10b981}} button{{width:100%;padding:12px;background:#047857;
+input:focus{{border-color:#a855f7}} button{{width:100%;padding:12px;background:linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
 color:white;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}}
-button:hover{{background:#059669}}
+button:hover{{background:linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)}}
 </style></head><body>
 <div class="login-wrap"><div class="login-box">
 {err}
@@ -255,8 +657,8 @@ async def users_page(request: Request, msg: str = ""):
 <div class="page-sub">{len(users)} total users</div>
 <div class="card">
   <div class="card-header"><h3>All Users</h3><span class="badge badge-blue">{len(users)}</span></div>
-  <table><thead><tr><th>ID</th><th>Email</th><th>Name</th><th>Created</th><th>Action</th></tr></thead>
-  <tbody>{rows}</tbody></table>
+  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Email</th><th>Name</th><th>Created</th><th>Action</th></tr></thead>
+  <tbody>{rows}</tbody></table></div>
 </div>"""
     return HTMLResponse(page("Users", body, "u"))
 
@@ -305,8 +707,8 @@ async def documents_page(request: Request, msg: str = ""):
 <div class="page-sub">{len(docs)} documents stored (including retained user-deleted archives)</div>
 <div class="card">
   <div class="card-header"><h3>Document Vault</h3><span class="badge badge-green">{len(docs)} total</span></div>
-  <table><thead><tr><th>ID</th><th>Filename</th><th>Title</th><th>Pages</th><th>Owner</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
-  <tbody>{rows}</tbody></table>
+  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Filename</th><th>Title</th><th>Pages</th><th>Owner</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+  <tbody>{rows}</tbody></table></div>
 </div>"""
     return HTMLResponse(page("Documents", body, "doc"))
 
@@ -356,8 +758,8 @@ async def conversations_page(request: Request):
 <div class="page-sub">Last 100 conversations (including retained archives)</div>
 <div class="card">
   <div class="card-header"><h3>Conversation History</h3><span class="badge badge-blue">{len(convs)}</span></div>
-  <table><thead><tr><th>ID</th><th>Title</th><th>User</th><th>Messages</th><th>Updated</th><th>Status</th><th>Action</th></tr></thead>
-  <tbody>{rows}</tbody></table>
+  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Title</th><th>User</th><th>Messages</th><th>Updated</th><th>Status</th><th>Action</th></tr></thead>
+  <tbody>{rows}</tbody></table></div>
 </div>"""
     return HTMLResponse(page("Conversations", body, "c"))
 
@@ -403,8 +805,8 @@ async def sessions_page(request: Request, msg: str = ""):
       <button class="btn btn-warning" onclick="return confirm('Logout ALL users?')">Clear All</button>
     </form>
   </div>
-  <table><thead><tr><th>Token</th><th>User</th><th>Created</th><th>Expires</th><th>Action</th></tr></thead>
-  <tbody>{rows}</tbody></table>
+  <div class="table-wrap"><table><thead><tr><th>Token</th><th>User</th><th>Created</th><th>Expires</th><th>Action</th></tr></thead>
+  <tbody>{rows}</tbody></table></div>
 </div>"""
     return HTMLResponse(page("Sessions", body, "s"))
 
@@ -456,10 +858,10 @@ async def activity_page(request: Request):
 <div class="page-sub">Latest 100 system audit &amp; security events</div>
 <div class="card">
   <div class="card-header"><h3>Audit Trail</h3></div>
-  <table>
+  <div class="table-wrap"><table>
     <thead><tr><th>Action</th><th>Details</th><th>User</th><th>IP Address</th><th>Timestamp</th></tr></thead>
     <tbody>{rows}</tbody>
-  </table>
+  </table></div>
 </div>"""
     return HTMLResponse(page("Activity Logs", body, "act"))
 
@@ -496,10 +898,10 @@ async def analytics_page(request: Request):
 <div class="page-sub">Latest 100 user questions &amp; RAG retrieval performance telemetry</div>
 <div class="card">
   <div class="card-header"><h3>Query Telemetry</h3></div>
-  <table>
+  <div class="table-wrap"><table>
     <thead><tr><th>Question</th><th>Document</th><th>User</th><th>Latency</th><th>Chunks</th><th>Timestamp</th></tr></thead>
     <tbody>{rows}</tbody>
-  </table>
+  </table></div>
 </div>"""
     return HTMLResponse(page("Query Analytics", body, "ana"))
 
@@ -532,10 +934,10 @@ async def settings_page(request: Request, msg: str = ""):
 <div class="page-sub">Enterprise system configuration &amp; active parameters</div>
 <div class="card">
   <div class="card-header"><h3>Global Application Settings</h3></div>
-  <table>
+  <div class="table-wrap"><table>
     <thead><tr><th>Key</th><th>Current Value</th><th>Description</th><th>Last Updated</th><th>Update</th></tr></thead>
     <tbody>{rows}</tbody>
-  </table>
+  </table></div>
 </div>"""
     return HTMLResponse(page("System Settings", body, "cfg"))
 
