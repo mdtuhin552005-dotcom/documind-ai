@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import json
 from datetime import UTC, datetime
@@ -34,6 +35,17 @@ class ChatService:
         self.settings = settings
         self.database = database
         self.vector_store = vector_store
+        self._llm: ChatGoogleGenerativeAI | None = None
+
+    def _get_llm(self) -> ChatGoogleGenerativeAI:
+        if self._llm is None and self.settings.gemini_api_key and self.settings.gemini_api_key.get_secret_value():
+            self._llm = ChatGoogleGenerativeAI(
+                model=self.settings.chat_model,
+                google_api_key=self.settings.gemini_api_key.get_secret_value(),
+                temperature=0.2,
+                max_retries=2,
+            )
+        return self._llm
 
     async def answer(self, request: ChatRequest, user_id: str) -> ChatResponse:
         if not self.settings.gemini_api_key or not self.settings.gemini_api_key.get_secret_value():
@@ -98,12 +110,7 @@ class ChatService:
                 messages.append(message_type(content=turn.content))
             messages.append(HumanMessage(content=request.question))
 
-            llm = ChatGoogleGenerativeAI(
-                model=self.settings.chat_model,
-                google_api_key=self.settings.gemini_api_key.get_secret_value(),
-                temperature=0.2,
-                max_retries=2,
-            )
+            llm = self._get_llm()
             result = await llm.ainvoke(messages)
             answer = extract_answer_text(result)
             if not answer:
@@ -162,9 +169,9 @@ class ChatService:
             "Executive summary main purpose and key objectives",
             "Core findings conclusions results and key takeaways",
         ]
+        results = await asyncio.gather(*(self._retrieve(q, document_id) for q in queries))
         collected_chunks: list[str] = []
-        for q in queries:
-            matches = await self._retrieve(q, document_id)
+        for matches in results:
             for m in matches:
                 if m.page_content not in collected_chunks:
                     collected_chunks.append(m.page_content)
@@ -187,12 +194,7 @@ class ChatService:
             "(Actionable conclusions)\n\n"
             f"Document Excerpts:\n{context_text}"
         )
-        llm = ChatGoogleGenerativeAI(
-            model=self.settings.chat_model,
-            google_api_key=self.settings.gemini_api_key.get_secret_value(),
-            temperature=0.3,
-            max_retries=2,
-        )
+        llm = self._get_llm()
         result = await llm.ainvoke([HumanMessage(content=prompt)])
         summary_text = extract_answer_text(result)
 

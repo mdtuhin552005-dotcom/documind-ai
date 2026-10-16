@@ -15,7 +15,7 @@ class Settings(BaseSettings):
 
     gemini_api_key: SecretStr | None = None
     google_client_id: str | None = None
-    chat_model: str = "gemini-3.1-flash-lite"
+    chat_model: str = "gemini-3.5-flash-lite"
     embedding_model: str = "models/gemini-embedding-001"
     data_dir: Path = Path("./data")
     max_upload_mb: int = Field(default=15, ge=1, le=100)

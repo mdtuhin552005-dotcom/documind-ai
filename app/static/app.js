@@ -521,7 +521,7 @@
   function updateUploadZoneState() {
     if (!elements.uploadZone) return;
     const isGated = !state.currentUser;
-    const hasDocuments = state.documents && state.documents.length > 0;
+    const hasActiveDocument = Boolean(state.selectedId && state.documents && state.documents.some((d) => d.id === state.selectedId));
 
     if (isGated) {
       elements.uploadZone.classList.add("upload-gated");
@@ -547,8 +547,8 @@
 
     elements.uploadZone.classList.remove("upload-gated");
 
-    if (hasDocuments) {
-      // Automatic Green state when file is uploaded
+    if (hasActiveDocument) {
+      // Automatic Green state when file is uploaded and active
       elements.uploadZone.classList.add("is-uploaded");
       const activeDoc = state.documents.find((d) => d.id === state.selectedId) || state.documents[0];
       const docName = activeDoc ? activeDoc.filename : "PDF Document";
@@ -1263,33 +1263,46 @@
   }
 
   async function createChat() {
-    if (!state.selectedId) {
-      showToast("Choose or upload a document before starting a chat.");
-      openMobileSidebar();
-      return;
-    }
+    // Starting a new chat requires uploading a new PDF document per user request
+    state.selectedId = null;
+    state.chatId = null;
+    state.history = [];
     try {
-      const conversation = await api("/api/chats", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ document_id: state.selectedId }),
-      });
-      state.chats.unshift(conversation);
-      state.chatId = conversation.id;
-      state.history = [];
-      if (elements.messageList) elements.messageList.replaceChildren();
-      if (elements.welcomeState) elements.welcomeState.hidden = false;
-      if (elements.chatScroll) elements.chatScroll.scrollTop = 0;
-      setExportButtonsDisabled(true);
-      try {
-        localStorage.setItem(activeChatStorageKey, state.chatId);
-      } catch {}
-      renderChats();
-      closeMobileSidebar();
-      elements.questionInput?.focus();
-    } catch (error) {
-      showToast(`Couldn't start a chat: ${error.message}`, "error");
+      localStorage.removeItem(activeChatStorageKey);
+    } catch {}
+
+    if (elements.messageList) elements.messageList.replaceChildren();
+    if (elements.welcomeState) elements.welcomeState.hidden = false;
+    if (elements.chatScroll) elements.chatScroll.scrollTop = 0;
+
+    if (elements.activeName) elements.activeName.textContent = "No document selected";
+    if (elements.sidebarDocCard) elements.sidebarDocCard.hidden = true;
+    if (elements.docMetadataBadge) elements.docMetadataBadge.hidden = true;
+
+    const welcomeTitle = document.getElementById("welcome-title-compact");
+    const welcomeDesc = document.getElementById("welcome-desc-compact");
+    if (welcomeTitle) welcomeTitle.textContent = "Start New Chat — Upload PDF";
+    if (welcomeDesc) welcomeDesc.textContent = "Please upload a new PDF document to begin this fresh chat session.";
+
+    elements.documentList?.querySelectorAll(".document-item").forEach((item) => {
+      item.classList.remove("is-selected");
+      item.querySelector(".current-doc-pill")?.remove();
+    });
+
+    updateUploadZoneState();
+
+    if (elements.questionInput) {
+      elements.questionInput.disabled = true;
+      elements.questionInput.placeholder = "Upload a PDF document to begin new chat…";
     }
+    elements.promptGrid?.querySelectorAll(".prompt-card").forEach((b) => (b.disabled = true));
+    elements.chatToolsBar?.querySelectorAll(".chat-tool-btn").forEach((b) => (b.disabled = true));
+    if (elements.sendButton) elements.sendButton.disabled = true;
+    setExportButtonsDisabled(true);
+
+    closeMobileSidebar();
+    showToast("Please upload a PDF document for this new chat.", "info");
+    handlePdfUploadTrigger();
   }
 
   async function openChat(chatId, closeSidebar = true) {
@@ -1373,8 +1386,26 @@
       const document = await api("/api/documents", { method: "POST", body: form });
       state.documents.unshift(document);
       state.selectedId = document.id;
-      clearConversation();
+
+      // Automatically create a new conversation for this new PDF
+      try {
+        const conversation = await api("/api/chats", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ document_id: document.id }),
+        });
+        state.chats.unshift(conversation);
+        state.chatId = conversation.id;
+        try {
+          localStorage.setItem(activeChatStorageKey, state.chatId);
+        } catch {}
+      } catch {}
+
+      state.history = [];
+      if (elements.messageList) elements.messageList.replaceChildren();
+      if (elements.welcomeState) elements.welcomeState.hidden = false;
       renderDocuments();
+      setSelectedDocument(document.id);
       updateUploadZoneState();
       if (elements.uploadZone) {
         elements.uploadZone.classList.add("upload-just-success");
@@ -1382,8 +1413,9 @@
           elements.uploadZone?.classList.remove("upload-just-success");
         }, 1200);
       }
-      showToast(`“${document.filename}” is ready to explore.`, "success");
+      showToast(`“${document.filename}” uploaded & ready for chat! ✓`, "success");
       if (elements.uploadProgressLabel) elements.uploadProgressLabel.textContent = "Your document is ready.";
+      elements.questionInput?.focus();
     } catch (error) {
       showToast(error.message, "error");
     } finally {
