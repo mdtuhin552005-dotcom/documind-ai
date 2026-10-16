@@ -16,6 +16,9 @@ def get_db_path(request: Request | None = None) -> Path:
     render_db = Path("/var/data/documind.sqlite3")
     if render_db.exists():
         return render_db
+    local_sqlite = Path("data/documind.sqlite3")
+    if local_sqlite.exists():
+        return local_sqlite
     local_db = Path("data/documind.db")
     if local_db.exists():
         return local_db

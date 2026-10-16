@@ -13,7 +13,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from app.database import DocumentDatabase
 
-DB_PATH = Path("data/documind.db")
+DB_PATH = Path("data/documind.sqlite3") if Path("data/documind.sqlite3").exists() else Path("data/documind.db")
 db = DocumentDatabase(DB_PATH)
 
 
