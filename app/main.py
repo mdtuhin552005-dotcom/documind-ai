@@ -132,6 +132,14 @@ def create_app(configured_settings: Settings = settings) -> FastAPI:
     async def home() -> FileResponse:
         return FileResponse(APP_DIR / "templates" / "index.html")
 
+    @application.get("/robots.txt", include_in_schema=False)
+    async def robots_txt() -> FileResponse:
+        return FileResponse(APP_DIR / "static" / "robots.txt", media_type="text/plain")
+
+    @application.get("/sitemap.xml", include_in_schema=False)
+    async def sitemap_xml() -> FileResponse:
+        return FileResponse(APP_DIR / "static" / "sitemap.xml", media_type="application/xml")
+
     @application.post("/register", include_in_schema=False, status_code=201)
     @application.post("/signup", include_in_schema=False, status_code=201)
     async def root_register(
