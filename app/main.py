@@ -140,6 +140,11 @@ def create_app(configured_settings: Settings = settings) -> FastAPI:
     async def sitemap_xml() -> FileResponse:
         return FileResponse(APP_DIR / "static" / "sitemap.xml", media_type="application/xml")
 
+    @application.get("/favicon.ico", include_in_schema=False)
+    @application.get("/favicon.svg", include_in_schema=False)
+    async def favicon() -> FileResponse:
+        return FileResponse(APP_DIR / "static" / "favicon.svg", media_type="image/svg+xml")
+
     @application.post("/register", include_in_schema=False, status_code=201)
     @application.post("/signup", include_in_schema=False, status_code=201)
     async def root_register(
