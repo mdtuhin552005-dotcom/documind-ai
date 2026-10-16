@@ -118,7 +118,7 @@ async def register(
         pass
 
     token = generate_token()
-    expires_at = (datetime.now(UTC) + timedelta(days=30)).isoformat()
+    expires_at = (datetime.now(UTC) + timedelta(days=365)).isoformat()
     await database.create_session({
         "token": token,
         "user_id": user_id,
@@ -129,7 +129,7 @@ async def register(
     response.set_cookie(
         key="documind_token",
         value=token,
-        max_age=30 * 86400,
+        max_age=365 * 86400,
         httponly=True,
         samesite="lax",
         secure=request.url.scheme == "https",
@@ -203,7 +203,7 @@ async def google_auth(
         user = user_data
 
     token = generate_token()
-    expires_at = (datetime.now(UTC) + timedelta(days=30)).isoformat()
+    expires_at = (datetime.now(UTC) + timedelta(days=365)).isoformat()
     await database.create_session({
         "token": token,
         "user_id": user["id"],
@@ -219,7 +219,7 @@ async def google_auth(
     response.set_cookie(
         key="documind_token",
         value=token,
-        max_age=30 * 86400,
+        max_age=365 * 86400,
         httponly=True,
         samesite="lax",
         secure=request.url.scheme == "https",
@@ -260,7 +260,7 @@ async def login(
 
     token = generate_token()
     now = datetime.now(UTC).isoformat()
-    expires_at = (datetime.now(UTC) + timedelta(days=30)).isoformat()
+    expires_at = (datetime.now(UTC) + timedelta(days=365)).isoformat()
     await database.create_session({
         "token": token,
         "user_id": user["id"],
@@ -276,7 +276,7 @@ async def login(
     response.set_cookie(
         key="documind_token",
         value=token,
-        max_age=30 * 86400,
+        max_age=365 * 86400,
         httponly=True,
         samesite="lax",
         secure=request.url.scheme == "https",

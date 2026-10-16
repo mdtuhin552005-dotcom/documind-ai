@@ -474,10 +474,17 @@
   // --- API Client ---
   async function api(path, options = {}) {
     const headers = options.headers ? { ...options.headers } : {};
-    if (state.authToken && !headers["Authorization"]) {
-      headers["Authorization"] = `Bearer ${state.authToken}`;
+    let token = state.authToken;
+    if (!token) {
+      try {
+        token = localStorage.getItem(authTokenStorageKey);
+        if (token) state.authToken = token;
+      } catch {}
     }
-    const response = await fetch(path, { ...options, headers, credentials: "same-origin" });
+    if (token && !headers["Authorization"]) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    const response = await fetch(path, { ...options, headers, credentials: "include" });
     if (!response.ok) {
       let message = `Request failed (${response.status}).`;
       try {
@@ -630,25 +637,45 @@
   }
 
   async function checkAuthSession() {
+    let savedToken = null;
+    let savedUser = null;
     try {
-      localStorage.removeItem(authTokenStorageKey);
-      localStorage.removeItem(authUserStorageKey);
+      savedToken = localStorage.getItem(authTokenStorageKey);
+      const rawUser = localStorage.getItem(authUserStorageKey);
+      if (rawUser) savedUser = JSON.parse(rawUser);
     } catch {
       // Storage unavailable
+    }
+
+    if (savedToken) {
+      state.authToken = savedToken;
+      if (savedUser) {
+        state.currentUser = savedUser;
+        updateAuthUI();
+      }
     }
 
     try {
       const data = await api("/api/auth/me");
       if (data && data.authenticated && data.user) {
         state.currentUser = data.user;
-        state.authToken = null;
+        if (savedToken) state.authToken = savedToken;
+        try {
+          localStorage.setItem(authUserStorageKey, JSON.stringify(data.user));
+          if (state.authToken) localStorage.setItem(authTokenStorageKey, state.authToken);
+        } catch {}
       } else {
+        // Only clear if backend explicitly says not authenticated
         state.currentUser = null;
         state.authToken = null;
+        try {
+          localStorage.removeItem(authTokenStorageKey);
+          localStorage.removeItem(authUserStorageKey);
+        } catch {}
       }
       updateAuthUI();
     } catch {
-      // Ignore background check error
+      // If network temporarily fails, keep local session so user is not logged out
     }
   }
 
@@ -698,6 +725,12 @@
   async function activateAuthenticatedUser(data, fallbackMessage) {
     state.currentUser = data.user;
     state.authToken = data.token;
+    try {
+      if (data.token) localStorage.setItem(authTokenStorageKey, data.token);
+      if (data.user) localStorage.setItem(authUserStorageKey, JSON.stringify(data.user));
+    } catch (e) {
+      console.warn("Could not persist session to localStorage", e);
+    }
     updateAuthUI();
     closeAuthModal();
     showToast(data.message || fallbackMessage, "success");
